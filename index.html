@@ -219,21 +219,31 @@ button{font-family:inherit}
 .roul-spin-btn:disabled{opacity:.35;cursor:not-allowed;transform:none;box-shadow:none}
 
 /* BLACKJACK */
-.bj-wrap{width:100%;max-width:600px}
-.bj-table{background:radial-gradient(ellipse at 50% 30%,#0d3320,#071a10);border:2px solid #1a4a2a;border-radius:var(--r2);padding:24px;text-align:center;min-height:360px;position:relative;overflow:hidden}
+.bj-wrap{width:100%;max-width:900px}
+.bj-table{background:radial-gradient(ellipse at 50% 30%,#0d3320,#071a10);border:2px solid #1a4a2a;border-radius:var(--r2);padding:28px 120px 28px 28px;text-align:center;min-height:480px;position:relative;overflow:hidden}
+@media(max-width:640px){.bj-table{padding:20px 14px}}
+.bj-deck{position:absolute;right:24px;top:50%;transform:translateY(-50%);width:84px;height:120px}
+@media(max-width:640px){.bj-deck{display:none}}
+.bj-deck .dk{position:absolute;width:84px;height:120px;border-radius:9px;background:url('burmalda.jpg') center/cover;border:2px solid #3b5f8a;box-shadow:0 4px 12px rgba(0,0,0,.6)}
+.bj-deck .dk:nth-child(1){top:0;left:0}
+.bj-deck .dk:nth-child(2){top:-3px;left:-3px}
+.bj-deck .dk:nth-child(3){top:-6px;left:-6px}
+.bj-deck-lbl{position:absolute;bottom:-22px;left:0;width:84px;text-align:center;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.35)}
 .bj-table::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.02'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");pointer-events:none}
 .bj-lbl{font-size:10px;color:rgba(255,255,255,.3);letter-spacing:3px;margin-bottom:8px;text-transform:uppercase}
 .cards-row{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;min-height:124px;align-items:center;margin:4px 0}
-.card-el{width:84px;height:120px;background:#fff;border-radius:9px;display:flex;flex-direction:column;justify-content:space-between;padding:7px;font-size:16px;font-weight:700;box-shadow:0 8px 22px rgba(0,0,0,.7),0 2px 4px rgba(0,0,0,.4)}
+.card-el{width:92px;height:132px;background:#fff;border-radius:10px;display:flex;flex-direction:column;justify-content:space-between;padding:8px;font-size:18px;font-weight:700;box-shadow:0 8px 22px rgba(0,0,0,.7),0 2px 4px rgba(0,0,0,.4)}
+@media(max-width:640px){.card-el{width:64px;height:92px;font-size:13px;padding:5px}}
 .card-el.red{color:#dc2626}
 .card-el.black{color:#111}
 .card-el.back{background:url('burmalda.jpg') center/cover;border:2px solid #3b5f8a}
-.card-el.deal{animation:dealCard .35s ease both}
-@keyframes dealCard{from{transform:translateY(-60px) rotate(-5deg) scale(.8);opacity:0}to{transform:none;opacity:1}}
+.card-el.deal{animation:dealCard .42s cubic-bezier(.25,.9,.35,1) both}
+@keyframes dealCard{0%{transform:translate(260px,-90px) rotate(22deg) scale(.7);opacity:0}55%{opacity:1}100%{transform:none;opacity:1}}
 .card-el.flip{animation:flipCard .4s ease both}
 @keyframes flipCard{0%{transform:scaleX(0)}50%{transform:scaleX(0)}100%{transform:scaleX(1)}}
 .card-top{align-self:flex-start;line-height:1}
-.card-mid{font-size:34px;align-self:center;line-height:1}
+.card-mid{font-size:38px;align-self:center;line-height:1}
+@media(max-width:640px){.card-mid{font-size:26px}}
 .card-bot{align-self:flex-end;transform:rotate(180deg);line-height:1}
 .bj-score{font-size:12px;font-weight:700;color:rgba(255,255,255,.5);min-height:18px;margin-bottom:4px}
 .bj-status{font-size:22px;font-weight:900;min-height:34px;margin:4px 0}
@@ -359,43 +369,7 @@ footer a:hover{color:var(--gold)}
 <!-- BEAR MODAL -->
 <div class="modal-overlay" id="bear-modal" style="display:none" onclick="if(event.target===this)closeBearModal()">
   <div class="modal-box">
-    <svg class="modal-bear" width="150" height="150" viewBox="0 0 200 200">
-      <defs>
-        <radialGradient id="bFur" cx="42%" cy="35%" r="75%"><stop offset="0%" stop-color="#c89254"/><stop offset="100%" stop-color="#9c6a36"/></radialGradient>
-      </defs>
-      <ellipse cx="100" cy="186" rx="60" ry="11" fill="#000" opacity=".25"/>
-      <ellipse cx="62" cy="172" rx="26" ry="20" fill="#9c6a36"/>
-      <ellipse cx="138" cy="172" rx="26" ry="20" fill="#9c6a36"/>
-      <ellipse cx="62" cy="176" rx="14" ry="10" fill="#e9cfa6"/>
-      <ellipse cx="138" cy="176" rx="14" ry="10" fill="#e9cfa6"/>
-      <g><circle cx="60" cy="170" r="2.4" fill="#9c6a36"/><circle cx="60" cy="178" r="2.4" fill="#9c6a36"/></g>
-      <g><circle cx="140" cy="170" r="2.4" fill="#9c6a36"/><circle cx="140" cy="178" r="2.4" fill="#9c6a36"/></g>
-      <ellipse cx="40" cy="118" rx="18" ry="27" fill="#a9743f" transform="rotate(-18 40 118)"/>
-      <ellipse cx="160" cy="118" rx="18" ry="27" fill="#a9743f" transform="rotate(18 160 118)"/>
-      <ellipse cx="100" cy="132" rx="50" ry="46" fill="url(#bFur)"/>
-      <ellipse cx="100" cy="138" rx="32" ry="32" fill="#f0d8b0"/>
-      <circle cx="56" cy="54" r="25" fill="#a9743f"/>
-      <circle cx="144" cy="54" r="25" fill="#a9743f"/>
-      <circle cx="56" cy="54" r="13" fill="#e9cfa6"/>
-      <circle cx="144" cy="54" r="13" fill="#e9cfa6"/>
-      <circle cx="100" cy="74" r="49" fill="url(#bFur)"/>
-      <ellipse cx="100" cy="90" rx="27" ry="21" fill="#f0d8b0"/>
-      <circle cx="79" cy="64" r="8" fill="#2a1810"/>
-      <circle cx="121" cy="64" r="8" fill="#2a1810"/>
-      <circle cx="82" cy="61" r="3" fill="#fff"/>
-      <circle cx="124" cy="61" r="3" fill="#fff"/>
-      <ellipse cx="100" cy="82" rx="11" ry="8" fill="#2a1810"/>
-      <path d="M100 90 V99" stroke="#2a1810" stroke-width="3" stroke-linecap="round"/>
-      <path d="M100 99 Q90 107 82 100" stroke="#2a1810" stroke-width="3" fill="none" stroke-linecap="round"/>
-      <path d="M100 99 Q110 107 118 100" stroke="#2a1810" stroke-width="3" fill="none" stroke-linecap="round"/>
-      <circle cx="72" cy="82" r="6" fill="#e8907a" opacity=".55"/>
-      <circle cx="128" cy="82" r="6" fill="#e8907a" opacity=".55"/>
-      <g transform="translate(100 124)">
-        <path d="M0 0 L-22 -10 Q-30 0 -22 10 Z" fill="#e0245e"/>
-        <path d="M0 0 L22 -10 Q30 0 22 10 Z" fill="#e0245e"/>
-        <circle cx="0" cy="0" r="7" fill="#c01d4f"/>
-      </g>
-    </svg>
+    <img class="modal-bear" src="bear.jpg" width="150" height="150" alt="Мишка" style="border-radius:16px;object-fit:contain">
     <div class="modal-title">🎉 Мишка в Telegram!</div>
     <div class="modal-sub">Поздравляем с покупкой! Ваш подарок — настоящий мишка в Telegram (15 ⭐ звёзд) от админа.<br>Напишите администратору и покажите код:</div>
     <div class="modal-code" id="bear-code">BEAR-2024</div>
@@ -523,20 +497,21 @@ footer a:hover{color:var(--gold)}
     <div id="tab-blackjack" class="tab-panel">
       <div class="bj-wrap">
         <div class="bj-table">
-          <div class="bj-lbl">DEALER</div>
+          <div class="bj-deck"><div class="dk"></div><div class="dk"></div><div class="dk"></div><div class="bj-deck-lbl">КОЛОДА</div></div>
+          <div class="bj-lbl">ДИЛЕР</div>
           <div class="cards-row" id="bj-dealer"></div>
           <div class="bj-score" id="bj-dscore"></div>
           <div class="bj-status" id="bj-status"></div>
-          <div class="bj-lbl">YOU</div>
+          <div class="bj-lbl">ВЫ</div>
           <div class="cards-row" id="bj-player"></div>
           <div class="bj-score" id="bj-pscore"></div>
           <div class="bj-actions" id="bj-actions"></div>
         </div>
         <div class="card" style="margin-top:8px">
           <div style="display:flex;flex-wrap:wrap;gap:10px;font-size:12px;color:var(--muted);line-height:1.8">
-            <span>Blackjack pays <b style="color:var(--gold)">3:2</b></span>
-            <span>Dealer stands on soft 17</span>
-            <span>Double down on any 2 cards</span>
+            <span>Блекджек платит <b style="color:var(--gold)">3:2</b></span>
+            <span>Дилер останавливается на 17</span>
+            <span>Удвоение на любых 2 картах</span>
           </div>
         </div>
       </div>
@@ -549,26 +524,26 @@ footer a:hover{color:var(--gold)}
           <canvas id="crash-canvas"></canvas>
           <div class="crash-mult-display">
             <div class="crash-mult c-safe" id="crash-mult">1.00×</div>
-            <div class="crash-phase-lbl" id="crash-phase">WAITING FOR BET</div>
+            <div class="crash-phase-lbl" id="crash-phase">ОЖИДАНИЕ СТАВКИ</div>
           </div>
-          <div id="crash-rocket" style="bottom:24px;left:24px">🚀</div>
+          <div id="crash-rocket" style="bottom:24px;left:24px;display:none">🚀</div>
         </div>
         <div class="crash-history" id="crash-history"></div>
         <div class="crash-controls">
           <div class="cc-group">
-            <div class="cc-lbl">Bet amount</div>
+            <div class="cc-lbl">Ставка</div>
             <div class="bet-row">
               <input class="bet-input" type="number" id="crash-bet" value="10" min="1">
               <div class="chip" onclick="cAddBet(10)">+10</div>
               <div class="chip" onclick="cAddBet(50)">+50</div>
-              <div class="chip" onclick="document.getElementById('crash-bet').value=G.coins">ALL IN</div>
+              <div class="chip" onclick="document.getElementById('crash-bet').value=G.coins">ВСЁ</div>
             </div>
           </div>
           <div class="cc-group">
-            <div class="cc-lbl">Auto cashout ×</div>
+            <div class="cc-lbl">Авто-вывод ×</div>
             <input class="bet-input" type="number" id="crash-auto" value="2.00" min="1.01" step="0.1" style="width:110px">
           </div>
-          <button class="cashout-btn st-idle" id="crash-btn" onclick="crashAction()">PLACE BET</button>
+          <button class="cashout-btn st-idle" id="crash-btn" onclick="crashAction()">СДЕЛАТЬ СТАВКУ</button>
         </div>
         <div class="crash-last-msg" id="crash-last"></div>
       </div>
@@ -652,7 +627,7 @@ function makeReelEl(i){const w=document.createElement('div');w.className='reel-w
 function rebuildReels(){const row=document.getElementById('reels-row');row.innerHTML='';for(let i=0;i<3;i++)row.appendChild(makeReelEl(i));G.reelCount=3}
 function addReel(){const row=document.getElementById('reels-row');row.appendChild(makeReelEl(G.reelCount));G.reelCount++}
 function leverAnim(){const sw=document.getElementById('lever-sw');sw.classList.remove('pull','rel');void sw.offsetWidth;sw.classList.add('pull');setTimeout(()=>{sw.classList.remove('pull');sw.classList.add('rel')},280);setTimeout(()=>sw.classList.remove('rel'),560)}
-function spinReel(i,final,dur){return new Promise(res=>{const strip=document.getElementById('rs'+i);if(!strip){res();return}const cnt=22+i*4;let h='';for(let j=0;j<cnt;j++)h+=`<div class="reel-sym">${SSYM[Math.floor(Math.random()*SSYM.length)]}</div>`;h+=`<div class="reel-sym">${final}</div>`;strip.style.transition='none';strip.style.transform='translateY(0)';strip.innerHTML=h;void strip.offsetWidth;strip.style.transition=`transform ${dur}ms cubic-bezier(.22,.8,.35,1)`;strip.style.transform=`translateY(-${cnt*SH}px)`;setTimeout(res,dur)})}
+function spinReel(i,final,dur){return new Promise(res=>{const strip=document.getElementById('rs'+i);if(!strip){res();return}const win=document.getElementById('rw'+i);const cellH=(win&&win.clientHeight)||SH;const cnt=22+i*4;let h='';for(let j=0;j<cnt;j++)h+=`<div class="reel-sym">${SSYM[Math.floor(Math.random()*SSYM.length)]}</div>`;h+=`<div class="reel-sym">${final}</div>`;strip.style.transition='none';strip.style.transform='translateY(0)';strip.innerHTML=h;void strip.offsetWidth;strip.style.transition=`transform ${dur}ms cubic-bezier(.22,.8,.35,1)`;strip.style.transform=`translateY(-${cnt*cellH}px)`;setTimeout(res,dur)})}
 function slotTrigger(){if(slotBusy)return;leverAnim();doSlot()}
 async function doSlot(){if(slotBusy)return;slotBusy=true;document.getElementById('slot-btn').disabled=true;const b=document.getElementById('slot-banner');b.className='';b.textContent='⏳';G.spins++;const n=G.reelCount,res=[];for(let i=0;i<n;i++){let s=wrand(SSYM,SWT);if(G.lucky&&i>0&&i<2&&Math.random()<.3)s=res[0];res.push(s)}for(let i=0;i<n;i++){const w=document.getElementById('rw'+i);if(w)w.classList.remove('glow')}await Promise.all(res.map((sym,i)=>spinReel(i,sym,900+i*250)));slotBusy=false;document.getElementById('slot-btn').disabled=false;evalSlot(res);addXP(8+Math.floor(G.level/5));updateUI();saveG()}
 function evalSlot(res){const n=res.length;let win=0,msg='',big=false;if(n>=5&&res.every(s=>s===res[0])){win=(SJACK[res.slice(0,3).join('')]||10)*20;msg='🎰 MEGA JACKPOT ×5! +'+fmt(win*G.mult*G.prestigeMult);big=true;glowAll(n)}else if(n>=4&&res.slice(0,4).every(s=>s===res[0])){win=(SJACK[res.slice(0,3).join('')]||10)*5;msg='🔥 SUPER JACKPOT ×4! +'+fmt(win*G.mult*G.prestigeMult);big=true;glowAll(4)}else{const key=res.slice(0,3).join('');if(SJACK[key]){win=SJACK[key];msg='🎉 JACKPOT! +'+fmt(win*G.mult*G.prestigeMult);big=true;glowAll(3)}else{const c={};res.forEach(s=>c[s]=(c[s]||0)+1);const p=Object.entries(c).find(([,v])=>v>=2);if(p){win=SPAIR[p[0]]||3;msg='✅ Pair! +'+fmt(win*G.mult*G.prestigeMult)}}}const b=document.getElementById('slot-banner');if(win>0){const e=Math.round(win*G.mult*G.prestigeMult);G.coins+=e;G.totalEarned+=e;b.textContent=msg;b.className=big?'big':'win';addLog(msg+' '+res.join(' '));if(big){popup(msg);flashLights()}}else{b.textContent='No win';b.className='miss';addLog('No win  '+res.join(' '))}}
@@ -676,64 +651,57 @@ let roulCv,roulCtx,roulSize;
 function initRoulCanvas(){
   roulCv=document.getElementById('roul-canvas');
   const wrap=roulCv.parentElement;
-  const avail=Math.min(wrap.clientWidth||420,window.innerWidth-32);
-  roulSize=window.innerWidth>700?Math.min(avail,440):Math.min(avail,360);
-  roulCv.width=roulSize;roulCv.height=roulSize;
+  const avail=Math.min(wrap.clientWidth||440,window.innerWidth-32);
+  roulSize=window.innerWidth>700?Math.min(avail,460):Math.min(avail,330);
+  const dpr=window.devicePixelRatio||1;
+  roulCv.width=Math.round(roulSize*dpr);roulCv.height=Math.round(roulSize*dpr);
   roulCv.style.width=roulSize+'px';roulCv.style.height=roulSize+'px';
-  roulCtx=roulCv.getContext('2d');
-  roulBallR=roulSize*.44;
-  drawRoulette();
+  roulCtx=roulCv.getContext('2d');roulCtx.setTransform(dpr,0,0,dpr,0,0);
+  if(!roulSpinning){roulBallAngle=-Math.PI/2;drawRoulette(-Math.PI/2)}
 }
-function drawRoulette(ballAngle,ballR){
+function drawRoulette(ballAngle){
   if(!roulCtx)return;
-  const ctx=roulCtx,sz=roulSize,cx=sz/2,cy=sz/2,r=sz/2-10;
+  const ctx=roulCtx,sz=roulSize,cx=sz/2,cy=sz/2,r=sz/2-7;
   ctx.clearRect(0,0,sz,sz);
-  // outer glossy wooden rim
-  const rim=ctx.createRadialGradient(cx,cy-r*.3,r*.5,cx,cy,r+8);
-  rim.addColorStop(0,'#5a4410');rim.addColorStop(.75,'#a07d18');rim.addColorStop(.9,'#f5c518');rim.addColorStop(1,'#7a5e10');
-  ctx.beginPath();ctx.arc(cx,cy,r+8,0,2*Math.PI);ctx.fillStyle=rim;ctx.fill();
-  ctx.beginPath();ctx.arc(cx,cy,r+2,0,2*Math.PI);ctx.fillStyle='#1a1300';ctx.fill();
-  // segments
+  // outer glossy rim
+  const rim=ctx.createRadialGradient(cx,cy-r*.4,r*.3,cx,cy,r+6);
+  rim.addColorStop(0,'#3a2c08');rim.addColorStop(.8,'#8a6a12');rim.addColorStop(.93,'#f5c518');rim.addColorStop(1,'#6a5010');
+  ctx.beginPath();ctx.arc(cx,cy,r+6,0,2*Math.PI);ctx.fillStyle=rim;ctx.fill();
+  // dark ball track
+  ctx.beginPath();ctx.arc(cx,cy,r,0,2*Math.PI);ctx.fillStyle='#0d0d0d';ctx.fill();
+  const rNum=r-Math.max(8,sz*.05); // segment radius (leaves a track for the ball)
   R_ORDER.forEach((num,i)=>{
     const a1=roulAngle+i*R_SEG-Math.PI/2,a2=a1+R_SEG;
-    ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,a1,a2);ctx.closePath();
-    ctx.fillStyle=num===0?'#15803d':(R_RED.includes(num)?'#8B1a1a':'#111');
-    ctx.fill();
-    ctx.strokeStyle='rgba(245,197,24,.4)';ctx.lineWidth=.8;ctx.stroke();
-    // number text
-    const mid=a1+R_SEG/2,tr=r*.76,tx=cx+tr*Math.cos(mid),ty=cy+tr*Math.sin(mid);
+    ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,rNum,a1,a2);ctx.closePath();
+    ctx.fillStyle=num===0?'#127a37':(R_RED.includes(num)?'#b01818':'#181818');
+    ctx.fill();ctx.strokeStyle='rgba(245,197,24,.35)';ctx.lineWidth=.8;ctx.stroke();
+    const mid=a1+R_SEG/2,tr=rNum*.83,tx=cx+tr*Math.cos(mid),ty=cy+tr*Math.sin(mid);
     ctx.save();ctx.translate(tx,ty);ctx.rotate(mid+Math.PI/2);
-    ctx.fillStyle='#fff';ctx.font=`bold ${Math.max(8,sz/40)}px sans-serif`;ctx.textAlign='center';ctx.textBaseline='middle';
-    ctx.shadowColor='rgba(0,0,0,.8)';ctx.shadowBlur=3;
+    ctx.fillStyle='#fff';ctx.font=`bold ${Math.max(9,sz/34)}px sans-serif`;ctx.textAlign='center';ctx.textBaseline='middle';
     ctx.fillText(num,0,0);ctx.restore();
   });
-  // inner decorative rings
-  [r*.18,r*.12].forEach((ir,i)=>{
-    ctx.beginPath();ctx.arc(cx,cy,ir,0,2*Math.PI);
-    ctx.fillStyle=i===0?'#1a1000':'#0a0a0a';ctx.fill();
-    ctx.strokeStyle='#f5c518';ctx.lineWidth=i===0?2:1;ctx.stroke();
-  });
-  // gold center dot
-  ctx.beginPath();ctx.arc(cx,cy,r*.06,0,2*Math.PI);ctx.fillStyle='#f5c518';ctx.fill();
-  // sector dividers (thin gold lines)
-  for(let i=0;i<37;i++){
-    const a=roulAngle+i*R_SEG-Math.PI/2;
-    ctx.beginPath();ctx.moveTo(cx+r*.2*Math.cos(a),cy+r*.2*Math.sin(a));ctx.lineTo(cx+r*Math.cos(a),cy+r*Math.sin(a));
-    ctx.strokeStyle='rgba(245,197,24,.3)';ctx.lineWidth=.5;ctx.stroke();
-  }
-  // ball
+  // metallic hub
+  const hub=ctx.createRadialGradient(cx,cy-rNum*.2,rNum*.04,cx,cy,rNum*.44);
+  hub.addColorStop(0,'#2a2008');hub.addColorStop(1,'#0a0a0a');
+  ctx.beginPath();ctx.arc(cx,cy,rNum*.44,0,2*Math.PI);ctx.fillStyle=hub;ctx.fill();
+  ctx.strokeStyle='#f5c518';ctx.lineWidth=2;ctx.stroke();
+  // spokes (rotate with wheel)
+  ctx.save();ctx.translate(cx,cy);ctx.rotate(roulAngle);
+  for(let k=0;k<4;k++){ctx.rotate(Math.PI/2);ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(0,-rNum*.42);ctx.strokeStyle='rgba(245,197,24,.45)';ctx.lineWidth=4;ctx.lineCap='round';ctx.stroke()}
+  ctx.restore();
+  ctx.beginPath();ctx.arc(cx,cy,rNum*.1,0,2*Math.PI);ctx.fillStyle='#f5c518';ctx.fill();
+  ctx.beginPath();ctx.arc(cx,cy,rNum*.04,0,2*Math.PI);ctx.fillStyle='#2a2008';ctx.fill();
+  // ball — constant radius on the track, never moves inward
   const ba=ballAngle!==undefined?ballAngle:roulBallAngle;
-  const br=ballR!==undefined?ballR:roulBallR;
-  const bx=cx+br*Math.cos(ba),by=cy+br*Math.sin(ba),brad=sz*.038;
+  const bR=(rNum+r)/2,brad=Math.max(5,sz*.027);
+  const bx=cx+bR*Math.cos(ba),by=cy+bR*Math.sin(ba);
   ctx.beginPath();ctx.arc(bx,by,brad,0,2*Math.PI);
   const bg=ctx.createRadialGradient(bx-brad*.4,by-brad*.4,brad*.1,bx,by,brad);
-  bg.addColorStop(0,'#ffffff');bg.addColorStop(.6,'#e8e8e8');bg.addColorStop(1,'#999');
-  ctx.fillStyle=bg;ctx.shadowBlur=12;ctx.shadowColor='rgba(255,255,255,.85)';ctx.fill();ctx.shadowBlur=0;
-  ctx.beginPath();ctx.arc(bx-brad*.35,by-brad*.35,brad*.32,0,2*Math.PI);ctx.fillStyle='rgba(255,255,255,.9)';ctx.fill();
+  bg.addColorStop(0,'#fff');bg.addColorStop(.65,'#dcdcdc');bg.addColorStop(1,'#808080');
+  ctx.fillStyle=bg;ctx.shadowBlur=8;ctx.shadowColor='rgba(0,0,0,.55)';ctx.fill();ctx.shadowBlur=0;
   // top pointer
-  ctx.beginPath();ctx.moveTo(cx-9,2);ctx.lineTo(cx+9,2);ctx.lineTo(cx,22);ctx.closePath();
-  ctx.fillStyle='#f5c518';ctx.shadowBlur=8;ctx.shadowColor='rgba(245,197,24,.8)';ctx.fill();ctx.shadowBlur=0;
-  ctx.strokeStyle='#7a5e10';ctx.lineWidth=1;ctx.stroke();
+  ctx.beginPath();ctx.moveTo(cx-10,0);ctx.lineTo(cx+10,0);ctx.lineTo(cx,20);ctx.closePath();
+  ctx.fillStyle='#f5c518';ctx.fill();ctx.strokeStyle='#6a5010';ctx.lineWidth=1.2;ctx.stroke();
 }
 
 function buildNumGrid(){
@@ -764,47 +732,31 @@ async function rSpin(){
 
   const result=Math.floor(Math.random()*37);
   const idx=R_ORDER.indexOf(result);
-  // calculate target wheel angle so result segment is at top (-PI/2)
-  const targetSegCenter=-(idx+.5)*R_SEG;
-  const fullSpins=8*2*Math.PI;
-  // normalize to make wheel spin forward
-  let delta=targetSegCenter-roulAngle;
-  delta=((delta%( 2*Math.PI))+2*Math.PI)%(2*Math.PI);
-  if(delta<Math.PI*.1)delta+=2*Math.PI;
-  const totalDelta=fullSpins+delta;
-  const startAngle=roulAngle;
-  const endAngle=roulAngle+totalDelta;
-
-  // ball spins opposite, faster initially, then slows and lands in pocket
-  const ballStart=roulBallAngle;
-  const ballEnd=Math.PI/2+targetSegCenter+(idx+.5)*R_SEG; // lands in pocket
-  const spinDur=6800;
+  // final wheel angle so the winning segment sits under the top pointer (-PI/2)
+  const targetWheel=-(idx+.5)*R_SEG;
+  const startW=roulAngle;
+  let dW=(targetWheel-startW)%(2*Math.PI);dW=((dW%(2*Math.PI))+2*Math.PI)%(2*Math.PI);
+  const wheelEnd=startW+2*Math.PI*5+dW;        // 5 full turns then settle
+  // ball spins the OPPOSITE way and ends exactly at the top (-PI/2)
+  const startB=roulBallAngle;
+  const ballEnd=-Math.PI/2-2*Math.PI*9;        // many turns the other way, ≡ -PI/2
+  const spinDur=8200;
   const start=performance.now();
-
   document.getElementById('roul-banner').textContent='Колесо крутится...';
 
-  function easeOut(t){return 1-Math.pow(1-t,5)}
-  function easeInOut(t){return t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2}
+  function easeOut(t){return 1-Math.pow(1-t,3.4)}
 
   function frame(){
     const now=performance.now();
     const t=Math.min(1,(now-start)/spinDur);
     const et=easeOut(t);
-    roulAngle=startAngle+totalDelta*et;
-    // ball: opposite spin, faster, falls inward near end
-    const ballT=easeOut(Math.min(1,t*1.2));
-    roulBallAngle=ballStart-totalDelta*2.5*ballT;
-    // ball radius: outer ring → inner pocket
-    const fallT=Math.max(0,(t-.5)/.5);
-    const outerR=roulSize*.44,innerR=roulSize*.32;
-    roulBallR=outerR-(outerR-innerR)*easeInOut(fallT);
-    drawRoulette();
+    roulAngle=startW+(wheelEnd-startW)*et;
+    roulBallAngle=startB+(ballEnd-startB)*et;
+    drawRoulette(roulBallAngle);
     if(t<1){roulRaf=requestAnimationFrame(frame)}
     else{
-      roulAngle=endAngle;
-      roulBallAngle=Math.PI*2-targetSegCenter-R_SEG*.5;
-      roulBallR=roulSize*.33;
-      drawRoulette();
+      roulAngle=targetWheel;roulBallAngle=-Math.PI/2;
+      drawRoulette(-Math.PI/2);
       showRoulResult(result,bet);
       roulSpinning=false;document.getElementById('roul-spin-btn').disabled=false;
     }
@@ -868,14 +820,14 @@ async function renderBJ(revealDelay){
 function bjSetActions(phase){
   const a=document.getElementById('bj-actions');
   if(phase==='bet'){
-    a.innerHTML=`<div class="bet-row"><input class="bet-input" type="number" id="bj-bet" value="${bjBetAmt||20}" min="1"><div class="chip" onclick="bjAddBet(10)">+10</div><div class="chip" onclick="bjAddBet(50)">+50</div><div class="chip" onclick="document.getElementById('bj-bet').value=G.coins">ALL IN</div></div><div class="bj-btn-row"><button class="abtn btn-gold" onclick="bjDeal()">DEAL</button></div>`;
+    a.innerHTML=`<div class="bet-row"><input class="bet-input" type="number" id="bj-bet" value="${bjBetAmt||20}" min="1"><div class="chip" onclick="bjAddBet(10)">+10</div><div class="chip" onclick="bjAddBet(50)">+50</div><div class="chip" onclick="document.getElementById('bj-bet').value=G.coins">ВСЁ</div></div><div class="bj-btn-row"><button class="abtn btn-gold" onclick="bjDeal()">РАЗДАТЬ</button></div>`;
   }else if(phase==='play'){
-    a.innerHTML=`<div class="bj-btn-row"><button class="abtn btn-green" onclick="bjHit()">HIT</button><button class="abtn btn-red" onclick="bjStand()">STAND</button><button class="abtn btn-blue" onclick="bjDouble()" ${G.coins<bjBetAmt?'disabled':''}>DOUBLE</button></div>`;
+    a.innerHTML=`<div class="bj-btn-row"><button class="abtn btn-green" onclick="bjHit()">ЕЩЁ</button><button class="abtn btn-red" onclick="bjStand()">ХВАТИТ</button><button class="abtn btn-blue" onclick="bjDouble()" ${G.coins<bjBetAmt?'disabled':''}>×2 УДВОИТЬ</button></div>`;
   }
 }
 async function bjDeal(){
   bjBetAmt=parseInt(document.getElementById('bj-bet').value)||20;
-  if(bjBetAmt<1||bjBetAmt>G.coins){document.getElementById('bj-status').textContent='Invalid bet';return}
+  if(bjBetAmt<1||bjBetAmt>G.coins){document.getElementById('bj-status').textContent='Неверная ставка';return}
   G.coins-=bjBetAmt;newDeck();
   bjPlayer=[bjDeck.pop(),bjDeck.pop()];
   bjDealer=[bjDeck.pop(),{...bjDeck.pop(),hidden:true}];
@@ -894,11 +846,11 @@ async function bjStand(){
 function bjEnd(outcome){
   bjActive=false;let msg='',gain=0;
   const pv=hVal(bjPlayer);
-  if(outcome==='bust')msg='💥 Bust! You lose.';
-  else if(outcome==='dbust'){msg='🎉 Dealer busts!';gain=bjBetAmt*2}
-  else if(outcome==='win'){if(pv===21&&bjPlayer.length===2){msg='🃏 Blackjack! 3:2';gain=Math.floor(bjBetAmt*2.5)}else{msg='✅ You win!';gain=bjBetAmt*2}}
-  else if(outcome==='push'){msg='🤝 Push';gain=bjBetAmt}
-  else msg='😔 Dealer wins.';
+  if(outcome==='bust')msg='💥 Перебор! Вы проиграли.';
+  else if(outcome==='dbust'){msg='🎉 Перебор у дилера!';gain=bjBetAmt*2}
+  else if(outcome==='win'){if(pv===21&&bjPlayer.length===2){msg='🃏 Блекджек! 3:2';gain=Math.floor(bjBetAmt*2.5)}else{msg='✅ Вы выиграли!';gain=bjBetAmt*2}}
+  else if(outcome==='push'){msg='🤝 Ничья';gain=bjBetAmt}
+  else msg='😔 Победил дилер.';
   G.coins+=gain;if(gain>bjBetAmt)G.totalEarned+=gain-bjBetAmt;
   document.getElementById('bj-status').textContent=msg;
   document.getElementById('bj-dscore').textContent=hVal(bjDealer)+'';
@@ -917,68 +869,89 @@ let cCv=null,cCtx=null;
 
 function genCrash(){const r=Math.random();if(r<0.04)return 1.00;return Math.max(1.01,parseFloat((0.96/(1-r)).toFixed(2)))}
 function cAddBet(n){const i=document.getElementById('crash-bet');i.value=Math.max(1,(parseInt(i.value)||0)+n)}
+let cW=780,cH=320,crashViewMaxM=2,crashViewMaxT=4,crashFlame=0;
 function initCrashCanvas(){
   cCv=document.getElementById('crash-canvas');
   const g=document.getElementById('crash-graph');
-  cCv.width=g.clientWidth||780;cCv.height=g.clientHeight||320;
-  cCtx=cCv.getContext('2d');
+  cW=g.clientWidth||780;cH=g.clientHeight||320;
+  const dpr=window.devicePixelRatio||1;
+  cCv.width=Math.round(cW*dpr);cCv.height=Math.round(cH*dpr);
+  cCv.style.width=cW+'px';cCv.style.height=cH+'px';
+  cCtx=cCv.getContext('2d');cCtx.setTransform(dpr,0,0,dpr,0,0);
+}
+function crashPX(t,m){return{x:44+(t/crashViewMaxT)*(cW-64),y:cH-30-((m-1)/(crashViewMaxM-1))*(cH-52)}}
+function drawRocket(ctx,x,y,ang){
+  ctx.save();ctx.translate(x,y);ctx.rotate(ang);
+  // flame
+  crashFlame=(crashFlame+1)%6;const fl=10+crashFlame*1.6;
+  const fg=ctx.createLinearGradient(-14-fl,0,-14,0);
+  fg.addColorStop(0,'rgba(255,180,40,0)');fg.addColorStop(.5,'rgba(255,140,20,.85)');fg.addColorStop(1,'#ffd34d');
+  ctx.beginPath();ctx.moveTo(-13,-5);ctx.quadraticCurveTo(-14-fl,0,-13,5);ctx.closePath();ctx.fillStyle=fg;ctx.fill();
+  // body
+  ctx.beginPath();ctx.moveTo(15,0);ctx.quadraticCurveTo(4,-8,-12,-7);ctx.lineTo(-12,7);ctx.quadraticCurveTo(4,8,15,0);ctx.closePath();
+  const bgr=ctx.createLinearGradient(-12,-7,-12,7);bgr.addColorStop(0,'#fff');bgr.addColorStop(.5,'#e0e0e0');bgr.addColorStop(1,'#9aa');
+  ctx.fillStyle=bgr;ctx.fill();
+  // nose + window + fins
+  ctx.beginPath();ctx.moveTo(15,0);ctx.quadraticCurveTo(6,-6,1,-6);ctx.lineTo(1,6);ctx.quadraticCurveTo(6,6,15,0);ctx.closePath();ctx.fillStyle='#e0245e';ctx.fill();
+  ctx.beginPath();ctx.arc(-3,0,3,0,2*Math.PI);ctx.fillStyle='#3aa0ff';ctx.fill();ctx.strokeStyle='#1a5a9a';ctx.lineWidth=1;ctx.stroke();
+  ctx.beginPath();ctx.moveTo(-8,-6);ctx.lineTo(-14,-12);ctx.lineTo(-10,-5);ctx.closePath();ctx.moveTo(-8,6);ctx.lineTo(-14,12);ctx.lineTo(-10,5);ctx.closePath();ctx.fillStyle='#e0245e';ctx.fill();
+  ctx.restore();
 }
 function drawCrashGraph(){
   if(!cCtx||crashPts.length<2)return;
-  const w=cCv.width,h=cCv.height;
-  cCtx.clearRect(0,0,w,h);
-  const maxT=Math.max(crashPts[crashPts.length-1].t,2);
-  const maxM=Math.max(crashMult*1.1,2);
-  function px(t,m){return{x:40+(t/maxT)*(w-60),y:h-30-((m-1)/(maxM-1))*(h-50)}}
-  // gradient fill
-  const grad=cCtx.createLinearGradient(0,0,0,h);
-  grad.addColorStop(0,'rgba(34,197,94,.3)');grad.addColorStop(1,'rgba(34,197,94,.02)');
-  cCtx.beginPath();
-  crashPts.forEach((p,i)=>{const {x,y}=px(p.t,p.m);if(i===0)cCtx.moveTo(x,y);else cCtx.lineTo(x,y)});
-  const last=px(crashPts[crashPts.length-1].t,1);
-  const first=px(0,1);
-  cCtx.lineTo(last.x,h-30);cCtx.lineTo(first.x,h-30);cCtx.closePath();
-  cCtx.fillStyle=grad;cCtx.fill();
-  // line
-  cCtx.beginPath();
-  crashPts.forEach((p,i)=>{const {x,y}=px(p.t,p.m);if(i===0)cCtx.moveTo(x,y);else cCtx.lineTo(x,y)});
-  cCtx.strokeStyle='#22c55e';cCtx.lineWidth=2.5;cCtx.lineJoin='round';cCtx.stroke();
-  // grid lines
-  cCtx.strokeStyle='rgba(255,255,255,.04)';cCtx.lineWidth=1;
-  [2,5,10].forEach(m=>{if(m<=maxM){const y=h-30-((m-1)/(maxM-1))*(h-50);cCtx.beginPath();cCtx.moveTo(40,y);cCtx.lineTo(w-20,y);cCtx.stroke();cCtx.fillStyle='rgba(255,255,255,.2)';cCtx.font='10px monospace';cCtx.fillText(m+'×',4,y+4)}});
-  // move rocket to tip
-  const tip=px(crashPts[crashPts.length-1].t,crashPts[crashPts.length-1].m);
-  const rocket=document.getElementById('crash-rocket');
-  rocket.style.left=(tip.x-16)+'px';rocket.style.bottom=(h-tip.y-16)+'px';
+  // smoothly ease the view bounds so the graph glides instead of snapping
+  const needM=Math.max(crashMult*1.18,1.8),needT=Math.max(crashPts[crashPts.length-1].t*1.08,4);
+  crashViewMaxM+=(needM-crashViewMaxM)*.12;crashViewMaxT+=(needT-crashViewMaxT)*.12;
+  cCtx.clearRect(0,0,cW,cH);
+  // grid
+  cCtx.font='10px monospace';
+  for(let m=2;m<=crashViewMaxM;m*=2){const y=cH-30-((m-1)/(crashViewMaxM-1))*(cH-52);cCtx.strokeStyle='rgba(255,255,255,.05)';cCtx.lineWidth=1;cCtx.beginPath();cCtx.moveTo(44,y);cCtx.lineTo(cW-12,y);cCtx.stroke();cCtx.fillStyle='rgba(255,255,255,.25)';cCtx.fillText(m+'×',6,y+4)}
+  const hot=crashMult>=5;
+  const col=hot?'#f97316':'#22c55e';
+  // gradient fill under curve
+  const grad=cCtx.createLinearGradient(0,0,0,cH);
+  grad.addColorStop(0,hot?'rgba(249,115,22,.32)':'rgba(34,197,94,.3)');grad.addColorStop(1,'rgba(34,197,94,.01)');
+  cCtx.beginPath();crashPts.forEach((p,i)=>{const {x,y}=crashPX(p.t,p.m);i?cCtx.lineTo(x,y):cCtx.moveTo(x,y)});
+  const last=crashPX(crashPts[crashPts.length-1].t,1),first=crashPX(0,1);
+  cCtx.lineTo(last.x,cH-30);cCtx.lineTo(first.x,cH-30);cCtx.closePath();cCtx.fillStyle=grad;cCtx.fill();
+  // glowing line
+  cCtx.beginPath();crashPts.forEach((p,i)=>{const {x,y}=crashPX(p.t,p.m);i?cCtx.lineTo(x,y):cCtx.moveTo(x,y)});
+  cCtx.strokeStyle=col;cCtx.lineWidth=3;cCtx.lineJoin='round';cCtx.lineCap='round';cCtx.shadowBlur=14;cCtx.shadowColor=col;cCtx.stroke();cCtx.shadowBlur=0;
+  // rocket at tip, angled along the curve
+  const n=crashPts.length,tip=crashPX(crashPts[n-1].t,crashPts[n-1].m);
+  const prev=crashPX(crashPts[Math.max(0,n-4)].t,crashPts[Math.max(0,n-4)].m);
+  const ang=Math.atan2(tip.y-prev.y,tip.x-prev.x);
+  drawRocket(cCtx,tip.x,tip.y,ang);
 }
 function crashAction(){
   if(crashState==='idle'){
     const b=parseInt(document.getElementById('crash-bet').value)||0;
-    if(b<1||b>G.coins){document.getElementById('crash-last').textContent='Invalid bet amount';return}
+    if(b<1||b>G.coins){document.getElementById('crash-last').textContent='Неверная сумма ставки';return}
     crashBet=b;G.coins-=crashBet;crashedOut=false;crashTarget=genCrash();
     updateUI();
     const btn=document.getElementById('crash-btn');
-    btn.className='cashout-btn st-wait';btn.textContent='WAITING...';btn.disabled=true;
-    document.getElementById('crash-phase').textContent='STARTING...';
+    btn.className='cashout-btn st-wait';btn.textContent='ОЖИДАНИЕ...';btn.disabled=true;
+    document.getElementById('crash-phase').textContent='СТАРТ...';
     setTimeout(startCrash,900);
   }else if(crashState==='flying'&&!crashedOut){
     crashedOut=true;
     const win=Math.floor(crashBet*crashMult);G.coins+=win;G.totalEarned+=win-crashBet;
-    document.getElementById('crash-last').textContent='Cashed out at '+crashMult.toFixed(2)+'× — profit +'+fmt(win-crashBet);
-    document.getElementById('crash-btn').textContent='OUT ×'+crashMult.toFixed(2);
+    document.getElementById('crash-last').textContent='Забрал на '+crashMult.toFixed(2)+'× — прибыль +'+fmt(win-crashBet);
+    document.getElementById('crash-btn').textContent='×'+crashMult.toFixed(2)+' ✓';
     document.getElementById('crash-btn').className='cashout-btn st-idle';
-    popup('🚀 Cash out ×'+crashMult.toFixed(2)+' +'+fmt(win));
-    addLog('🚀 Crash ×'+crashMult.toFixed(2)+' cashed out +'+fmt(win));
+    popup('🚀 Забрал ×'+crashMult.toFixed(2)+' +'+fmt(win));
+    addLog('🚀 Краш ×'+crashMult.toFixed(2)+' забрал +'+fmt(win));
     updateUI();saveG();
   }
 }
 function startCrash(){
-  crashState='flying';crashMult=1;crashT0=performance.now();crashPts=[];
+  crashState='flying';crashMult=1;crashT0=performance.now();crashPts=[{t:0,m:1}];
+  crashViewMaxM=2;crashViewMaxT=4;
   initCrashCanvas();
   const btn=document.getElementById('crash-btn');
-  btn.className='cashout-btn st-live';btn.textContent='CASH OUT';btn.disabled=false;
-  document.getElementById('crash-phase').textContent='FLYING';
-  document.getElementById('crash-rocket').textContent='🚀';
+  btn.className='cashout-btn st-live';btn.textContent='ЗАБРАТЬ';btn.disabled=false;
+  document.getElementById('crash-phase').textContent='ПОЛЁТ';
+  document.getElementById('crash-rocket').style.display='none';
   crashLoop();
 }
 function crashLoop(){
@@ -1002,28 +975,26 @@ function doCrash(){
   if(crashRaf){cancelAnimationFrame(crashRaf);crashRaf=null}
   crashState='crashed';
   const el=document.getElementById('crash-mult');
-  el.textContent=crashTarget.toFixed(2)+'× CRASHED';el.className='crash-mult c-crash';
-  document.getElementById('crash-rocket').textContent='💥';
-  document.getElementById('crash-phase').textContent='CRASHED';
+  el.textContent=crashTarget.toFixed(2)+'× КРАШ';el.className='crash-mult c-crash';
+  document.getElementById('crash-phase').textContent='ВЗОРВАЛАСЬ';
   const btn=document.getElementById('crash-btn');
-  btn.className='cashout-btn st-idle';btn.textContent='PLACE BET';btn.disabled=false;
-  if(!crashedOut){document.getElementById('crash-last').textContent='Crashed at '+crashTarget.toFixed(2)+'× — lost '+fmt(crashBet);addLog('🚀 Crashed at ×'+crashTarget.toFixed(2)+' — lost '+fmt(crashBet));saveG()}
+  btn.className='cashout-btn st-idle';btn.textContent='СДЕЛАТЬ СТАВКУ';btn.disabled=false;
+  if(!crashedOut){document.getElementById('crash-last').textContent='Краш на '+crashTarget.toFixed(2)+'× — проигрыш '+fmt(crashBet);addLog('🚀 Краш на ×'+crashTarget.toFixed(2)+' — проигрыш '+fmt(crashBet));saveG()}
   addCrashHist(crashTarget);
-  // draw crash line in red
+  // red crash curve + explosion burst on canvas
   if(cCtx&&crashPts.length>1){
-    const w=cCv.width,h=cCv.height;
-    const maxT=Math.max(crashPts[crashPts.length-1].t,2),maxM=Math.max(crashTarget*1.1,2);
-    cCtx.strokeStyle='#ef4444';cCtx.lineWidth=2.5;cCtx.beginPath();
-    crashPts.forEach((p,i)=>{const x=40+(p.t/maxT)*(w-60),y=h-30-((p.m-1)/(maxM-1))*(h-50);if(i===0)cCtx.moveTo(x,y);else cCtx.lineTo(x,y)});
-    cCtx.stroke();
+    cCtx.strokeStyle='#ef4444';cCtx.lineWidth=3;cCtx.lineJoin='round';cCtx.shadowBlur=12;cCtx.shadowColor='#ef4444';cCtx.beginPath();
+    crashPts.forEach((p,i)=>{const {x,y}=crashPX(p.t,p.m);i?cCtx.lineTo(x,y):cCtx.moveTo(x,y)});
+    cCtx.stroke();cCtx.shadowBlur=0;
+    const tip=crashPX(crashPts[crashPts.length-1].t,crashPts[crashPts.length-1].m);
+    for(let k=0;k<14;k++){const a=k/14*2*Math.PI,d=14+Math.random()*16;cCtx.beginPath();cCtx.arc(tip.x+Math.cos(a)*d,tip.y+Math.sin(a)*d,2+Math.random()*3,0,2*Math.PI);cCtx.fillStyle=k%2?'#ffd34d':'#ff5a2a';cCtx.fill()}
+    cCtx.beginPath();cCtx.arc(tip.x,tip.y,16,0,2*Math.PI);cCtx.fillStyle='rgba(255,120,40,.5)';cCtx.fill();
   }
   setTimeout(()=>{
     crashState='idle';
     el.textContent='1.00×';el.className='crash-mult c-safe';
-    document.getElementById('crash-phase').textContent='WAITING FOR BET';
-    document.getElementById('crash-rocket').style.left='24px';document.getElementById('crash-rocket').style.bottom='24px';
-    document.getElementById('crash-rocket').textContent='🚀';
-    if(cCtx)cCtx.clearRect(0,0,cCv.width,cCv.height);
+    document.getElementById('crash-phase').textContent='ОЖИДАНИЕ СТАВКИ';
+    if(cCtx)cCtx.clearRect(0,0,cW,cH);
   },2800);
 }
 function addCrashHist(v){crashHistory.unshift(v);if(crashHistory.length>12)crashHistory.pop();const h=document.getElementById('crash-history');h.innerHTML='';crashHistory.forEach(x=>{const d=document.createElement('div');d.className='c-hist '+(x<1.5?'low':x<4?'mid':'high');d.textContent=x.toFixed(2)+'×';h.appendChild(d)})}
@@ -1048,24 +1019,7 @@ function renderShop(){
     el.className='shop-item'+(item.type==='special'?' special':'');
     if(item.id==='bear'){
       el.innerHTML=`
-        <svg width="92" height="92" viewBox="0 0 200 200" style="flex-shrink:0">
-          <defs><radialGradient id="sFur" cx="42%" cy="35%" r="75%"><stop offset="0%" stop-color="#c89254"/><stop offset="100%" stop-color="#9c6a36"/></radialGradient></defs>
-          <ellipse cx="62" cy="172" rx="26" ry="20" fill="#9c6a36"/><ellipse cx="138" cy="172" rx="26" ry="20" fill="#9c6a36"/>
-          <ellipse cx="62" cy="176" rx="14" ry="10" fill="#e9cfa6"/><ellipse cx="138" cy="176" rx="14" ry="10" fill="#e9cfa6"/>
-          <ellipse cx="40" cy="118" rx="18" ry="27" fill="#a9743f" transform="rotate(-18 40 118)"/><ellipse cx="160" cy="118" rx="18" ry="27" fill="#a9743f" transform="rotate(18 160 118)"/>
-          <ellipse cx="100" cy="132" rx="50" ry="46" fill="url(#sFur)"/><ellipse cx="100" cy="138" rx="32" ry="32" fill="#f0d8b0"/>
-          <circle cx="56" cy="54" r="25" fill="#a9743f"/><circle cx="144" cy="54" r="25" fill="#a9743f"/>
-          <circle cx="56" cy="54" r="13" fill="#e9cfa6"/><circle cx="144" cy="54" r="13" fill="#e9cfa6"/>
-          <circle cx="100" cy="74" r="49" fill="url(#sFur)"/><ellipse cx="100" cy="90" rx="27" ry="21" fill="#f0d8b0"/>
-          <circle cx="79" cy="64" r="8" fill="#2a1810"/><circle cx="121" cy="64" r="8" fill="#2a1810"/>
-          <circle cx="82" cy="61" r="3" fill="#fff"/><circle cx="124" cy="61" r="3" fill="#fff"/>
-          <ellipse cx="100" cy="82" rx="11" ry="8" fill="#2a1810"/>
-          <path d="M100 90 V99" stroke="#2a1810" stroke-width="3" stroke-linecap="round"/>
-          <path d="M100 99 Q90 107 82 100" stroke="#2a1810" stroke-width="3" fill="none" stroke-linecap="round"/>
-          <path d="M100 99 Q110 107 118 100" stroke="#2a1810" stroke-width="3" fill="none" stroke-linecap="round"/>
-          <circle cx="72" cy="82" r="6" fill="#e8907a" opacity=".55"/><circle cx="128" cy="82" r="6" fill="#e8907a" opacity=".55"/>
-          <g transform="translate(100 124)"><path d="M0 0 L-22 -10 Q-30 0 -22 10 Z" fill="#e0245e"/><path d="M0 0 L22 -10 Q30 0 22 10 Z" fill="#e0245e"/><circle cx="0" cy="0" r="7" fill="#c01d4f"/></g>
-        </svg>
+        <img src="bear.jpg" width="92" height="92" alt="Мишка" style="flex-shrink:0;border-radius:14px;object-fit:contain">
         <div class="shop-item-name">${item.name}</div>
         <div class="shop-item-desc">${item.desc}</div>
         <div style="font-size:11px;color:#a855f7;margin-top:-4px;font-weight:600">🌟 Настоящий подарок · 15 звёзд от админа</div>
@@ -1144,6 +1098,7 @@ function startGame(){
   setTimeout(initRoulCanvas,200);
 }
 function goMenu(){document.getElementById('game').classList.remove('visible');document.getElementById('menu').classList.add('visible');updateUI()}
+let _rsz;window.addEventListener('resize',()=>{clearTimeout(_rsz);_rsz=setTimeout(()=>{if(document.getElementById('tab-roulette').classList.contains('active'))initRoulCanvas();if(document.getElementById('tab-crash').classList.contains('active')&&crashState==='idle')initCrashCanvas()},200)});
 
 /* INIT */
 rebuildReels();for(let i=3;i<G.reelCount;i++)addReel();
