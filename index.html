@@ -5,575 +5,672 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Бурмалда Тайкун</title>
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  :root {
-    --bg: #0d0d0d;
-    --bg2: #181818;
-    --bg3: #222;
-    --border: #333;
-    --border2: #444;
-    --text: #f0f0f0;
-    --muted: #888;
-    --gold: #f5c518;
-    --gold2: #e0a800;
-    --green: #22c55e;
-    --red: #ef4444;
-    --purple: #a855f7;
-    --radius: 12px;
-    --radius-sm: 8px;
-  }
+:root {
+  --bg: #0d0d0d;
+  --bg2: #181818;
+  --bg3: #222;
+  --border: #333;
+  --border2: #444;
+  --text: #f0f0f0;
+  --muted: #888;
+  --gold: #f5c518;
+  --gold2: #e0a800;
+  --green: #22c55e;
+  --red: #ef4444;
+  --purple: #a855f7;
+  --radius: 12px;
+  --radius-sm: 8px;
+}
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
 
-  header {
-    width: 100%;
-    background: var(--bg2);
-    border-bottom: 1px solid var(--border);
-    padding: 16px 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
+/* ========== SPLASH ========== */
+#splash {
+  position: fixed; inset: 0; z-index: 100;
+  background: #000;
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 0;
+}
+.splash-logo {
+  font-size: 52px; font-weight: 900; color: var(--gold);
+  letter-spacing: 3px; text-align: center;
+  opacity: 0; transform: scale(0.7);
+  animation: splashIn 0.8s cubic-bezier(.34,1.56,.64,1) 0.3s forwards;
+}
+.splash-sub {
+  font-size: 15px; color: var(--muted); letter-spacing: 6px;
+  opacity: 0; transform: translateY(10px);
+  animation: fadeUp 0.6s ease 1s forwards;
+}
+.splash-bar-wrap {
+  margin-top: 48px; width: 200px; height: 3px;
+  background: var(--bg3); border-radius: 99px; overflow: hidden;
+}
+.splash-bar {
+  height: 3px; background: var(--gold); border-radius: 99px;
+  width: 0%;
+  animation: loadBar 1.6s ease 0.5s forwards;
+}
+@keyframes splashIn {
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes fadeUp {
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes loadBar {
+  to { width: 100%; }
+}
+#splash.hide {
+  animation: splashOut 0.6s ease forwards;
+}
+@keyframes splashOut {
+  to { opacity: 0; pointer-events: none; }
+}
 
-  .logo { font-size: 20px; font-weight: 700; color: var(--gold); letter-spacing: 1px; }
-  .logo span { color: var(--text); font-weight: 400; }
+/* ========== MENU ========== */
+#menu {
+  display: none;
+  position: fixed; inset: 0; z-index: 90;
+  background: #000;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto;
+}
+#menu.visible { display: flex; }
 
-  .header-coins {
-    display: flex; align-items: center; gap: 8px;
-    background: var(--bg3); border: 1px solid var(--border); border-radius: 99px;
-    padding: 6px 16px; font-size: 15px; font-weight: 600; color: var(--gold);
-  }
+.menu-hero {
+  position: relative; width: 100%; max-width: 480px;
+  height: 420px; overflow: hidden; flex-shrink: 0;
+}
+.menu-hero img {
+  width: 100%; height: 100%; object-fit: cover; object-position: top center;
+  display: block;
+}
+.menu-hero-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to bottom, transparent 30%, #000 100%);
+}
+.menu-hero-badge {
+  position: absolute; top: 16px; left: 16px;
+  background: rgba(0,0,0,0.7); border: 1px solid var(--gold);
+  border-radius: 99px; padding: 4px 14px;
+  font-size: 12px; color: var(--gold); letter-spacing: 1px;
+}
 
-  .main { width: 100%; max-width: 760px; padding: 24px 16px 60px; display: flex; flex-direction: column; gap: 16px; }
+.menu-content {
+  width: 100%; max-width: 480px;
+  padding: 0 24px 48px;
+  display: flex; flex-direction: column; align-items: center; gap: 16px;
+  margin-top: -80px; position: relative; z-index: 2;
+}
 
-  .stats-row {
-    display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
-  }
-  .stat-card {
-    background: var(--bg2); border: 1px solid var(--border);
-    border-radius: var(--radius-sm); padding: 12px 10px; text-align: center;
-  }
-  .stat-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
-  .stat-value { font-size: 20px; font-weight: 700; color: var(--gold); }
-  .stat-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.menu-title {
+  font-size: 42px; font-weight: 900; color: var(--gold);
+  letter-spacing: 2px; text-align: center; line-height: 1.1;
+  text-shadow: 0 0 40px rgba(245,197,24,0.4);
+  animation: pulseGold 3s ease-in-out infinite;
+}
+@keyframes pulseGold {
+  0%,100% { text-shadow: 0 0 30px rgba(245,197,24,0.3); }
+  50%      { text-shadow: 0 0 60px rgba(245,197,24,0.7); }
+}
+.menu-tagline {
+  font-size: 14px; color: var(--muted); text-align: center; letter-spacing: 1px;
+}
 
-  .slot-section {
-    background: var(--bg2); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 24px; text-align: center;
-  }
+.menu-btn-play {
+  width: 100%; padding: 18px;
+  background: var(--gold); color: #000;
+  border: none; border-radius: var(--radius);
+  font-size: 18px; font-weight: 800; letter-spacing: 1px;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+  animation: btnPulse 2s ease-in-out infinite;
+}
+@keyframes btnPulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(245,197,24,0.4); }
+  50%      { box-shadow: 0 0 0 12px rgba(245,197,24,0); }
+}
+.menu-btn-play:hover { background: var(--gold2); transform: scale(1.02); }
+.menu-btn-play:active { transform: scale(0.98); }
 
-  .slot-title { font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px; }
+.menu-stats-row {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 100%;
+}
+.menu-stat {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 12px 8px; text-align: center;
+}
+.menu-stat-val { font-size: 20px; font-weight: 700; color: var(--gold); }
+.menu-stat-lbl { font-size: 11px; color: var(--muted); margin-top: 2px; }
 
-  .reels { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
+.menu-features {
+  width: 100%; display: flex; flex-direction: column; gap: 8px;
+}
+.menu-feature {
+  display: flex; align-items: center; gap: 12px;
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 12px 14px;
+  font-size: 13px; color: var(--muted);
+}
+.menu-feature-icon { font-size: 20px; flex-shrink: 0; }
+.menu-feature-title { font-weight: 600; color: var(--text); display: block; }
 
-  .reel {
-    width: 88px; height: 88px; background: var(--bg3);
-    border: 2px solid var(--border2); border-radius: var(--radius-sm);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 44px; position: relative; overflow: hidden;
-    transition: border-color 0.2s;
-  }
-  .reel.win { border-color: var(--gold); box-shadow: 0 0 12px rgba(245,197,24,0.3); }
-  .reel.spinning { animation: shake 0.12s linear infinite; }
+/* ========== GAME ========== */
+#game {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+}
+#game.visible { display: flex; }
 
-  @keyframes shake {
-    0%   { transform: translateY(-3px); }
-    50%  { transform: translateY(3px); }
-    100% { transform: translateY(-3px); }
-  }
+#game.enter { animation: gameEnter 0.5s ease; }
+@keyframes gameEnter {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 
-  .spin-area { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+header {
+  width: 100%;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 20px;
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 10;
+}
+.logo { font-size: 17px; font-weight: 800; color: var(--gold); letter-spacing: 1px; }
+.logo span { color: var(--text); font-weight: 400; }
+.header-right { display: flex; align-items: center; gap: 10px; }
+.header-coins {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 99px;
+  padding: 5px 14px; font-size: 14px; font-weight: 700; color: var(--gold);
+}
+.menu-back-btn {
+  background: transparent; border: 1px solid var(--border2);
+  border-radius: var(--radius-sm); padding: 5px 10px;
+  font-size: 12px; color: var(--muted); cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+.menu-back-btn:hover { border-color: var(--gold); color: var(--gold); }
 
-  .spin-btn {
-    background: var(--gold); color: #000;
-    border: none; border-radius: var(--radius-sm);
-    padding: 14px 48px; font-size: 16px; font-weight: 700;
-    cursor: pointer; letter-spacing: 0.5px;
-    transition: background 0.15s, transform 0.1s, opacity 0.15s;
-    min-width: 200px;
-  }
-  .spin-btn:hover:not(:disabled) { background: var(--gold2); }
-  .spin-btn:active:not(:disabled) { transform: scale(0.97); }
-  .spin-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.main { width: 100%; max-width: 760px; padding: 20px 16px 60px; display: flex; flex-direction: column; gap: 14px; }
 
-  .spin-cost { font-size: 12px; color: var(--muted); }
+.stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.stat-card {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 12px 10px; text-align: center;
+}
+.stat-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+.stat-value { font-size: 20px; font-weight: 700; color: var(--gold); }
+.stat-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
 
-  .win-banner {
-    min-height: 28px; font-size: 15px; font-weight: 600;
-    color: var(--green); transition: opacity 0.2s;
-  }
-  .win-banner.jackpot { color: var(--gold); font-size: 18px; }
-  .win-banner.miss { color: var(--muted); font-weight: 400; }
+.slot-section {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 24px; text-align: center;
+}
+.slot-title { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px; }
+.reels { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
+.reel {
+  width: 88px; height: 88px; background: var(--bg3);
+  border: 2px solid var(--border2); border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 44px; transition: border-color 0.2s;
+}
+.reel.win { border-color: var(--gold); box-shadow: 0 0 14px rgba(245,197,24,0.35); }
+.reel.spinning { animation: shake 0.12s linear infinite; }
+@keyframes shake {
+  0%   { transform: translateY(-3px); }
+  50%  { transform: translateY(3px); }
+  100% { transform: translateY(-3px); }
+}
 
-  .xp-row { margin-top: 16px; }
-  .xp-label { font-size: 12px; color: var(--muted); margin-bottom: 6px; display: flex; justify-content: space-between; }
-  .xp-bar-bg { height: 6px; background: var(--bg3); border-radius: 99px; overflow: hidden; }
-  .xp-bar { height: 6px; background: var(--purple); border-radius: 99px; transition: width 0.4s; width: 0%; }
+.spin-area { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.spin-btn {
+  background: var(--gold); color: #000;
+  border: none; border-radius: var(--radius-sm);
+  padding: 14px 48px; font-size: 16px; font-weight: 800;
+  cursor: pointer; letter-spacing: 0.5px;
+  transition: background 0.15s, transform 0.1s, opacity 0.15s;
+  min-width: 200px;
+}
+.spin-btn:hover:not(:disabled) { background: var(--gold2); }
+.spin-btn:active:not(:disabled) { transform: scale(0.97); }
+.spin-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
-  .multiplier-badge {
-    display: inline-block; background: rgba(168,85,247,0.15);
-    border: 1px solid rgba(168,85,247,0.4); border-radius: 99px;
-    font-size: 12px; color: var(--purple); padding: 3px 10px; margin-top: 8px;
-  }
+.win-banner { min-height: 28px; font-size: 15px; font-weight: 600; color: var(--green); }
+.win-banner.jackpot { color: var(--gold); font-size: 18px; }
+.win-banner.miss { color: var(--muted); font-weight: 400; }
 
-  .section-card {
-    background: var(--bg2); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 20px;
-  }
-  .section-header { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+.xp-row { margin-top: 16px; }
+.xp-label { font-size: 12px; color: var(--muted); margin-bottom: 6px; display: flex; justify-content: space-between; }
+.xp-bar-bg { height: 6px; background: var(--bg3); border-radius: 99px; overflow: hidden; }
+.xp-bar { height: 6px; background: var(--purple); border-radius: 99px; transition: width 0.4s; width: 0%; }
 
-  .upgrade-list { display: flex; flex-direction: column; gap: 8px; }
-  .upgrade-item {
-    display: flex; align-items: center; gap: 12px;
-    background: var(--bg3); border: 1px solid var(--border);
-    border-radius: var(--radius-sm); padding: 12px 14px;
-    transition: border-color 0.2s;
-  }
-  .upgrade-item.affordable { border-color: rgba(245,197,24,0.3); }
-  .upgrade-item.done { opacity: 0.6; }
-  .u-icon { font-size: 26px; flex-shrink: 0; }
-  .u-info { flex: 1; }
-  .u-name { font-size: 13px; font-weight: 600; color: var(--text); }
-  .u-desc { font-size: 12px; color: var(--muted); margin-top: 2px; }
-  .u-btn {
-    border: 1px solid var(--border2); border-radius: var(--radius-sm);
-    padding: 7px 14px; font-size: 12px; font-weight: 600; cursor: pointer;
-    background: transparent; color: var(--gold);
-    white-space: nowrap; flex-shrink: 0;
-    transition: background 0.15s, border-color 0.15s;
-  }
-  .u-btn:hover:not(:disabled) { background: rgba(245,197,24,0.1); border-color: var(--gold); }
-  .u-btn:disabled { color: var(--muted); cursor: not-allowed; border-color: var(--border); }
-  .u-btn.bought { color: var(--green); border-color: rgba(34,197,94,0.4); background: rgba(34,197,94,0.08); }
+.multiplier-badge {
+  display: inline-block; background: rgba(168,85,247,0.15);
+  border: 1px solid rgba(168,85,247,0.4); border-radius: 99px;
+  font-size: 12px; color: var(--purple); padding: 3px 10px; margin-top: 6px;
+}
 
-  .payout-grid {
-    display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px;
-  }
-  .payout-row {
-    display: flex; align-items: center; justify-content: space-between;
-    background: var(--bg3); border-radius: var(--radius-sm); padding: 8px 12px;
-    font-size: 13px;
-  }
-  .payout-combo { letter-spacing: 2px; }
-  .payout-amt { font-weight: 600; color: var(--gold); }
+.section-card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; }
+.section-header { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 14px; }
 
-  .log-list { max-height: 120px; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; }
-  .log-item { font-size: 12px; color: var(--muted); padding: 4px 0; border-bottom: 1px solid var(--border); }
-  .log-item:first-child { color: var(--text); }
+.upgrade-list { display: flex; flex-direction: column; gap: 8px; }
+.upgrade-item {
+  display: flex; align-items: center; gap: 12px;
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 12px 14px;
+  transition: border-color 0.2s;
+}
+.upgrade-item.affordable { border-color: rgba(245,197,24,0.35); }
+.upgrade-item.done { opacity: 0.55; }
+.u-icon { font-size: 26px; flex-shrink: 0; }
+.u-info { flex: 1; }
+.u-name { font-size: 13px; font-weight: 600; color: var(--text); }
+.u-desc { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.u-btn {
+  border: 1px solid var(--border2); border-radius: var(--radius-sm);
+  padding: 7px 14px; font-size: 12px; font-weight: 600; cursor: pointer;
+  background: transparent; color: var(--gold);
+  white-space: nowrap; flex-shrink: 0;
+  transition: background 0.15s, border-color 0.15s;
+}
+.u-btn:hover:not(:disabled) { background: rgba(245,197,24,0.1); border-color: var(--gold); }
+.u-btn:disabled { color: var(--muted); cursor: not-allowed; border-color: var(--border); }
+.u-btn.bought { color: var(--green); border-color: rgba(34,197,94,0.4); background: rgba(34,197,94,0.08); }
 
-  .prestige-btn {
-    width: 100%; background: linear-gradient(135deg, #7c3aed, #a855f7);
-    border: none; border-radius: var(--radius-sm); padding: 14px;
-    font-size: 15px; font-weight: 700; color: #fff; cursor: pointer;
-    transition: opacity 0.15s, transform 0.1s;
-  }
-  .prestige-btn:hover:not(:disabled) { opacity: 0.9; }
-  .prestige-btn:active:not(:disabled) { transform: scale(0.98); }
-  .prestige-btn:disabled { opacity: 0.3; cursor: not-allowed; }
-  .prestige-desc { font-size: 12px; color: var(--muted); margin-top: 8px; text-align: center; }
+.payout-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
+.payout-row {
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--bg3); border-radius: var(--radius-sm); padding: 8px 12px; font-size: 13px;
+}
+.payout-combo { letter-spacing: 2px; }
+.payout-amt { font-weight: 600; color: var(--gold); }
 
-  .prestige-stars { display: flex; gap: 4px; justify-content: center; margin-top: 8px; }
-  .p-star { font-size: 16px; opacity: 0.3; }
-  .p-star.lit { opacity: 1; }
+.log-list { max-height: 120px; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; }
+.log-item { font-size: 12px; color: var(--muted); padding: 4px 0; border-bottom: 1px solid var(--border); }
+.log-item:first-child { color: var(--text); }
 
-  footer {
-    text-align: center; font-size: 12px; color: var(--muted);
-    padding: 24px; border-top: 1px solid var(--border); width: 100%;
-  }
+.prestige-btn {
+  width: 100%; background: linear-gradient(135deg, #7c3aed, #a855f7);
+  border: none; border-radius: var(--radius-sm); padding: 14px;
+  font-size: 15px; font-weight: 700; color: #fff; cursor: pointer;
+  transition: opacity 0.15s, transform 0.1s;
+}
+.prestige-btn:hover:not(:disabled) { opacity: 0.9; }
+.prestige-btn:active:not(:disabled) { transform: scale(0.98); }
+.prestige-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+.prestige-desc { font-size: 12px; color: var(--muted); margin-top: 8px; text-align: center; }
+.prestige-stars { display: flex; gap: 4px; justify-content: center; margin-top: 8px; }
+.p-star { font-size: 16px; opacity: 0.3; }
+.p-star.lit { opacity: 1; }
 
-  @media (max-width: 500px) {
-    .stats-row { grid-template-columns: repeat(2, 1fr); }
-    .reel { width: 72px; height: 72px; font-size: 36px; }
-    .payout-grid { grid-template-columns: 1fr; }
-  }
+/* win popup */
+.win-popup {
+  position: fixed; top: 80px; left: 50%; transform: translateX(-50%) scale(0.8);
+  background: var(--bg2); border: 2px solid var(--gold);
+  border-radius: var(--radius); padding: 16px 32px;
+  font-size: 22px; font-weight: 800; color: var(--gold);
+  pointer-events: none; opacity: 0; z-index: 50;
+  white-space: nowrap;
+  transition: opacity 0.2s, transform 0.2s;
+}
+.win-popup.show {
+  opacity: 1; transform: translateX(-50%) scale(1);
+}
+
+footer {
+  text-align: center; font-size: 12px; color: var(--muted);
+  padding: 24px; border-top: 1px solid var(--border); width: 100%;
+}
+
+@media (max-width: 500px) {
+  .stats-row { grid-template-columns: repeat(2, 1fr); }
+  .reel { width: 72px; height: 72px; font-size: 36px; }
+  .payout-grid { grid-template-columns: 1fr; }
+  .menu-title { font-size: 32px; }
+}
 </style>
 </head>
 <body>
 
-<header>
-  <div class="logo">БУРМАЛДА <span>ТАЙКУН</span></div>
-  <div class="header-coins">💰 <span id="hd-coins">0</span></div>
-</header>
+<!-- SPLASH -->
+<div id="splash">
+  <div class="splash-logo">БУРМАЛДА<br>ТАЙКУН</div>
+  <div class="splash-sub">МЕЛСТРОЙ EDITION</div>
+  <div class="splash-bar-wrap"><div class="splash-bar"></div></div>
+</div>
 
-<main class="main">
+<!-- MENU -->
+<div id="menu">
+  <div class="menu-hero">
+    <img src="melstroy.jpg" alt="Мелстрой" onerror="this.style.display='none'">
+    <div class="menu-hero-overlay"></div>
+    <div class="menu-hero-badge">МЕЛСТРОЙ EDITION</div>
+  </div>
+  <div class="menu-content">
+    <div class="menu-title">БУРМАЛДА<br>ТАЙКУН</div>
+    <div class="menu-tagline">крути слот — стань богатым как Мелстрой</div>
 
-  <div class="stats-row">
-    <div class="stat-card">
-      <div class="stat-label">Монеты</div>
-      <div class="stat-value" id="s-coins">0</div>
+    <div class="menu-stats-row" id="menu-stats-row">
+      <div class="menu-stat"><div class="menu-stat-val" id="ms-coins">0</div><div class="menu-stat-lbl">монеты</div></div>
+      <div class="menu-stat"><div class="menu-stat-val" id="ms-level">1</div><div class="menu-stat-lbl">уровень</div></div>
+      <div class="menu-stat"><div class="menu-stat-val" id="ms-spins">0</div><div class="menu-stat-lbl">крутилок</div></div>
     </div>
-    <div class="stat-card">
-      <div class="stat-label">Уровень</div>
-      <div class="stat-value" id="s-level">1</div>
-      <div class="stat-sub" id="s-prestige-label"></div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Крутилок</div>
-      <div class="stat-value" id="s-spins">0</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Всего заработано</div>
-      <div class="stat-value" id="s-total">0</div>
+
+    <button class="menu-btn-play" onclick="startGame()">▶ ИГРАТЬ</button>
+
+    <div class="menu-features">
+      <div class="menu-feature"><div class="menu-feature-icon">🎰</div><div><span class="menu-feature-title">Слот Мелстроя</span>8 символов, джекпоты, пары</div></div>
+      <div class="menu-feature"><div class="menu-feature-icon">🛒</div><div><span class="menu-feature-title">Прокачка</span>9 улучшений — авто, множители, барабаны</div></div>
+      <div class="menu-feature"><div class="menu-feature-icon">⭐</div><div><span class="menu-feature-title">Престиж</span>Сбрось прогресс, получи x2 навсегда</div></div>
+      <div class="menu-feature"><div class="menu-feature-icon">💾</div><div><span class="menu-feature-title">Автосохранение</span>Прогресс сохраняется в браузере</div></div>
     </div>
   </div>
+</div>
 
-  <div class="slot-section">
-    <div class="slot-title">⚡ Слот Мелстроя ⚡</div>
-    <div class="reels" id="reels">
-      <div class="reel" id="r0">💎</div>
-      <div class="reel" id="r1">💰</div>
-      <div class="reel" id="r2">🏆</div>
+<!-- WIN POPUP -->
+<div class="win-popup" id="win-popup"></div>
+
+<!-- GAME -->
+<div id="game">
+  <header>
+    <div class="logo">БУРМАЛДА <span>ТАЙКУН</span></div>
+    <div class="header-right">
+      <div class="header-coins">💰 <span id="hd-coins">0</span></div>
+      <button class="menu-back-btn" onclick="goMenu()">☰ Меню</button>
     </div>
-    <div class="spin-area">
-      <div class="win-banner" id="win-banner">Нажми крутить!</div>
-      <button class="spin-btn" id="spin-btn" onclick="doSpin()">КРУТИТЬ</button>
-      <div class="spin-cost" id="spin-cost">Бесплатно</div>
-      <div class="multiplier-badge" id="mult-badge">Множитель: x1</div>
+  </header>
+
+  <div class="main">
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-label">Монеты</div><div class="stat-value" id="s-coins">0</div></div>
+      <div class="stat-card"><div class="stat-label">Уровень</div><div class="stat-value" id="s-level">1</div><div class="stat-sub" id="s-prestige-label"></div></div>
+      <div class="stat-card"><div class="stat-label">Крутилок</div><div class="stat-value" id="s-spins">0</div></div>
+      <div class="stat-card"><div class="stat-label">Заработано</div><div class="stat-value" id="s-total">0</div></div>
     </div>
-    <div class="xp-row">
-      <div class="xp-label">
-        <span>Опыт</span>
-        <span id="xp-text">0 / 100</span>
+
+    <div class="slot-section">
+      <div class="slot-title">⚡ Слот Мелстроя ⚡</div>
+      <div class="reels" id="reels">
+        <div class="reel" id="r0">💎</div>
+        <div class="reel" id="r1">💰</div>
+        <div class="reel" id="r2">🏆</div>
       </div>
-      <div class="xp-bar-bg"><div class="xp-bar" id="xp-bar"></div></div>
+      <div class="spin-area">
+        <div class="win-banner" id="win-banner">Нажми крутить!</div>
+        <button class="spin-btn" id="spin-btn" onclick="doSpin()">КРУТИТЬ</button>
+        <div class="multiplier-badge" id="mult-badge">Множитель: x1</div>
+      </div>
+      <div class="xp-row">
+        <div class="xp-label"><span>Опыт до следующего уровня</span><span id="xp-text">0 / 100</span></div>
+        <div class="xp-bar-bg"><div class="xp-bar" id="xp-bar"></div></div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header">🛒 Улучшения</div>
+      <div class="upgrade-list" id="upgrade-list"></div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header">📊 Выплаты</div>
+      <div class="payout-grid" id="payout-grid"></div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header">⭐ Престиж</div>
+      <div class="prestige-stars" id="prestige-stars"></div>
+      <button class="prestige-btn" id="prestige-btn" onclick="doPrestige()">ПРЕСТИЖ — сбросить ради x2 навсегда</button>
+      <div class="prestige-desc" id="prestige-desc">Доступно с уровня 10</div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header">📜 Лог</div>
+      <div class="log-list" id="log-list"></div>
     </div>
   </div>
-
-  <div class="section-card">
-    <div class="section-header">🛒 Улучшения</div>
-    <div class="upgrade-list" id="upgrade-list"></div>
-  </div>
-
-  <div class="section-card">
-    <div class="section-header">📊 Выплаты</div>
-    <div class="payout-grid" id="payout-grid"></div>
-  </div>
-
-  <div class="section-card">
-    <div class="section-header">⭐ Престиж</div>
-    <div class="prestige-stars" id="prestige-stars"></div>
-    <button class="prestige-btn" id="prestige-btn" onclick="doPrestige()">ПРЕСТИЖ (сбросить, получить x2 навсегда)</button>
-    <div class="prestige-desc" id="prestige-desc">Доступно с уровня 10</div>
-  </div>
-
-  <div class="section-card">
-    <div class="section-header">📜 Лог</div>
-    <div class="log-list" id="log-list"></div>
-  </div>
-
-</main>
-
-<footer>Бурмалда Тайкун &mdash; фан-игра про Мелстроя. Прогресс сохраняется автоматически.</footer>
+  <footer>Бурмалда Тайкун · фан-игра · прогресс сохраняется автоматически</footer>
+</div>
 
 <script>
 const SYMBOLS = ['💎','💰','🏆','🔑','🚗','🏠','💍','🪙'];
 const WEIGHTS  = [  1,   3,   2,   4,   4,   3,   2,   8];
 const JACKPOTS = {
-  '💎💎💎': 500, '🏆🏆🏆': 300, '💰💰💰': 200,
-  '🔑🔑🔑': 150, '🚗🚗🚗': 100, '🏠🏠🏠': 80,
-  '💍💍💍': 60,  '🪙🪙🪙': 20,
+  '💎💎💎':500,'🏆🏆🏆':300,'💰💰💰':200,
+  '🔑🔑🔑':150,'🚗🚗🚗':100,'🏠🏠🏠':80,'💍💍💍':60,'🪙🪙🪙':20,
 };
-const PAIR_BONUS = { '💎':50,'🏆':30,'💰':20,'🔑':15,'🚗':10,'🏠':8,'💍':6,'🪙':3 };
+const PAIR_BONUS = {'💎':50,'🏆':30,'💰':20,'🔑':15,'🚗':10,'🏠':8,'💍':6,'🪙':3};
 
 const UPGRADES = [
-  { id:'mult2',  icon:'⛓️',  name:'Цепь Мелстроя',      desc:'Множитель x2 к каждому выигрышу',      cost:50,    effect:()=>{ G.mult*=2; } },
-  { id:'auto3',  icon:'🤖',  name:'Авто-крутилка',       desc:'Крутит сам каждые 3 сек',              cost:150,   effect:()=>startAuto(3000) },
-  { id:'lucky',  icon:'🍀',  name:'Удача Мелстроя',      desc:'+30% шанс совпадения первых двух',     cost:250,   effect:()=>{ G.lucky=true; } },
-  { id:'extra',  icon:'✨',  name:'Экстра барабан',      desc:'Четвёртый барабан (x5 за 4 одинак.)',  cost:500,   effect:()=>addReel() },
-  { id:'mult3',  icon:'🚗',  name:'Мерседес',            desc:'Множитель x3 (стакуется)',             cost:800,   effect:()=>{ G.mult*=3; } },
-  { id:'auto1',  icon:'⚡',  name:'Турбо авто',          desc:'Авто каждые 1 сек',                    cost:2000,  effect:()=>startAuto(1000) },
-  { id:'extra2', icon:'🎰',  name:'Пятый барабан',       desc:'Пятый барабан (x10 за 5 одинак.)',     cost:5000,  effect:()=>addReel() },
-  { id:'mult5',  icon:'🥇',  name:'Золотая цепь',        desc:'Множитель x5 (стакуется)',             cost:8000,  effect:()=>{ G.mult*=5; } },
-  { id:'auto05', icon:'🔥',  name:'Гиперавто',           desc:'Авто каждые 0.5 сек',                 cost:20000, effect:()=>startAuto(500) },
+  {id:'mult2', icon:'⛓️', name:'Цепь Мелстроя',   desc:'Множитель x2',                       cost:50,    effect:()=>{G.mult*=2;}},
+  {id:'auto3', icon:'🤖', name:'Авто-крутилка',    desc:'Крутит сам каждые 3 сек',            cost:150,   effect:()=>startAuto(3000)},
+  {id:'lucky', icon:'🍀', name:'Удача Мелстроя',   desc:'+30% шанс совпасть первым двум',     cost:250,   effect:()=>{G.lucky=true;}},
+  {id:'extra', icon:'✨', name:'Экстра барабан',   desc:'4-й барабан (x5 за 4 одинак.)',      cost:500,   effect:()=>addReel()},
+  {id:'mult3', icon:'🚗', name:'Мерседес',          desc:'Множитель x3 (стакуется)',           cost:800,   effect:()=>{G.mult*=3;}},
+  {id:'auto1', icon:'⚡', name:'Турбо авто',        desc:'Авто каждую секунду',                cost:2000,  effect:()=>startAuto(1000)},
+  {id:'extra2',icon:'🎰', name:'Пятый барабан',     desc:'5-й барабан (x10 за 5 одинак.)',    cost:5000,  effect:()=>addReel()},
+  {id:'mult5', icon:'🥇', name:'Золотая цепь',      desc:'Множитель x5 (стакуется)',           cost:8000,  effect:()=>{G.mult*=5;}},
+  {id:'auto05',icon:'🔥', name:'Гиперавто',         desc:'Авто каждые 0.5 сек',               cost:20000, effect:()=>startAuto(500)},
 ];
 
-const PRESTIGE_REQ_LEVEL = 10;
-const PRESTIGE_MAX = 5;
-
-let G = loadState();
-let spinning = false;
-let autoTimer = null;
+let G, spinning=false, autoTimer=null;
 
 function defaultState() {
-  return {
-    coins:0, totalEarned:0, level:1, xp:0, spins:0,
-    mult:1, lucky:false, prestigeCount:0, prestigeMult:1,
-    bought: [], reelCount: 3,
-  };
+  return {coins:0,totalEarned:0,level:1,xp:0,spins:0,
+          mult:1,lucky:false,prestigeCount:0,prestigeMult:1,bought:[],reelCount:3};
 }
-
 function loadState() {
-  try {
-    const s = JSON.parse(localStorage.getItem('burmалda_v1'));
-    if(s && typeof s.coins === 'number') return s;
-  } catch(e) {}
+  try { const s=JSON.parse(localStorage.getItem('burmалda_v2')); if(s&&typeof s.coins==='number') return s; } catch(e){}
   return defaultState();
 }
-
-function saveState() {
-  localStorage.setItem('burmалda_v1', JSON.stringify(G));
-}
-
+function saveState() { localStorage.setItem('burmалda_v2',JSON.stringify(G)); }
 function fmt(n) {
-  n = Math.round(n);
+  n=Math.round(n);
   if(n>=1e9) return (n/1e9).toFixed(2)+'B';
   if(n>=1e6) return (n/1e6).toFixed(2)+'M';
   if(n>=1000) return (n/1000).toFixed(1)+'K';
   return n.toString();
 }
-
 function wrand() {
-  const total = WEIGHTS.reduce((a,b)=>a+b,0);
-  let r = Math.random()*total;
-  for(let i=0;i<SYMBOLS.length;i++){ r-=WEIGHTS[i]; if(r<=0) return SYMBOLS[i]; }
+  const tot=WEIGHTS.reduce((a,b)=>a+b,0); let r=Math.random()*tot;
+  for(let i=0;i<SYMBOLS.length;i++){r-=WEIGHTS[i];if(r<=0)return SYMBOLS[i];}
   return SYMBOLS[SYMBOLS.length-1];
+}
+
+function showPopup(msg) {
+  const p=document.getElementById('win-popup');
+  p.textContent=msg; p.classList.add('show');
+  setTimeout(()=>p.classList.remove('show'),1500);
 }
 
 function doSpin() {
   if(spinning) return;
-  spinning = true;
-  document.getElementById('spin-btn').disabled = true;
-  document.getElementById('win-banner').className = 'win-banner';
-  document.getElementById('win-banner').textContent = '⏳';
+  spinning=true;
+  document.getElementById('spin-btn').disabled=true;
+  document.getElementById('win-banner').className='win-banner';
+  document.getElementById('win-banner').textContent='⏳';
   G.spins++;
 
-  const n = G.reelCount;
-  for(let i=0;i<n;i++) {
-    const r = document.getElementById('r'+i);
-    if(r) r.classList.add('spinning');
-  }
+  const n=G.reelCount;
+  for(let i=0;i<n;i++){const r=document.getElementById('r'+i);if(r)r.classList.add('spinning');}
 
-  let tick = 0;
-  const iv = setInterval(() => {
-    for(let i=0;i<n;i++){
-      const r = document.getElementById('r'+i);
-      if(r) r.textContent = SYMBOLS[Math.floor(Math.random()*SYMBOLS.length)];
-    }
+  let tick=0;
+  const iv=setInterval(()=>{
+    for(let i=0;i<n;i++){const r=document.getElementById('r'+i);if(r)r.textContent=SYMBOLS[Math.floor(Math.random()*SYMBOLS.length)];}
     tick++;
-    if(tick > 12) {
+    if(tick>12){
       clearInterval(iv);
-      const res = [];
+      const res=[];
       for(let i=0;i<n;i++){
-        let s = wrand();
-        if(G.lucky && i>0 && i<2 && Math.random()<0.3) s = res[0];
+        let s=wrand();
+        if(G.lucky&&i>0&&i<2&&Math.random()<0.3)s=res[0];
         res.push(s);
-        const r = document.getElementById('r'+i);
-        if(r){ r.textContent = s; r.classList.remove('spinning'); r.classList.remove('win'); }
+        const r=document.getElementById('r'+i);
+        if(r){r.textContent=s;r.classList.remove('spinning');r.classList.remove('win');}
       }
-      spinning = false;
-      document.getElementById('spin-btn').disabled = false;
+      spinning=false;
+      document.getElementById('spin-btn').disabled=false;
       evalWin(res);
-      addXP(8 + Math.floor(G.level/5));
+      addXP(8+Math.floor(G.level/5));
       updateUI();
       saveState();
     }
-  }, 80);
+  },80);
 }
 
 function evalWin(res) {
-  const n = res.length;
-  let win = 0; let msg = ''; let big = false;
-
-  if(n>=5 && res.every(s=>s===res[0])) {
-    const base = JACKPOTS[res[0]+res[0]+res[0]]||10;
-    win = base * 20; msg = '🎰 МЕГА ДЖЕКПОТ x5! +'+fmt(win*G.mult*G.prestigeMult); big=true;
-    highlightAll(n);
-  } else if(n>=4 && res.slice(0,4).every(s=>s===res[0])) {
-    const base = JACKPOTS[res[0]+res[0]+res[0]]||10;
-    win = base * 5; msg = '🔥 СУПЕР ДЖЕКПОТ x4! +'+fmt(win*G.mult*G.prestigeMult); big=true;
-    highlightAll(4);
+  const n=res.length; let win=0,msg='',big=false;
+  if(n>=5&&res.every(s=>s===res[0])){
+    win=(JACKPOTS[res[0]+res[0]+res[0]]||10)*20; msg='🎰 МЕГА ДЖЕКПОТ x5! +'+fmt(win*G.mult*G.prestigeMult); big=true; highlightAll(n);
+  } else if(n>=4&&res.slice(0,4).every(s=>s===res[0])){
+    win=(JACKPOTS[res[0]+res[0]+res[0]]||10)*5; msg='🔥 СУПЕР ДЖЕКПОТ x4! +'+fmt(win*G.mult*G.prestigeMult); big=true; highlightAll(4);
   } else {
-    const key = res.slice(0,3).join('');
-    if(JACKPOTS[key]) {
-      win = JACKPOTS[key]; msg = '🎉 ДЖЕКПОТ! +'+fmt(win*G.mult*G.prestigeMult); big=true;
-      highlightAll(3);
-    } else {
-      const counts = {};
-      res.forEach(s=>counts[s]=(counts[s]||0)+1);
-      const pair = Object.entries(counts).find(([,v])=>v>=2);
-      if(pair) { win = PAIR_BONUS[pair[0]]||3; msg = '✅ Пара! +'+fmt(win*G.mult*G.prestigeMult); }
+    const key=res.slice(0,3).join('');
+    if(JACKPOTS[key]){win=JACKPOTS[key];msg='🎉 ДЖЕКПОТ! +'+fmt(win*G.mult*G.prestigeMult);big=true;highlightAll(3);}
+    else {
+      const counts={};res.forEach(s=>counts[s]=(counts[s]||0)+1);
+      const pair=Object.entries(counts).find(([,v])=>v>=2);
+      if(pair){win=PAIR_BONUS[pair[0]]||3;msg='✅ Пара! +'+fmt(win*G.mult*G.prestigeMult);}
     }
   }
-
-  if(win>0) {
-    const earned = Math.round(win * G.mult * G.prestigeMult);
-    G.coins += earned;
-    G.totalEarned += earned;
-    addLog(msg + '  ' + res.join(' '));
-    const banner = document.getElementById('win-banner');
-    banner.textContent = msg;
-    banner.className = 'win-banner' + (big ? ' jackpot' : '');
+  if(win>0){
+    const earned=Math.round(win*G.mult*G.prestigeMult);
+    G.coins+=earned; G.totalEarned+=earned;
+    addLog(msg+'  '+res.join(' '));
+    const b=document.getElementById('win-banner');
+    b.textContent=msg; b.className='win-banner'+(big?' jackpot':'');
+    if(big) showPopup(msg);
   } else {
-    const banner = document.getElementById('win-banner');
-    banner.textContent = '😔 Мимо...';
-    banner.className = 'win-banner miss';
-    addLog('😔 Мимо  ' + res.join(' '));
+    document.getElementById('win-banner').textContent='😔 Мимо...';
+    document.getElementById('win-banner').className='win-banner miss';
+    addLog('😔 Мимо  '+res.join(' '));
   }
 }
 
-function highlightAll(count) {
-  for(let i=0;i<count;i++){
-    const r = document.getElementById('r'+i);
-    if(r) r.classList.add('win');
-  }
+function highlightAll(count){for(let i=0;i<count;i++){const r=document.getElementById('r'+i);if(r)r.classList.add('win');}}
+function addXP(n){G.xp+=n;const need=G.level*100;if(G.xp>=need){G.xp-=need;G.level++;addLog('🆙 Уровень '+G.level+'!');}}
+function startAuto(ms){if(autoTimer)clearInterval(autoTimer);autoTimer=setInterval(()=>{if(!spinning)doSpin();},ms);}
+function addReel(){const n=G.reelCount;G.reelCount++;const c=document.getElementById('reels');const d=document.createElement('div');d.className='reel';d.id='r'+n;d.textContent='🪙';c.appendChild(d);}
+
+function buyUpgrade(id){
+  const u=UPGRADES.find(x=>x.id===id);
+  if(!u||G.bought.includes(id)||G.coins<u.cost)return;
+  G.coins-=u.cost; G.bought.push(id); u.effect();
+  addLog('🛒 Куплено: '+u.name); updateUI(); saveState();
 }
 
-function addXP(n) {
-  G.xp += n;
-  const needed = G.level * 100;
-  if(G.xp >= needed) { G.xp -= needed; G.level++; addLog('🆙 Уровень '+G.level+'!'); }
-}
-
-function startAuto(ms) {
-  if(autoTimer) clearInterval(autoTimer);
-  autoTimer = setInterval(()=>{ if(!spinning) doSpin(); }, ms);
-}
-
-function addReel() {
-  const n = G.reelCount;
-  G.reelCount++;
-  const reels = document.getElementById('reels');
-  const d = document.createElement('div');
-  d.className='reel'; d.id='r'+n; d.textContent='🪙';
-  reels.appendChild(d);
-}
-
-function buyUpgrade(id) {
-  const u = UPGRADES.find(x=>x.id===id);
-  if(!u || G.bought.includes(id) || G.coins<u.cost) return;
-  G.coins -= u.cost;
-  G.bought.push(id);
-  u.effect();
-  addLog('🛒 Куплено: '+u.name);
-  updateUI();
-  saveState();
-}
-
-function doPrestige() {
-  if(G.level < PRESTIGE_REQ_LEVEL || G.prestigeCount >= PRESTIGE_MAX) return;
-  if(!confirm('Сбросить прогресс и получить постоянный x2 к выигрышу?')) return;
-  G.prestigeCount++;
-  G.prestigeMult *= 2;
-  const saved = { prestigeCount: G.prestigeCount, prestigeMult: G.prestigeMult };
-  G = defaultState();
-  G.prestigeCount = saved.prestigeCount;
-  G.prestigeMult = saved.prestigeMult;
-  if(autoTimer) { clearInterval(autoTimer); autoTimer=null; }
+function doPrestige(){
+  if(G.level<10||G.prestigeCount>=5)return;
+  if(!confirm('Сбросить прогресс и получить постоянный x2 к выигрышу?'))return;
+  G.prestigeCount++; G.prestigeMult*=2;
+  const saved={prestigeCount:G.prestigeCount,prestigeMult:G.prestigeMult};
+  G=defaultState(); G.prestigeCount=saved.prestigeCount; G.prestigeMult=saved.prestigeMult;
+  if(autoTimer){clearInterval(autoTimer);autoTimer=null;}
   rebuildReels();
-  addLog('⭐ Престиж '+G.prestigeCount+'! Постоянный x'+G.prestigeMult+' навсегда');
-  updateUI();
-  saveState();
+  addLog('⭐ Престиж '+G.prestigeCount+'! x'+G.prestigeMult+' навсегда');
+  updateUI(); saveState();
 }
 
-function rebuildReels() {
-  const container = document.getElementById('reels');
-  container.innerHTML = '';
-  for(let i=0;i<3;i++){
-    const d=document.createElement('div');
-    d.className='reel'; d.id='r'+i; d.textContent=SYMBOLS[i];
-    container.appendChild(d);
-  }
+function rebuildReels(){
+  const c=document.getElementById('reels'); c.innerHTML='';
+  for(let i=0;i<3;i++){const d=document.createElement('div');d.className='reel';d.id='r'+i;d.textContent=SYMBOLS[i];c.appendChild(d);}
   G.reelCount=3;
 }
 
-function addLog(msg) {
-  const list = document.getElementById('log-list');
-  const item = document.createElement('div');
-  item.className='log-item'; item.textContent=msg;
-  list.insertBefore(item, list.firstChild);
-  while(list.children.length>30) list.removeChild(list.lastChild);
+function addLog(msg){
+  const l=document.getElementById('log-list');
+  const d=document.createElement('div');d.className='log-item';d.textContent=msg;
+  l.insertBefore(d,l.firstChild);
+  while(l.children.length>30)l.removeChild(l.lastChild);
 }
 
-function updateUI() {
-  document.getElementById('hd-coins').textContent = fmt(G.coins);
-  document.getElementById('s-coins').textContent = fmt(G.coins);
-  document.getElementById('s-level').textContent = G.level;
-  document.getElementById('s-spins').textContent = G.spins;
-  document.getElementById('s-total').textContent = fmt(G.totalEarned);
-
-  const needed = G.level * 100;
-  document.getElementById('xp-text').textContent = G.xp+' / '+needed;
-  document.getElementById('xp-bar').style.width = Math.round(G.xp/needed*100)+'%';
-
-  const totalMult = G.mult * G.prestigeMult;
-  document.getElementById('mult-badge').textContent = 'Множитель: x'+totalMult + (G.prestigeMult>1 ? ' (престиж x'+G.prestigeMult+')':'');
-
-  const pLabel = document.getElementById('s-prestige-label');
-  pLabel.textContent = G.prestigeCount > 0 ? '⭐'.repeat(G.prestigeCount) : '';
-
-  renderUpgrades();
-  renderPayouts();
-  renderPrestige();
+function updateUI(){
+  const tm=G.mult*G.prestigeMult;
+  document.getElementById('hd-coins').textContent=fmt(G.coins);
+  document.getElementById('s-coins').textContent=fmt(G.coins);
+  document.getElementById('s-level').textContent=G.level;
+  document.getElementById('s-spins').textContent=G.spins;
+  document.getElementById('s-total').textContent=fmt(G.totalEarned);
+  const need=G.level*100;
+  document.getElementById('xp-text').textContent=G.xp+' / '+need;
+  document.getElementById('xp-bar').style.width=Math.round(G.xp/need*100)+'%';
+  document.getElementById('mult-badge').textContent='Множитель: x'+tm+(G.prestigeMult>1?' (престиж x'+G.prestigeMult+')':'');
+  document.getElementById('s-prestige-label').textContent=G.prestigeCount>0?'⭐'.repeat(G.prestigeCount):'';
+  renderUpgrades(); renderPrestige();
+  document.getElementById('ms-coins').textContent=fmt(G.coins);
+  document.getElementById('ms-level').textContent=G.level;
+  document.getElementById('ms-spins').textContent=G.spins;
 }
 
-function renderUpgrades() {
-  const list = document.getElementById('upgrade-list');
-  list.innerHTML = '';
-  UPGRADES.forEach(u => {
-    const bought = G.bought.includes(u.id);
-    const can = G.coins >= u.cost && !bought;
-    const el = document.createElement('div');
-    el.className = 'upgrade-item' + (bought?' done':(can?' affordable':''));
-    el.innerHTML = `
-      <div class="u-icon">${u.icon}</div>
-      <div class="u-info">
-        <div class="u-name">${u.name}</div>
-        <div class="u-desc">${u.desc}</div>
-      </div>
-      <button class="u-btn ${bought?'bought':''}" ${(bought||!can)?'disabled':''} onclick="buyUpgrade('${u.id}')">
-        ${bought ? '✓ Куплено' : '💰 '+fmt(u.cost)}
-      </button>
-    `;
+function renderUpgrades(){
+  const list=document.getElementById('upgrade-list'); list.innerHTML='';
+  UPGRADES.forEach(u=>{
+    const bought=G.bought.includes(u.id), can=G.coins>=u.cost&&!bought;
+    const el=document.createElement('div');
+    el.className='upgrade-item'+(bought?' done':(can?' affordable':''));
+    el.innerHTML=`<div class="u-icon">${u.icon}</div><div class="u-info"><div class="u-name">${u.name}</div><div class="u-desc">${u.desc}</div></div><button class="u-btn ${bought?'bought':''}" ${(bought||!can)?'disabled':''} onclick="buyUpgrade('${u.id}')">${bought?'✓ Куплено':'💰 '+fmt(u.cost)}</button>`;
     list.appendChild(el);
   });
 }
 
-function renderPayouts() {
-  const grid = document.getElementById('payout-grid');
-  if(grid.children.length) return;
-  Object.entries(JACKPOTS).forEach(([combo, amt]) => {
-    const d = document.createElement('div');
-    d.className='payout-row';
+function renderPayouts(){
+  const g=document.getElementById('payout-grid');
+  if(g.children.length)return;
+  Object.entries(JACKPOTS).forEach(([combo,amt])=>{
+    const d=document.createElement('div');d.className='payout-row';
     d.innerHTML=`<span class="payout-combo">${combo}</span><span class="payout-amt">+${amt}</span>`;
-    grid.appendChild(d);
+    g.appendChild(d);
   });
 }
 
-function renderPrestige() {
-  const stars = document.getElementById('prestige-stars');
-  stars.innerHTML = '';
-  for(let i=0;i<PRESTIGE_MAX;i++){
-    const s=document.createElement('div');
-    s.className='p-star'+(i<G.prestigeCount?' lit':'');
-    s.textContent='⭐';
-    stars.appendChild(s);
-  }
-  const btn = document.getElementById('prestige-btn');
-  const desc = document.getElementById('prestige-desc');
-  const canPrestige = G.level>=PRESTIGE_REQ_LEVEL && G.prestigeCount<PRESTIGE_MAX;
-  btn.disabled = !canPrestige;
-  if(G.prestigeCount>=PRESTIGE_MAX) {
-    desc.textContent = 'Максимальный престиж достигнут! x'+G.prestigeMult+' навсегда';
-  } else {
-    desc.textContent = canPrestige
-      ? 'Доступно! Получишь x2 навсегда (итого x'+(G.prestigeMult*2)+')'
-      : 'Нужен уровень '+PRESTIGE_REQ_LEVEL+' (сейчас '+G.level+')';
-  }
+function renderPrestige(){
+  const s=document.getElementById('prestige-stars'); s.innerHTML='';
+  for(let i=0;i<5;i++){const d=document.createElement('div');d.className='p-star'+(i<G.prestigeCount?' lit':'');d.textContent='⭐';s.appendChild(d);}
+  const btn=document.getElementById('prestige-btn'),desc=document.getElementById('prestige-desc');
+  const can=G.level>=10&&G.prestigeCount<5;
+  btn.disabled=!can;
+  desc.textContent=G.prestigeCount>=5?'Макс. престиж! x'+G.prestigeMult+' навсегда':can?'Доступно! x'+(G.prestigeMult*2)+' навсегда':'Нужен уровень 10 (сейчас '+G.level+')';
 }
 
+function startGame(){
+  document.getElementById('menu').classList.remove('visible');
+  const g=document.getElementById('game');
+  g.classList.add('visible','enter');
+  setTimeout(()=>g.classList.remove('enter'),600);
+}
+
+function goMenu(){
+  document.getElementById('game').classList.remove('visible');
+  document.getElementById('menu').classList.add('visible');
+  updateUI();
+}
+
+// INIT
+G=loadState();
 rebuildReels();
-for(let i=3;i<G.reelCount;i++) addReel();
-if(G.bought.includes('mult2')) G.mult=Math.max(G.mult,2);
+for(let i=3;i<G.reelCount;i++)addReel();
+renderPayouts();
 updateUI();
+
+setTimeout(()=>{
+  const sp=document.getElementById('splash');
+  sp.classList.add('hide');
+  setTimeout(()=>{
+    sp.style.display='none';
+    document.getElementById('menu').classList.add('visible');
+  },600);
+},2200);
 </script>
 </body>
 </html>
