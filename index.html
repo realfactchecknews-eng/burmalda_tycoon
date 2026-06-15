@@ -35,8 +35,10 @@ button{font-family:inherit}
 .menu-left-ov{position:absolute;inset:0;background:linear-gradient(to right,transparent 55%,#000 100%),linear-gradient(to bottom,rgba(0,0,0,.4) 0%,transparent 30%)}
 .menu-badge{position:absolute;top:20px;left:20px;background:rgba(0,0,0,.8);border:1px solid var(--gold);border-radius:99px;padding:5px 16px;font-size:11px;color:var(--gold);letter-spacing:3px;font-weight:600}
 .menu-right{display:flex;flex-direction:column;justify-content:center;padding:60px 48px;gap:22px;min-height:100vh}
-.menu-title{font-size:58px;font-weight:900;color:var(--gold);letter-spacing:3px;line-height:1;animation:gPulse 3s ease-in-out infinite}
-@keyframes gPulse{0%,100%{text-shadow:0 0 30px rgba(245,197,24,.3)}50%{text-shadow:0 0 70px rgba(245,197,24,.8)}}
+.menu-logo{display:flex;flex-direction:column;align-items:flex-start;gap:6px}
+.menu-logo .logo-emblem{margin-bottom:6px}
+.menu-title{font-size:58px;font-weight:900;letter-spacing:3px;line-height:1;animation:gPulse 3s ease-in-out infinite;background:linear-gradient(180deg,#ffe888,#f5c518 50%,#b8860b);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+@keyframes gPulse{0%,100%{filter:drop-shadow(0 0 14px rgba(245,197,24,.25))}50%{filter:drop-shadow(0 0 30px rgba(245,197,24,.7))}}
 .menu-tagline{font-size:13px;color:var(--muted);letter-spacing:2px;margin-top:-8px}
 .menu-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 .menu-stat{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px 8px;text-align:center}
@@ -57,7 +59,14 @@ button{font-family:inherit}
 #game.enter{animation:gEnter .5s ease}
 @keyframes gEnter{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 .hdr{background:var(--bg2);border-bottom:1px solid var(--border);padding:0 20px;display:flex;align-items:center;justify-content:space-between;height:52px;position:sticky;top:0;z-index:50}
-.hdr-logo{font-size:16px;font-weight:900;color:var(--gold);letter-spacing:3px}
+.hdr-logo{display:flex;align-items:center;gap:9px}
+.logo{display:inline-flex;align-items:center;gap:12px}
+.logo-emblem{flex-shrink:0;filter:drop-shadow(0 2px 6px rgba(245,197,24,.35))}
+.logo-emblem.spin-ring{animation:emblemSpin 14s linear infinite}
+@keyframes emblemSpin{to{transform:rotate(360deg)}}
+.logo-word{display:flex;flex-direction:column;line-height:1}
+.logo-word b{font-weight:900;color:var(--gold);letter-spacing:3px;background:linear-gradient(180deg,#ffe06a,#f5c518 45%,#b8860b);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.logo-word small{font-size:8px;letter-spacing:4px;color:var(--muted);font-weight:600;margin-top:2px}
 .hdr-right{display:flex;align-items:center;gap:10px}
 .hdr-balance{display:flex;align-items:center;gap:6px;background:var(--bg3);border:1px solid var(--border);border-radius:99px;padding:5px 14px;font-size:13px;font-weight:700;color:var(--gold)}
 .hdr-back{background:transparent;border:1px solid var(--border2);border-radius:var(--r);padding:5px 12px;font-size:12px;color:var(--muted);cursor:pointer;transition:border-color .15s,color .15s;letter-spacing:1px}
@@ -214,8 +223,8 @@ button{font-family:inherit}
 .bj-table{background:radial-gradient(ellipse at 50% 30%,#0d3320,#071a10);border:2px solid #1a4a2a;border-radius:var(--r2);padding:24px;text-align:center;min-height:360px;position:relative;overflow:hidden}
 .bj-table::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.02'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");pointer-events:none}
 .bj-lbl{font-size:10px;color:rgba(255,255,255,.3);letter-spacing:3px;margin-bottom:8px;text-transform:uppercase}
-.cards-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;min-height:96px;align-items:center;margin:4px 0}
-.card-el{width:62px;height:90px;background:#fff;border-radius:7px;display:flex;flex-direction:column;justify-content:space-between;padding:5px;font-size:12px;font-weight:700;box-shadow:0 6px 18px rgba(0,0,0,.7),0 2px 4px rgba(0,0,0,.4)}
+.cards-row{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;min-height:124px;align-items:center;margin:4px 0}
+.card-el{width:84px;height:120px;background:#fff;border-radius:9px;display:flex;flex-direction:column;justify-content:space-between;padding:7px;font-size:16px;font-weight:700;box-shadow:0 8px 22px rgba(0,0,0,.7),0 2px 4px rgba(0,0,0,.4)}
 .card-el.red{color:#dc2626}
 .card-el.black{color:#111}
 .card-el.back{background:url('burmalda.jpg') center/cover;border:2px solid #3b5f8a}
@@ -224,7 +233,7 @@ button{font-family:inherit}
 .card-el.flip{animation:flipCard .4s ease both}
 @keyframes flipCard{0%{transform:scaleX(0)}50%{transform:scaleX(0)}100%{transform:scaleX(1)}}
 .card-top{align-self:flex-start;line-height:1}
-.card-mid{font-size:24px;align-self:center;line-height:1}
+.card-mid{font-size:34px;align-self:center;line-height:1}
 .card-bot{align-self:flex-end;transform:rotate(180deg);line-height:1}
 .bj-score{font-size:12px;font-weight:700;color:rgba(255,255,255,.5);min-height:18px;margin-bottom:4px}
 .bj-status{font-size:22px;font-weight:900;min-height:34px;margin:4px 0}
@@ -318,7 +327,16 @@ footer a:hover{color:var(--gold)}
       <div class="menu-badge">PREMIUM EDITION</div>
     </div>
     <div class="menu-right">
-      <div><div class="menu-title">BURMALDA</div><div class="menu-tagline">PREMIUM CASINO EXPERIENCE</div></div>
+      <div class="menu-logo">
+        <svg class="logo-emblem spin-ring" width="76" height="76" viewBox="0 0 48 48">
+          <circle cx="24" cy="24" r="22" fill="#0c0c0c" stroke="#f5c518" stroke-width="2"/>
+          <circle cx="24" cy="24" r="20" fill="none" stroke="#f5c518" stroke-width="3" stroke-dasharray="2 7.47" stroke-linecap="round"/>
+          <circle cx="24" cy="24" r="13" fill="#1a1400" stroke="#f5c518" stroke-width="1.5"/>
+          <text x="24" y="29.5" text-anchor="middle" font-size="13" font-weight="900" fill="#f5c518" font-family="Arial,sans-serif">67</text>
+        </svg>
+        <div class="menu-title">BURMALDA</div>
+        <div class="menu-tagline">PREMIUM CASINO EXPERIENCE</div>
+      </div>
       <div class="menu-stats">
         <div class="menu-stat"><div class="msv" id="ms-coins">500</div><div class="msl">BALANCE</div></div>
         <div class="menu-stat"><div class="msv" id="ms-level">1</div><div class="msl">LEVEL</div></div>
@@ -341,29 +359,45 @@ footer a:hover{color:var(--gold)}
 <!-- BEAR MODAL -->
 <div class="modal-overlay" id="bear-modal" style="display:none" onclick="if(event.target===this)closeBearModal()">
   <div class="modal-box">
-    <svg class="modal-bear" width="120" height="120" viewBox="0 0 120 120">
-      <circle cx="60" cy="65" r="42" fill="#8B5E3C"/>
-      <circle cx="60" cy="42" r="30" fill="#8B5E3C"/>
-      <circle cx="36" cy="18" r="13" fill="#8B5E3C"/>
-      <circle cx="84" cy="18" r="13" fill="#8B5E3C"/>
-      <circle cx="36" cy="18" r="7" fill="#C08B68"/>
-      <circle cx="84" cy="18" r="7" fill="#C08B68"/>
-      <ellipse cx="60" cy="52" rx="16" ry="11" fill="#C08B68"/>
-      <ellipse cx="60" cy="46" rx="7" ry="5" fill="#1a0a0a"/>
-      <circle cx="46" cy="34" r="5.5" fill="#1a0a0a"/>
-      <circle cx="74" cy="34" r="5.5" fill="#1a0a0a"/>
-      <circle cx="48" cy="32" r="2" fill="white"/>
-      <circle cx="76" cy="32" r="2" fill="white"/>
-      <path d="M 52 54 Q 60 61 68 54" stroke="#1a0a0a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-      <ellipse cx="60" cy="75" rx="24" ry="28" fill="#C08B68"/>
-      <ellipse cx="33" cy="95" rx="13" ry="9" fill="#8B5E3C"/>
-      <ellipse cx="87" cy="95" rx="13" ry="9" fill="#8B5E3C"/>
-      <circle cx="52" cy="68" r="4" fill="#A0705A" opacity=".5"/>
-      <circle cx="68" cy="68" r="4" fill="#A0705A" opacity=".5"/>
-      <text x="60" y="114" text-anchor="middle" font-size="14">⭐</text>
+    <svg class="modal-bear" width="150" height="150" viewBox="0 0 200 200">
+      <defs>
+        <radialGradient id="bFur" cx="42%" cy="35%" r="75%"><stop offset="0%" stop-color="#c89254"/><stop offset="100%" stop-color="#9c6a36"/></radialGradient>
+      </defs>
+      <ellipse cx="100" cy="186" rx="60" ry="11" fill="#000" opacity=".25"/>
+      <ellipse cx="62" cy="172" rx="26" ry="20" fill="#9c6a36"/>
+      <ellipse cx="138" cy="172" rx="26" ry="20" fill="#9c6a36"/>
+      <ellipse cx="62" cy="176" rx="14" ry="10" fill="#e9cfa6"/>
+      <ellipse cx="138" cy="176" rx="14" ry="10" fill="#e9cfa6"/>
+      <g><circle cx="60" cy="170" r="2.4" fill="#9c6a36"/><circle cx="60" cy="178" r="2.4" fill="#9c6a36"/></g>
+      <g><circle cx="140" cy="170" r="2.4" fill="#9c6a36"/><circle cx="140" cy="178" r="2.4" fill="#9c6a36"/></g>
+      <ellipse cx="40" cy="118" rx="18" ry="27" fill="#a9743f" transform="rotate(-18 40 118)"/>
+      <ellipse cx="160" cy="118" rx="18" ry="27" fill="#a9743f" transform="rotate(18 160 118)"/>
+      <ellipse cx="100" cy="132" rx="50" ry="46" fill="url(#bFur)"/>
+      <ellipse cx="100" cy="138" rx="32" ry="32" fill="#f0d8b0"/>
+      <circle cx="56" cy="54" r="25" fill="#a9743f"/>
+      <circle cx="144" cy="54" r="25" fill="#a9743f"/>
+      <circle cx="56" cy="54" r="13" fill="#e9cfa6"/>
+      <circle cx="144" cy="54" r="13" fill="#e9cfa6"/>
+      <circle cx="100" cy="74" r="49" fill="url(#bFur)"/>
+      <ellipse cx="100" cy="90" rx="27" ry="21" fill="#f0d8b0"/>
+      <circle cx="79" cy="64" r="8" fill="#2a1810"/>
+      <circle cx="121" cy="64" r="8" fill="#2a1810"/>
+      <circle cx="82" cy="61" r="3" fill="#fff"/>
+      <circle cx="124" cy="61" r="3" fill="#fff"/>
+      <ellipse cx="100" cy="82" rx="11" ry="8" fill="#2a1810"/>
+      <path d="M100 90 V99" stroke="#2a1810" stroke-width="3" stroke-linecap="round"/>
+      <path d="M100 99 Q90 107 82 100" stroke="#2a1810" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M100 99 Q110 107 118 100" stroke="#2a1810" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <circle cx="72" cy="82" r="6" fill="#e8907a" opacity=".55"/>
+      <circle cx="128" cy="82" r="6" fill="#e8907a" opacity=".55"/>
+      <g transform="translate(100 124)">
+        <path d="M0 0 L-22 -10 Q-30 0 -22 10 Z" fill="#e0245e"/>
+        <path d="M0 0 L22 -10 Q30 0 22 10 Z" fill="#e0245e"/>
+        <circle cx="0" cy="0" r="7" fill="#c01d4f"/>
+      </g>
     </svg>
-    <div class="modal-title">🎉 Telegram Bear!</div>
-    <div class="modal-sub">Ваша награда — медведь в Telegram!<br>Перейдите к администратору и покажите код:</div>
+    <div class="modal-title">🎉 Мишка в Telegram!</div>
+    <div class="modal-sub">Поздравляем с покупкой! Ваш подарок — настоящий мишка в Telegram (15 ⭐ звёзд) от админа.<br>Напишите администратору и покажите код:</div>
     <div class="modal-code" id="bear-code">BEAR-2024</div>
     <a class="modal-tg-btn" href="https://t.me/Matveyika" target="_blank" rel="noopener">✈️ Написать @Matveyika</a>
     <button class="modal-close" onclick="closeBearModal()">Закрыть</button>
@@ -373,7 +407,17 @@ footer a:hover{color:var(--gold)}
 <!-- GAME -->
 <div id="game">
   <div class="hdr">
-    <div class="hdr-logo">BURMALDA</div>
+    <div class="hdr-logo">
+      <div class="logo">
+        <svg class="logo-emblem" width="34" height="34" viewBox="0 0 48 48">
+          <circle cx="24" cy="24" r="22" fill="#0c0c0c" stroke="#f5c518" stroke-width="2"/>
+          <circle cx="24" cy="24" r="20" fill="none" stroke="#f5c518" stroke-width="3" stroke-dasharray="2 7.47" stroke-linecap="round"/>
+          <circle cx="24" cy="24" r="13" fill="#1a1400" stroke="#f5c518" stroke-width="1.5"/>
+          <text x="24" y="29.5" text-anchor="middle" font-size="13" font-weight="900" fill="#f5c518" font-family="Arial,sans-serif">67</text>
+        </svg>
+        <div class="logo-word"><b style="font-size:16px">BURMALDA</b><small>CASINO</small></div>
+      </div>
+    </div>
     <div class="hdr-right">
       <div class="hdr-balance">💰 <span id="hd-coins">500</span></div>
       <button class="hdr-back" onclick="goMenu()">LOBBY</button>
@@ -444,7 +488,7 @@ footer a:hover{color:var(--gold)}
           <div class="wheel-wrap">
             <canvas id="roul-canvas" width="360" height="360"></canvas>
             <div class="roul-result-big" id="roul-result">—</div>
-            <div class="roul-banner" id="roul-banner">Place your bets and spin</div>
+            <div class="roul-banner" id="roul-banner">Сделайте ставки и крутите</div>
           </div>
           <div class="roul-right">
             <div class="card-title">Selected numbers</div>
@@ -469,7 +513,7 @@ footer a:hover{color:var(--gold)}
               <div class="chip" onclick="rAddBet(100)">+100</div>
               <div class="chip" onclick="document.getElementById('r-bet').value=G.coins">ALL IN</div>
             </div>
-            <button class="roul-spin-btn" id="roul-spin-btn" onclick="rSpin()">SPIN THE WHEEL</button>
+            <button class="roul-spin-btn" id="roul-spin-btn" onclick="rSpin()">КРУТИТЬ КОЛЕСО</button>
           </div>
         </div>
       </div>
@@ -534,8 +578,8 @@ footer a:hover{color:var(--gold)}
     <div id="tab-shop" class="tab-panel">
       <div class="inner">
         <div style="text-align:center;margin-bottom:8px">
-          <div style="font-size:22px;font-weight:900;color:var(--gold);letter-spacing:2px">BURMALDA SHOP</div>
-          <div style="font-size:12px;color:var(--muted);margin-top:4px">Spend your winnings on exclusive rewards</div>
+          <div style="font-size:22px;font-weight:900;color:var(--gold);letter-spacing:2px">МАГАЗИН BURMALDA</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:4px">Трать монеты на эксклюзивные награды</div>
         </div>
         <div class="shop-grid" id="shop-grid"></div>
       </div>
@@ -642,10 +686,13 @@ function initRoulCanvas(){
 }
 function drawRoulette(ballAngle,ballR){
   if(!roulCtx)return;
-  const ctx=roulCtx,sz=roulSize,cx=sz/2,cy=sz/2,r=sz/2-4;
+  const ctx=roulCtx,sz=roulSize,cx=sz/2,cy=sz/2,r=sz/2-10;
   ctx.clearRect(0,0,sz,sz);
-  // outer ring
-  ctx.beginPath();ctx.arc(cx,cy,r+3,0,2*Math.PI);ctx.fillStyle='#8B6914';ctx.fill();
+  // outer glossy wooden rim
+  const rim=ctx.createRadialGradient(cx,cy-r*.3,r*.5,cx,cy,r+8);
+  rim.addColorStop(0,'#5a4410');rim.addColorStop(.75,'#a07d18');rim.addColorStop(.9,'#f5c518');rim.addColorStop(1,'#7a5e10');
+  ctx.beginPath();ctx.arc(cx,cy,r+8,0,2*Math.PI);ctx.fillStyle=rim;ctx.fill();
+  ctx.beginPath();ctx.arc(cx,cy,r+2,0,2*Math.PI);ctx.fillStyle='#1a1300';ctx.fill();
   // segments
   R_ORDER.forEach((num,i)=>{
     const a1=roulAngle+i*R_SEG-Math.PI/2,a2=a1+R_SEG;
@@ -677,10 +724,16 @@ function drawRoulette(ballAngle,ballR){
   // ball
   const ba=ballAngle!==undefined?ballAngle:roulBallAngle;
   const br=ballR!==undefined?ballR:roulBallR;
-  const bx=cx+br*Math.cos(ba),by=cy+br*Math.sin(ba);
-  ctx.beginPath();ctx.arc(bx,by,sz*.04,0,2*Math.PI);
-  ctx.fillStyle='#fff';ctx.shadowBlur=10;ctx.shadowColor='rgba(255,255,255,.9)';ctx.fill();ctx.shadowBlur=0;
-  ctx.beginPath();ctx.arc(bx-sz*.01,by-sz*.01,sz*.015,0,2*Math.PI);ctx.fillStyle='rgba(0,0,0,.3)';ctx.fill();
+  const bx=cx+br*Math.cos(ba),by=cy+br*Math.sin(ba),brad=sz*.038;
+  ctx.beginPath();ctx.arc(bx,by,brad,0,2*Math.PI);
+  const bg=ctx.createRadialGradient(bx-brad*.4,by-brad*.4,brad*.1,bx,by,brad);
+  bg.addColorStop(0,'#ffffff');bg.addColorStop(.6,'#e8e8e8');bg.addColorStop(1,'#999');
+  ctx.fillStyle=bg;ctx.shadowBlur=12;ctx.shadowColor='rgba(255,255,255,.85)';ctx.fill();ctx.shadowBlur=0;
+  ctx.beginPath();ctx.arc(bx-brad*.35,by-brad*.35,brad*.32,0,2*Math.PI);ctx.fillStyle='rgba(255,255,255,.9)';ctx.fill();
+  // top pointer
+  ctx.beginPath();ctx.moveTo(cx-9,2);ctx.lineTo(cx+9,2);ctx.lineTo(cx,22);ctx.closePath();
+  ctx.fillStyle='#f5c518';ctx.shadowBlur=8;ctx.shadowColor='rgba(245,197,24,.8)';ctx.fill();ctx.shadowBlur=0;
+  ctx.strokeStyle='#7a5e10';ctx.lineWidth=1;ctx.stroke();
 }
 
 function buildNumGrid(){
@@ -703,9 +756,9 @@ function updateRSel(){
 
 async function rSpin(){
   if(roulSpinning)return;
-  if(!roulSelected.length&&!roulQuick){document.getElementById('roul-banner').textContent='Select at least one bet!';return}
+  if(!roulSelected.length&&!roulQuick){document.getElementById('roul-banner').textContent='Выберите хотя бы одну ставку!';return}
   const bet=parseInt(document.getElementById('r-bet').value)||0;
-  if(bet<1||bet>G.coins){document.getElementById('roul-banner').textContent='Invalid bet amount';return}
+  if(bet<1||bet>G.coins){document.getElementById('roul-banner').textContent='Неверная сумма ставки';return}
   roulSpinning=true;document.getElementById('roul-spin-btn').disabled=true;
   G.coins-=bet;updateUI();
 
@@ -713,7 +766,7 @@ async function rSpin(){
   const idx=R_ORDER.indexOf(result);
   // calculate target wheel angle so result segment is at top (-PI/2)
   const targetSegCenter=-(idx+.5)*R_SEG;
-  const fullSpins=6*2*Math.PI;
+  const fullSpins=8*2*Math.PI;
   // normalize to make wheel spin forward
   let delta=targetSegCenter-roulAngle;
   delta=((delta%( 2*Math.PI))+2*Math.PI)%(2*Math.PI);
@@ -725,12 +778,12 @@ async function rSpin(){
   // ball spins opposite, faster initially, then slows and lands in pocket
   const ballStart=roulBallAngle;
   const ballEnd=Math.PI/2+targetSegCenter+(idx+.5)*R_SEG; // lands in pocket
-  const spinDur=5000;
+  const spinDur=6800;
   const start=performance.now();
 
-  document.getElementById('roul-banner').textContent='Spinning...';
+  document.getElementById('roul-banner').textContent='Колесо крутится...';
 
-  function easeOut(t){return 1-Math.pow(1-t,4)}
+  function easeOut(t){return 1-Math.pow(1-t,5)}
   function easeInOut(t){return t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2}
 
   function frame(){
@@ -774,8 +827,8 @@ function showRoulResult(result,bet){
   else if(roulQuick==='low'&&result>=1&&result<=18)won=bet*2;
   else if(roulQuick==='high'&&result>=19&&result<=36)won=bet*2;
   const banner=document.getElementById('roul-banner');
-  if(won>0){G.coins+=won;G.totalEarned+=won-bet;banner.textContent='✅ WIN +'+fmt(won)+'!';popup('🎡 Roulette +'+fmt(won)+'!');addLog('🎡 Roulette: '+result+' → +'+fmt(won))}
-  else{banner.textContent='😔 No win — '+result;addLog('🎡 Roulette: '+result+' — loss')}
+  if(won>0){G.coins+=won;G.totalEarned+=won-bet;banner.textContent='✅ ВЫИГРЫШ +'+fmt(won)+'!';popup('🎡 Рулетка +'+fmt(won)+'!');addLog('🎡 Рулетка: '+result+' → +'+fmt(won))}
+  else{banner.textContent='😔 Не повезло — '+result;addLog('🎡 Рулетка: '+result+' — проигрыш')}
   updateUI();saveG();
 }
 
@@ -984,7 +1037,7 @@ const SHOP_ITEMS=[
   {id:'cosmetic_table',icon:'🌙',name:'Night Table',desc:'Dark moon theme for the blackjack table',price:5000,type:'cosmetic'},
   {id:'cosmetic_rocket',icon:'🛸',name:'UFO Crash',desc:'Replace the crash rocket with a UFO',price:10000,type:'cosmetic'},
   {id:'booster_x2',icon:'⚡',name:'Win Booster',desc:'Double all winnings for 10 spins',price:3000,type:'booster'},
-  {id:'bear',icon:'🐻',name:'Telegram Bear',desc:'Real Telegram Bear gift from the admin! Show us the code to claim.',price:100000,type:'special'},
+  {id:'bear',icon:'🐻',name:'Мишка в Telegram',desc:'Настоящий подарок «Мишка» в Telegram от админа! Купи и получи код для получения.',price:100000,type:'special'},
 ];
 function renderShop(){
   const g=document.getElementById('shop-grid');g.innerHTML='';
@@ -995,24 +1048,29 @@ function renderShop(){
     el.className='shop-item'+(item.type==='special'?' special':'');
     if(item.id==='bear'){
       el.innerHTML=`
-        <svg width="80" height="80" viewBox="0 0 120 120" style="flex-shrink:0">
-          <circle cx="60" cy="65" r="42" fill="#8B5E3C"/><circle cx="60" cy="42" r="30" fill="#8B5E3C"/>
-          <circle cx="36" cy="18" r="13" fill="#8B5E3C"/><circle cx="84" cy="18" r="13" fill="#8B5E3C"/>
-          <circle cx="36" cy="18" r="7" fill="#C08B68"/><circle cx="84" cy="18" r="7" fill="#C08B68"/>
-          <ellipse cx="60" cy="52" rx="16" ry="11" fill="#C08B68"/>
-          <ellipse cx="60" cy="46" rx="7" ry="5" fill="#1a0a0a"/>
-          <circle cx="46" cy="34" r="5.5" fill="#1a0a0a"/><circle cx="74" cy="34" r="5.5" fill="#1a0a0a"/>
-          <circle cx="48" cy="32" r="2" fill="white"/><circle cx="76" cy="32" r="2" fill="white"/>
-          <path d="M 52 54 Q 60 61 68 54" stroke="#1a0a0a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-          <ellipse cx="60" cy="75" rx="24" ry="28" fill="#C08B68"/>
-          <ellipse cx="33" cy="95" rx="13" ry="9" fill="#8B5E3C"/><ellipse cx="87" cy="95" rx="13" ry="9" fill="#8B5E3C"/>
-          <text x="60" y="114" text-anchor="middle" font-size="14">⭐</text>
+        <svg width="92" height="92" viewBox="0 0 200 200" style="flex-shrink:0">
+          <defs><radialGradient id="sFur" cx="42%" cy="35%" r="75%"><stop offset="0%" stop-color="#c89254"/><stop offset="100%" stop-color="#9c6a36"/></radialGradient></defs>
+          <ellipse cx="62" cy="172" rx="26" ry="20" fill="#9c6a36"/><ellipse cx="138" cy="172" rx="26" ry="20" fill="#9c6a36"/>
+          <ellipse cx="62" cy="176" rx="14" ry="10" fill="#e9cfa6"/><ellipse cx="138" cy="176" rx="14" ry="10" fill="#e9cfa6"/>
+          <ellipse cx="40" cy="118" rx="18" ry="27" fill="#a9743f" transform="rotate(-18 40 118)"/><ellipse cx="160" cy="118" rx="18" ry="27" fill="#a9743f" transform="rotate(18 160 118)"/>
+          <ellipse cx="100" cy="132" rx="50" ry="46" fill="url(#sFur)"/><ellipse cx="100" cy="138" rx="32" ry="32" fill="#f0d8b0"/>
+          <circle cx="56" cy="54" r="25" fill="#a9743f"/><circle cx="144" cy="54" r="25" fill="#a9743f"/>
+          <circle cx="56" cy="54" r="13" fill="#e9cfa6"/><circle cx="144" cy="54" r="13" fill="#e9cfa6"/>
+          <circle cx="100" cy="74" r="49" fill="url(#sFur)"/><ellipse cx="100" cy="90" rx="27" ry="21" fill="#f0d8b0"/>
+          <circle cx="79" cy="64" r="8" fill="#2a1810"/><circle cx="121" cy="64" r="8" fill="#2a1810"/>
+          <circle cx="82" cy="61" r="3" fill="#fff"/><circle cx="124" cy="61" r="3" fill="#fff"/>
+          <ellipse cx="100" cy="82" rx="11" ry="8" fill="#2a1810"/>
+          <path d="M100 90 V99" stroke="#2a1810" stroke-width="3" stroke-linecap="round"/>
+          <path d="M100 99 Q90 107 82 100" stroke="#2a1810" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <path d="M100 99 Q110 107 118 100" stroke="#2a1810" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <circle cx="72" cy="82" r="6" fill="#e8907a" opacity=".55"/><circle cx="128" cy="82" r="6" fill="#e8907a" opacity=".55"/>
+          <g transform="translate(100 124)"><path d="M0 0 L-22 -10 Q-30 0 -22 10 Z" fill="#e0245e"/><path d="M0 0 L22 -10 Q30 0 22 10 Z" fill="#e0245e"/><circle cx="0" cy="0" r="7" fill="#c01d4f"/></g>
         </svg>
         <div class="shop-item-name">${item.name}</div>
         <div class="shop-item-desc">${item.desc}</div>
-        <div style="font-size:11px;color:#a855f7;margin-top:-4px;font-weight:600">🌟 15 Telegram Stars from admin</div>
+        <div style="font-size:11px;color:#a855f7;margin-top:-4px;font-weight:600">🌟 Настоящий подарок · 15 звёзд от админа</div>
         <div class="shop-item-price">💰 ${fmt(item.price)}</div>
-        <button class="shop-buy-btn ${owned?'owned':''}" ${(!can&&!owned)?'disabled':''} onclick="buyShopItem('${item.id}')">${owned?'✓ OWNED':'BUY'}</button>`;
+        <button class="shop-buy-btn ${owned?'owned':''}" ${(!can&&!owned)?'disabled':''} onclick="buyShopItem('${item.id}')">${owned?'✓ КУПЛЕНО':'КУПИТЬ'}</button>`;
     }else{
       el.innerHTML=`
         <div class="shop-item-icon">${item.icon}</div>
@@ -1027,12 +1085,12 @@ function renderShop(){
 function buyShopItem(id){
   const item=SHOP_ITEMS.find(x=>x.id===id);
   if(!item||G.shopOwned.includes(id))return;
-  if(G.coins<item.price){popup('Not enough coins!');return}
-  if(!confirm(`Buy "${item.name}" for ${fmt(item.price)} coins?`))return;
+  if(G.coins<item.price){popup('Недостаточно монет!');return}
+  if(!confirm(`Купить «${item.name}» за ${fmt(item.price)} монет?`))return;
   G.coins-=item.price;G.shopOwned.push(id);
   if(id==='bear'){openBearModal()}
-  else popup('✅ Purchased: '+item.name);
-  addLog('🛍️ Bought: '+item.name);
+  else popup('✅ Куплено: '+item.name);
+  addLog('🛍️ Куплено: '+item.name);
   renderShop();updateUI();saveG();
 }
 function openBearModal(){
