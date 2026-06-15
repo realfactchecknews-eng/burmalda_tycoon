@@ -80,89 +80,100 @@ body {
   display: none;
   position: fixed; inset: 0; z-index: 90;
   background: #000;
-  flex-direction: column;
-  align-items: center;
   overflow-y: auto;
 }
-#menu.visible { display: flex; }
+#menu.visible { display: block; }
 
-.menu-hero {
-  position: relative; width: 100%; max-width: 480px;
-  height: 420px; overflow: hidden; flex-shrink: 0;
+.menu-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 100vh;
 }
-.menu-hero img {
+
+.menu-left {
+  position: sticky; top: 0; height: 100vh;
+  overflow: hidden; flex-shrink: 0;
+}
+.menu-left img {
   width: 100%; height: 100%; object-fit: cover; object-position: top center;
   display: block;
 }
-.menu-hero-overlay {
+.menu-left-overlay {
   position: absolute; inset: 0;
-  background: linear-gradient(to bottom, transparent 30%, #000 100%);
+  background: linear-gradient(to right, transparent 60%, #000 100%),
+              linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, transparent 40%);
 }
 .menu-hero-badge {
-  position: absolute; top: 16px; left: 16px;
-  background: rgba(0,0,0,0.7); border: 1px solid var(--gold);
-  border-radius: 99px; padding: 4px 14px;
-  font-size: 12px; color: var(--gold); letter-spacing: 1px;
+  position: absolute; top: 20px; left: 20px;
+  background: rgba(0,0,0,0.75); border: 1px solid var(--gold);
+  border-radius: 99px; padding: 5px 16px;
+  font-size: 12px; color: var(--gold); letter-spacing: 2px; font-weight: 600;
 }
 
-.menu-content {
-  width: 100%; max-width: 480px;
-  padding: 0 24px 48px;
-  display: flex; flex-direction: column; align-items: center; gap: 16px;
-  margin-top: -80px; position: relative; z-index: 2;
+.menu-right {
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 60px 48px; gap: 20px; min-height: 100vh;
 }
 
 .menu-title {
-  font-size: 42px; font-weight: 900; color: var(--gold);
-  letter-spacing: 2px; text-align: center; line-height: 1.1;
-  text-shadow: 0 0 40px rgba(245,197,24,0.4);
+  font-size: 56px; font-weight: 900; color: var(--gold);
+  letter-spacing: 2px; line-height: 1;
   animation: pulseGold 3s ease-in-out infinite;
 }
 @keyframes pulseGold {
   0%,100% { text-shadow: 0 0 30px rgba(245,197,24,0.3); }
-  50%      { text-shadow: 0 0 60px rgba(245,197,24,0.7); }
+  50%      { text-shadow: 0 0 70px rgba(245,197,24,0.8); }
 }
 .menu-tagline {
-  font-size: 14px; color: var(--muted); text-align: center; letter-spacing: 1px;
+  font-size: 14px; color: var(--muted); letter-spacing: 1px; margin-top: -8px;
 }
 
 .menu-btn-play {
   width: 100%; padding: 18px;
   background: var(--gold); color: #000;
   border: none; border-radius: var(--radius);
-  font-size: 18px; font-weight: 800; letter-spacing: 1px;
+  font-size: 20px; font-weight: 800; letter-spacing: 1px;
   cursor: pointer;
   transition: background 0.15s, transform 0.1s;
   animation: btnPulse 2s ease-in-out infinite;
 }
 @keyframes btnPulse {
-  0%,100% { box-shadow: 0 0 0 0 rgba(245,197,24,0.4); }
-  50%      { box-shadow: 0 0 0 12px rgba(245,197,24,0); }
+  0%,100% { box-shadow: 0 0 0 0 rgba(245,197,24,0.5); }
+  50%      { box-shadow: 0 0 0 14px rgba(245,197,24,0); }
 }
 .menu-btn-play:hover { background: var(--gold2); transform: scale(1.02); }
 .menu-btn-play:active { transform: scale(0.98); }
 
 .menu-stats-row {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 100%;
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
 }
 .menu-stat {
   background: var(--bg2); border: 1px solid var(--border);
-  border-radius: var(--radius-sm); padding: 12px 8px; text-align: center;
+  border-radius: var(--radius-sm); padding: 14px 8px; text-align: center;
 }
-.menu-stat-val { font-size: 20px; font-weight: 700; color: var(--gold); }
-.menu-stat-lbl { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.menu-stat-val { font-size: 22px; font-weight: 700; color: var(--gold); }
+.menu-stat-lbl { font-size: 11px; color: var(--muted); margin-top: 3px; }
 
 .menu-features {
-  width: 100%; display: flex; flex-direction: column; gap: 8px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
 }
 .menu-feature {
-  display: flex; align-items: center; gap: 12px;
+  display: flex; align-items: center; gap: 10px;
   background: var(--bg2); border: 1px solid var(--border);
   border-radius: var(--radius-sm); padding: 12px 14px;
-  font-size: 13px; color: var(--muted);
+  font-size: 12px; color: var(--muted);
 }
 .menu-feature-icon { font-size: 20px; flex-shrink: 0; }
-.menu-feature-title { font-weight: 600; color: var(--text); display: block; }
+.menu-feature-title { font-weight: 600; color: var(--text); display: block; font-size: 13px; }
+
+@media (max-width: 768px) {
+  .menu-layout { grid-template-columns: 1fr; }
+  .menu-left { position: relative; height: 55vw; max-height: 380px; }
+  .menu-left-overlay { background: linear-gradient(to bottom, transparent 40%, #000 100%); }
+  .menu-right { padding: 28px 20px 48px; min-height: unset; }
+  .menu-title { font-size: 36px; }
+  .menu-features { grid-template-columns: 1fr; }
+}
 
 /* ========== GAME ========== */
 #game {
@@ -353,28 +364,32 @@ footer {
 
 <!-- MENU -->
 <div id="menu">
-  <div class="menu-hero">
-    <img src="melstroy.jpg" alt="Мелстрой" onerror="this.style.display='none'">
-    <div class="menu-hero-overlay"></div>
-    <div class="menu-hero-badge">МЕЛСТРОЙ EDITION</div>
-  </div>
-  <div class="menu-content">
-    <div class="menu-title">БУРМАЛДА<br>ТАЙКУН</div>
-    <div class="menu-tagline">крути слот — стань богатым как Мелстрой</div>
-
-    <div class="menu-stats-row" id="menu-stats-row">
-      <div class="menu-stat"><div class="menu-stat-val" id="ms-coins">0</div><div class="menu-stat-lbl">монеты</div></div>
-      <div class="menu-stat"><div class="menu-stat-val" id="ms-level">1</div><div class="menu-stat-lbl">уровень</div></div>
-      <div class="menu-stat"><div class="menu-stat-val" id="ms-spins">0</div><div class="menu-stat-lbl">крутилок</div></div>
+  <div class="menu-layout">
+    <div class="menu-left">
+      <img src="melstroy.jpg" alt="Мелстрой" onerror="this.style.display='none'">
+      <div class="menu-left-overlay"></div>
+      <div class="menu-hero-badge">МЕЛСТРОЙ EDITION</div>
     </div>
+    <div class="menu-right">
+      <div>
+        <div class="menu-title">БУРМАЛДА<br>ТАЙКУН</div>
+        <div class="menu-tagline">крути слот — стань богатым как Мелстрой</div>
+      </div>
 
-    <button class="menu-btn-play" onclick="startGame()">▶ ИГРАТЬ</button>
+      <div class="menu-stats-row">
+        <div class="menu-stat"><div class="menu-stat-val" id="ms-coins">0</div><div class="menu-stat-lbl">монеты</div></div>
+        <div class="menu-stat"><div class="menu-stat-val" id="ms-level">1</div><div class="menu-stat-lbl">уровень</div></div>
+        <div class="menu-stat"><div class="menu-stat-val" id="ms-spins">0</div><div class="menu-stat-lbl">крутилок</div></div>
+      </div>
 
-    <div class="menu-features">
-      <div class="menu-feature"><div class="menu-feature-icon">🎰</div><div><span class="menu-feature-title">Слот Мелстроя</span>8 символов, джекпоты, пары</div></div>
-      <div class="menu-feature"><div class="menu-feature-icon">🛒</div><div><span class="menu-feature-title">Прокачка</span>9 улучшений — авто, множители, барабаны</div></div>
-      <div class="menu-feature"><div class="menu-feature-icon">⭐</div><div><span class="menu-feature-title">Престиж</span>Сбрось прогресс, получи x2 навсегда</div></div>
-      <div class="menu-feature"><div class="menu-feature-icon">💾</div><div><span class="menu-feature-title">Автосохранение</span>Прогресс сохраняется в браузере</div></div>
+      <button class="menu-btn-play" onclick="startGame()">▶ ИГРАТЬ</button>
+
+      <div class="menu-features">
+        <div class="menu-feature"><div class="menu-feature-icon">🎰</div><div><span class="menu-feature-title">Слот Мелстроя</span>8 символов, джекпоты, пары</div></div>
+        <div class="menu-feature"><div class="menu-feature-icon">🛒</div><div><span class="menu-feature-title">Прокачка</span>9 улучшений</div></div>
+        <div class="menu-feature"><div class="menu-feature-icon">⭐</div><div><span class="menu-feature-title">Престиж</span>x2 навсегда</div></div>
+        <div class="menu-feature"><div class="menu-feature-icon">💾</div><div><span class="menu-feature-title">Автосохранение</span>в браузере</div></div>
+      </div>
     </div>
   </div>
 </div>
