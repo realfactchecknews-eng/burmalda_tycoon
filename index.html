@@ -6,7 +6,7 @@
 <title>BURMALDA — Premium Casino</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--bg:#080808;--bg2:#111;--bg3:#181818;--bg4:#1e1e1e;--border:#252525;--border2:#333;--text:#f0f0f0;--muted:#777;--gold:#f5c518;--gold2:#d4a017;--green:#22c55e;--red:#ef4444;--r:10px;--r2:14px}
+:root{--bg:#080808;--bg2:#111;--bg3:#181818;--bg4:#1e1e1e;--border:#252525;--border2:#333;--text:#f0f0f0;--muted:#777;--muted2:#444;--gold:#f5c518;--gold2:#d4a017;--green:#22c55e;--red:#ef4444;--r:10px;--r2:14px}
 html{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh}
 body{display:flex;flex-direction:column;min-height:100vh}
 button{font-family:inherit}
@@ -181,6 +181,7 @@ button{font-family:inherit}
 /* ROULETTE */
 .roul-layout{display:grid;grid-template-columns:1fr 360px;gap:20px;width:100%;max-width:900px}
 @media(max-width:700px){.roul-layout{grid-template-columns:1fr}}
+#roul-canvas{max-width:100%;height:auto;display:block}
 .wheel-wrap{display:flex;flex-direction:column;align-items:center;gap:14px}
 #roul-canvas{border-radius:50%;display:block;cursor:default}
 .roul-result-big{font-size:56px;font-weight:900;min-height:70px;text-align:center;display:flex;align-items:center;justify-content:center;border-radius:var(--r2);width:100%;background:var(--bg2);border:1px solid var(--border);transition:all .3s}
@@ -217,7 +218,7 @@ button{font-family:inherit}
 .card-el{width:62px;height:90px;background:#fff;border-radius:7px;display:flex;flex-direction:column;justify-content:space-between;padding:5px;font-size:12px;font-weight:700;box-shadow:0 6px 18px rgba(0,0,0,.7),0 2px 4px rgba(0,0,0,.4)}
 .card-el.red{color:#dc2626}
 .card-el.black{color:#111}
-.card-el.back{background:linear-gradient(135deg,#1e3a5f 25%,#2a4f7a 25%,#2a4f7a 50%,#1e3a5f 50%,#1e3a5f 75%,#2a4f7a 75%);background-size:8px 8px;border:2px solid #3b5f8a}
+.card-el.back{background:url('burmalda.jpg') center/cover;border:2px solid #3b5f8a}
 .card-el.deal{animation:dealCard .35s ease both}
 @keyframes dealCard{from{transform:translateY(-60px) rotate(-5deg) scale(.8);opacity:0}to{transform:none;opacity:1}}
 .card-el.flip{animation:flipCard .4s ease both}
@@ -631,8 +632,10 @@ let roulCv,roulCtx,roulSize;
 function initRoulCanvas(){
   roulCv=document.getElementById('roul-canvas');
   const wrap=roulCv.parentElement;
-  roulSize=Math.min(wrap.clientWidth||360,360);
+  const avail=Math.min(wrap.clientWidth||420,window.innerWidth-32);
+  roulSize=window.innerWidth>700?Math.min(avail,440):Math.min(avail,360);
   roulCv.width=roulSize;roulCv.height=roulSize;
+  roulCv.style.width=roulSize+'px';roulCv.style.height=roulSize+'px';
   roulCtx=roulCv.getContext('2d');
   roulBallR=roulSize*.44;
   drawRoulette();
