@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BURMALDA — Premium Casino</title>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{--bg:#080808;--bg2:#111;--bg3:#181818;--bg4:#1e1e1e;--border:#252525;--border2:#333;--text:#f0f0f0;--muted:#777;--muted2:#444;--gold:#f5c518;--gold2:#d4a017;--green:#22c55e;--red:#ef4444;--r:10px;--r2:14px}
@@ -337,6 +339,32 @@ footer a{color:var(--muted);text-decoration:none;transition:color .2s}
 footer a:hover{color:var(--gold)}
 
 @media(max-width:600px){.stats-row{grid-template-columns:repeat(2,1fr)}.reel-sym{font-size:46px}.reel-win{height:90px}.reel-win::before{border-radius:5px}.reel-strip .reel-sym{height:90px}.machine-bottom{flex-direction:column}.m-displays{width:100%;justify-content:center}.m-spin-btn{width:100%}.crash-mult{font-size:48px}.qb-grid{grid-template-columns:repeat(3,1fr)}}
+
+/* PROFILE TAB */
+.profile-section{background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r2);padding:20px;margin-bottom:14px}
+.profile-section-title{font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:14px;font-weight:600}
+.profile-avatar{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold2));display:flex;align-items:center;justify-content:center;font-size:36px;margin:0 auto 16px;box-shadow:0 0 24px rgba(245,197,24,.3)}
+.profile-name{font-size:22px;font-weight:900;text-align:center;color:var(--gold);margin-bottom:4px}
+.profile-sub{font-size:12px;color:var(--muted);text-align:center;letter-spacing:1px;margin-bottom:16px}
+.profile-id-wrap{background:#000;border:1px solid var(--border2);border-radius:var(--r);padding:10px 14px;display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.profile-id-text{font-family:monospace;font-size:14px;color:var(--gold);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;letter-spacing:1px}
+.profile-copy-btn{background:var(--bg4);border:1px solid var(--border2);border-radius:8px;color:var(--gold);padding:6px 12px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;transition:background .15s}
+.profile-copy-btn:hover{background:rgba(245,197,24,.15)}
+.profile-hint{font-size:11px;color:var(--muted);line-height:1.5}
+.profile-sync-input{width:100%;background:#000;border:1px solid var(--border2);border-radius:var(--r);color:var(--text);font-size:14px;padding:10px 14px;font-family:monospace;margin-bottom:10px;outline:none;transition:border-color .15s}
+.profile-sync-input:focus{border-color:var(--gold)}
+.profile-sync-btn{width:100%;padding:12px;background:rgba(245,197,24,.1);border:1px solid rgba(245,197,24,.4);border-radius:var(--r);font-size:14px;font-weight:700;color:var(--gold);cursor:pointer;transition:background .15s;letter-spacing:1px;margin-bottom:6px}
+.profile-sync-btn:hover{background:rgba(245,197,24,.2)}
+.profile-sync-status{font-size:12px;text-align:center;min-height:18px}
+.profile-stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.profile-stat{background:var(--bg4);border:1px solid var(--border);border-radius:var(--r);padding:14px;text-align:center}
+.profile-stat-v{font-size:20px;font-weight:800;color:var(--gold)}
+.profile-stat-l{font-size:11px;color:var(--muted);margin-top:3px;letter-spacing:1px}
+.cloud-status{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);padding:4px 0}
+.cloud-dot{width:8px;height:8px;border-radius:50%;background:var(--muted2);flex-shrink:0}
+.cloud-dot.online{background:var(--green);box-shadow:0 0 8px rgba(34,197,94,.5)}
+.cloud-dot.syncing{background:var(--gold);animation:cdPulse 1s ease-in-out infinite}
+@keyframes cdPulse{0%,100%{opacity:1}50%{opacity:.3}}
 </style>
 </head>
 <body>
@@ -586,6 +614,7 @@ footer a:hover{color:var(--gold)}
     <button class="tab-btn" onclick="showTab('blackjack',this)">🃏 BLACKJACK</button>
     <button class="tab-btn" onclick="showTab('crash',this)">🚀 CRASH</button>
     <button class="tab-btn" onclick="showTab('shop',this)">🛍️ SHOP</button>
+    <button class="tab-btn" onclick="showTab('profile',this)">👤 ПРОФИЛЬ</button>
   </nav>
   <div class="tab-content">
 
@@ -743,6 +772,50 @@ footer a:hover{color:var(--gold)}
       </div>
     </div>
 
+    <!-- PROFILE -->
+    <div id="tab-profile" class="tab-panel">
+      <div class="inner">
+        <div class="profile-section">
+          <div class="profile-avatar">🎰</div>
+          <div class="profile-name">BURMALDA PLAYER</div>
+          <div class="profile-sub">ЛИЧНЫЙ КАБИНЕТ</div>
+          <div class="cloud-status">
+            <div class="cloud-dot" id="cloud-dot"></div>
+            <span id="cloud-status-text">Инициализация...</span>
+          </div>
+        </div>
+        <div class="profile-section">
+          <div class="profile-section-title">🔑 Ваш ID аккаунта</div>
+          <div class="profile-id-wrap">
+            <span class="profile-id-text" id="profile-uid-display">—</span>
+            <button class="profile-copy-btn" onclick="copyUID()">📋 Копировать</button>
+          </div>
+          <div class="profile-hint">Сохрани этот ID — он нужен чтобы войти на другом устройстве и продолжить игру с тем же прогрессом.</div>
+        </div>
+        <div class="profile-section">
+          <div class="profile-section-title">📱 Войти с другого устройства</div>
+          <input class="profile-sync-input" id="profile-uid-input" type="text" placeholder="Вставь свой ID аккаунта..." autocomplete="off" spellcheck="false">
+          <button class="profile-sync-btn" onclick="switchAccount()">↩ ВОЙТИ В АККАУНТ</button>
+          <div class="profile-sync-status" id="profile-sync-status"></div>
+        </div>
+        <div class="profile-section">
+          <div class="profile-section-title">📊 Статистика</div>
+          <div class="profile-stats-grid">
+            <div class="profile-stat"><div class="profile-stat-v" id="pr-coins">—</div><div class="profile-stat-l">МОНЕТЫ</div></div>
+            <div class="profile-stat"><div class="profile-stat-v" id="pr-level">—</div><div class="profile-stat-l">УРОВЕНЬ</div></div>
+            <div class="profile-stat"><div class="profile-stat-v" id="pr-spins">—</div><div class="profile-stat-l">ИГР СЫГРАНО</div></div>
+            <div class="profile-stat"><div class="profile-stat-v" id="pr-earned">—</div><div class="profile-stat-l">ЗАРАБОТАНО</div></div>
+          </div>
+        </div>
+        <div class="profile-section">
+          <div class="profile-section-title">☁️ Синхронизация</div>
+          <button class="profile-sync-btn" onclick="forceSyncCloud()">↑ Сохранить в облако сейчас</button>
+          <button class="profile-sync-btn" onclick="forceLoadCloud()" style="background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.3);color:var(--green)">↓ Загрузить из облака</button>
+          <div class="profile-sync-status" id="profile-sync-status2"></div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -750,11 +823,54 @@ footer a:hover{color:var(--gold)}
 
 <script>
 /* ══════════════════════════════════
+   FIREBASE — заполни своими данными:
+   1. console.firebase.google.com → создай проект
+   2. Realtime Database → создай БД → Rules:
+      { "rules": { ".read": true, ".write": true } }
+   3. Project Settings → Your apps → Web → скопируй config
+══════════════════════════════════ */
+const FB_CFG={
+  apiKey:"REPLACE_API_KEY",
+  authDomain:"REPLACE_PROJECT.firebaseapp.com",
+  databaseURL:"https://REPLACE_PROJECT-default-rtdb.firebaseio.com",
+  projectId:"REPLACE_PROJECT"
+};
+let fbDB=null;
+function initFirebase(){
+  if(FB_CFG.apiKey.includes('REPLACE')){setCloudStatus('off','Firebase не настроен — прогресс только локально');return}
+  try{const app=firebase.initializeApp(FB_CFG);fbDB=firebase.database(app);setCloudStatus('online','Облако подключено')}
+  catch(e){setCloudStatus('off','Ошибка Firebase')}
+}
+function setCloudStatus(st,msg){
+  const dot=document.getElementById('cloud-dot'),txt=document.getElementById('cloud-status-text');
+  if(dot)dot.className='cloud-dot'+(st==='online'?' online':st==='syncing'?' syncing':'');
+  if(txt)txt.textContent=msg;
+}
+
+/* ══════════════════════════════════
+   ACCOUNT ID
+══════════════════════════════════ */
+function genId(){return Array.from(crypto.getRandomValues(new Uint8Array(14))).map(b=>b.toString(16).padStart(2,'0')).join('')}
+let accountId=localStorage.getItem('burmalda_account_id')||'';
+if(!accountId){accountId=genId();localStorage.setItem('burmalda_account_id',accountId)}
+
+/* ══════════════════════════════════
    SHARED STATE
 ══════════════════════════════════ */
 function defState(){return{coins:500,totalEarned:0,level:1,xp:0,spins:0,mult:1,lucky:false,prestigeCount:0,prestigeMult:1,bought:[],reelCount:3,shopOwned:[]}}
 function loadG(){try{const s=JSON.parse(localStorage.getItem('burmalda_v5'));if(s&&typeof s.coins==='number'){if(!s.shopOwned)s.shopOwned=[];return s}}catch(e){}return defState()}
-function saveG(){localStorage.setItem('burmalda_v5',JSON.stringify(G))}
+let _cloudTimer=null;
+function saveG(){
+  localStorage.setItem('burmalda_v5',JSON.stringify(G));
+  if(!fbDB)return;
+  clearTimeout(_cloudTimer);
+  setCloudStatus('syncing','Сохранение...');
+  _cloudTimer=setTimeout(()=>{
+    fbDB.ref('accounts/'+accountId).set({...G,_ts:Date.now()})
+      .then(()=>setCloudStatus('online','Сохранено ✓'))
+      .catch(()=>setCloudStatus('online','Ошибка сохранения'));
+  },2000);
+}
 let G=loadG();
 function fmt(n){n=Math.round(n);if(n>=1e9)return(n/1e9).toFixed(2)+'B';if(n>=1e6)return(n/1e6).toFixed(2)+'M';if(n>=1000)return(n/1000).toFixed(1)+'K';return n.toString()}
 function wrand(syms,wts){const t=wts.reduce((a,b)=>a+b,0);let r=Math.random()*t;for(let i=0;i<syms.length;i++){r-=wts[i];if(r<=0)return syms[i]}return syms[syms.length-1]}
@@ -1271,6 +1387,65 @@ function renderUpgrades(){
 function renderPayouts(){const g=document.getElementById('payout-grid');g.innerHTML='';Object.entries(SJACK).forEach(([combo,amt])=>{const d=document.createElement('div');d.className='payout-row';d.innerHTML=`<span class="payout-combo">${combo}</span><span class="payout-amt">+${amt}</span>`;g.appendChild(d)})}
 function renderPrestige(){const s=document.getElementById('prestige-stars');s.innerHTML='';for(let i=0;i<5;i++){const d=document.createElement('div');d.className='p-star'+(i<G.prestigeCount?' lit':'');d.textContent='⭐';s.appendChild(d)}const btn=document.getElementById('prestige-btn'),desc=document.getElementById('prestige-desc');const can=G.level>=10&&G.prestigeCount<5;btn.disabled=!can;desc.textContent=G.prestigeCount>=5?'Max prestige! ×'+G.prestigeMult+' forever':can?'Available! ×'+(G.prestigeMult*2)+' forever':'Need level 10 (current: '+G.level+')'}
 
+/* ══════════════════════════════════
+   PROFILE FUNCTIONS
+══════════════════════════════════ */
+function updateProfileTab(){
+  document.getElementById('profile-uid-display').textContent=accountId;
+  document.getElementById('pr-coins').textContent=fmt(G.coins);
+  document.getElementById('pr-level').textContent=G.level;
+  document.getElementById('pr-spins').textContent=G.spins;
+  document.getElementById('pr-earned').textContent=fmt(G.totalEarned);
+  if(!fbDB)setCloudStatus('off','Firebase не настроен — прогресс только локально');
+}
+function copyUID(){
+  navigator.clipboard.writeText(accountId).then(()=>{
+    const btn=document.querySelector('.profile-copy-btn');
+    const orig=btn.textContent;btn.textContent='✓ Скопировано!';
+    setTimeout(()=>btn.textContent=orig,2000);
+  }).catch(()=>{popup('ID: '+accountId)});
+}
+async function switchAccount(){
+  const inp=document.getElementById('profile-uid-input');
+  const newId=(inp.value||'').trim().toLowerCase().replace(/\s/g,'');
+  const st=document.getElementById('profile-sync-status');
+  if(!newId||newId.length<10){st.style.color='var(--red)';st.textContent='Введи корректный ID аккаунта';return}
+  if(newId===accountId){st.style.color='var(--muted)';st.textContent='Это уже твой аккаунт';return}
+  if(!fbDB){st.style.color='var(--red)';st.textContent='Firebase не настроен';return}
+  st.style.color='var(--gold)';st.textContent='Загружаю...';
+  try{
+    const snap=await fbDB.ref('accounts/'+newId).get();
+    if(!snap.exists()){st.style.color='var(--red)';st.textContent='Аккаунт не найден';return}
+    const data=snap.val();
+    if(typeof data.coins!=='number'){st.style.color='var(--red)';st.textContent='Данные повреждены';return}
+    accountId=newId;localStorage.setItem('burmalda_account_id',accountId);
+    delete data._ts;G=data;if(!G.shopOwned)G.shopOwned=[];
+    localStorage.setItem('burmalda_v5',JSON.stringify(G));
+    updateUI();updateProfileTab();inp.value='';
+    st.style.color='var(--green)';st.textContent='✓ Аккаунт загружен!';
+    popup('✅ Вошёл в аккаунт!');
+  }catch(e){st.style.color='var(--red)';st.textContent='Ошибка: '+e.message}
+}
+async function forceSyncCloud(){
+  const st=document.getElementById('profile-sync-status2');
+  if(!fbDB){st.style.color='var(--red)';st.textContent='Firebase не настроен';return}
+  st.style.color='var(--gold)';st.textContent='Сохранение...';
+  try{await fbDB.ref('accounts/'+accountId).set({...G,_ts:Date.now()});st.style.color='var(--green)';st.textContent='✓ Сохранено в облако!'}
+  catch(e){st.style.color='var(--red)';st.textContent='Ошибка: '+e.message}
+}
+async function forceLoadCloud(){
+  const st=document.getElementById('profile-sync-status2');
+  if(!fbDB){st.style.color='var(--red)';st.textContent='Firebase не настроен';return}
+  st.style.color='var(--gold)';st.textContent='Загрузка...';
+  try{
+    const snap=await fbDB.ref('accounts/'+accountId).get();
+    if(!snap.exists()){st.style.color='var(--muted)';st.textContent='Нет данных в облаке';return}
+    const data=snap.val();delete data._ts;G=data;if(!G.shopOwned)G.shopOwned=[];
+    localStorage.setItem('burmalda_v5',JSON.stringify(G));
+    updateUI();updateProfileTab();st.style.color='var(--green)';st.textContent='✓ Загружено из облака!';
+  }catch(e){st.style.color='var(--red)';st.textContent='Ошибка: '+e.message}
+}
+
 function showTab(name,btn){
   document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
@@ -1278,6 +1453,7 @@ function showTab(name,btn){
   if(btn)btn.classList.add('active');
   if(name==='roulette'){setTimeout(initRoulCanvas,50)}
   if(name==='crash'){setTimeout(initCrashCanvas,50)}
+  if(name==='profile'){updateProfileTab()}
 }
 function startGame(){
   document.getElementById('menu').classList.remove('visible');
@@ -1316,6 +1492,7 @@ document.getElementById('privacy-check').addEventListener('change',function(){
 /* INIT */
 rebuildReels();for(let i=3;i<G.reelCount;i++)addReel();
 buildNumGrid();renderPayouts();updateUI();bjSetActions('bet');
+initFirebase();
 if(localStorage.getItem('burmalda_privacy_accepted')==='1'){
   startSplash();
 }else{
