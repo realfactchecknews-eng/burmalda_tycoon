@@ -869,8 +869,16 @@ function initFirebase(){
   setCloudStatus('syncing','Подключение...');
   function doInit(){
     try{const app=firebase.initializeApp(FB_CFG);fbDB=firebase.database(app);setCloudStatus('online','Облако подключено');
-      // подгружаем монеты после подключения
-      fbDB.ref('coins/'+accountId).get().then(s=>{if(s.exists()){G.coins=s.val().amount;localStorage.setItem('burmalda_v5',JSON.stringify(G));updateUI()}}).catch(()=>{});
+      // подгружаем прогресс из облака при старте (включая монеты)
+      fbDB.ref('game/'+accountId).get().then(s=>{
+        if(!s.exists())return;
+        const d=s.val();delete d._ts;
+        if(!d.shopOwned)d.shopOwned=[];if(!d.bought)d.bought=[];
+        if(!d.nickname)d.nickname='';if(!d.avatar)d.avatar='🎰';
+        if(typeof d.coins==='number'&&d.coins!==G.coins){
+          G=d;localStorage.setItem('burmalda_v5',JSON.stringify(G));updateUI();
+        }
+      }).catch(()=>{});
     }catch(e){setCloudStatus('off','Ошибка Firebase')}
   }
   if(typeof firebase!=='undefined'){doInit();return}
@@ -907,25 +915,24 @@ const AVATARS=['🎰','🃏','🎲','🎯','💎','🔥','⚡','👑','🐻','�
 function defState(){return{coins:500,totalEarned:0,level:1,xp:0,spins:0,mult:1,lucky:false,prestigeCount:0,prestigeMult:1,bought:[],reelCount:3,shopOwned:[],nickname:'',avatar:'🎰'}}
 function loadG(){try{const s=JSON.parse(localStorage.getItem('burmalda_v5'));if(s&&typeof s.coins==='number'){if(!s.shopOwned)s.shopOwned=[];if(!s.bought)s.bought=[];if(!s.nickname)s.nickname='';if(!s.avatar)s.avatar='🎰';return s}}catch(e){}return defState()}
 let _cloudTimer=null;
-function gameState(){const{coins,...s}=G;return s}
 function saveG(){
   localStorage.setItem('burmalda_v5',JSON.stringify(G));
   if(!fbDB)return;
   clearTimeout(_cloudTimer);
-  // Мгновенное сохранение — нельзя откатить проигрыш рефрешем
   _cloudTimer=setTimeout(()=>{
     setCloudStatus('syncing','Сохранение...');
-    fbDB.ref('game/'+accountId).set({...gameState(),_ts:Date.now()})
+    fbDB.ref('game/'+accountId).set({...G,_ts:Date.now()})
       .then(()=>setCloudStatus('online','Сохранено ✓'))
       .catch(()=>setCloudStatus('online','Ошибка сохранения'));
   },300);
 }
 async function loadCloudAccount(id){
-  const[gSnap,cSnap]=await Promise.all([fbDB.ref('game/'+id).get(),fbDB.ref('coins/'+id).get()]);
-  if(!gSnap.exists())return null;
-  const d=gSnap.val();delete d._ts;
+  const snap=await fbDB.ref('game/'+id).get();
+  if(!snap.exists())return null;
+  const d=snap.val();delete d._ts;
   if(!d.shopOwned)d.shopOwned=[];if(!d.bought)d.bought=[];
-  d.coins=cSnap.exists()?cSnap.val().amount:(d.coins||500);
+  if(!d.nickname)d.nickname='';if(!d.avatar)d.avatar='🎰';
+  if(typeof d.coins!=='number')d.coins=500;
   return d;
 }
 let G=loadG();
@@ -1509,7 +1516,7 @@ async function forceSyncCloud(){
   const st=document.getElementById('profile-sync-status2');
   if(!fbDB){st.style.color='var(--red)';st.textContent='Firebase не настроен';return}
   st.style.color='var(--gold)';st.textContent='Сохранение...';
-  try{await fbDB.ref('game/'+accountId).set({...gameState(),_ts:Date.now()});st.style.color='var(--green)';st.textContent='✓ Сохранено в облако!'}
+  try{await fbDB.ref('game/'+accountId).set({...G,_ts:Date.now()});st.style.color='var(--green)';st.textContent='✓ Сохранено в облако!'}
   catch(e){st.style.color='var(--red)';st.textContent='Ошибка: '+e.message}
 }
 async function forceLoadCloud(){
