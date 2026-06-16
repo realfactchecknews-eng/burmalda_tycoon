@@ -1810,7 +1810,7 @@ async function melCallGroq(text,attempt=0){
     return reply;
   }catch(e){
     if(attempt<1) return melCallGroq(text,1);
-    return 'Бля, API не отвечает. Попробуй позже, беда';
+    return 'Бля, ошибка: '+e.message;
   }
 }
 
