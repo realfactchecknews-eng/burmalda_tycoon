@@ -834,9 +834,10 @@ footer a:hover{color:var(--gold)}
         </div>
         <div class="profile-section">
           <div class="profile-section-title">☁️ Синхронизация</div>
-          <button class="profile-sync-btn" onclick="forceSyncCloud()">↑ Сохранить в облако сейчас</button>
-          <button class="profile-sync-btn" onclick="forceLoadCloud()" style="background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.3);color:var(--green)">↓ Загрузить из облака</button>
-          <div class="profile-sync-status" id="profile-sync-status2"></div>
+          <div class="cloud-status" style="margin-bottom:0">
+            <div class="cloud-dot" id="cloud-dot2"></div>
+            <span id="cloud-status-text2">Прогресс сохраняется автоматически после каждого действия</span>
+          </div>
         </div>
       </div>
     </div>
