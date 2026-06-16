@@ -4,8 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BURMALDA — Premium Casino</title>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{--bg:#080808;--bg2:#111;--bg3:#181818;--bg4:#1e1e1e;--border:#252525;--border2:#333;--text:#f0f0f0;--muted:#777;--muted2:#444;--gold:#f5c518;--gold2:#d4a017;--green:#22c55e;--red:#ef4444;--r:10px;--r2:14px}
@@ -840,9 +838,27 @@ const FB_CFG={
 };
 let fbDB=null;
 function initFirebase(){
-  if(FB_CFG.apiKey.includes('REPLACE')){setCloudStatus('off','Firebase не настроен — прогресс только локально');return}
-  try{const app=firebase.initializeApp(FB_CFG);fbDB=firebase.database(app);setCloudStatus('online','Облако подключено')}
-  catch(e){setCloudStatus('off','Ошибка Firebase')}
+  if(FB_CFG.apiKey.includes('REPLACE')){setCloudStatus('off','Firebase не настроен');return}
+  setCloudStatus('syncing','Подключение...');
+  function doInit(){
+    try{const app=firebase.initializeApp(FB_CFG);fbDB=firebase.database(app);setCloudStatus('online','Облако подключено');
+      // подгружаем монеты после подключения
+      fbDB.ref('coins/'+accountId).get().then(s=>{if(s.exists()){G.coins=s.val().amount;localStorage.setItem('burmalda_v5',JSON.stringify(G));updateUI()}}).catch(()=>{});
+    }catch(e){setCloudStatus('off','Ошибка Firebase')}
+  }
+  if(typeof firebase!=='undefined'){doInit();return}
+  // Грузим Firebase SDK асинхронно — сайт не блокируется
+  const s1=document.createElement('script');
+  s1.src='https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js';
+  s1.onerror=()=>setCloudStatus('off','Нет соединения с облаком');
+  s1.onload=()=>{
+    const s2=document.createElement('script');
+    s2.src='https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js';
+    s2.onerror=()=>setCloudStatus('off','Нет соединения с облаком');
+    s2.onload=doInit;
+    document.head.appendChild(s2);
+  };
+  document.head.appendChild(s1);
 }
 function setCloudStatus(st,msg){
   const dot=document.getElementById('cloud-dot'),txt=document.getElementById('cloud-status-text');
@@ -884,11 +900,6 @@ async function loadCloudAccount(id){
   return d;
 }
 let G=loadG();
-// Подгружаем монеты из облака при старте (асинхронно)
-setTimeout(async()=>{
-  if(!fbDB)return;
-  try{const snap=await fbDB.ref('coins/'+accountId).get();if(snap.exists()){G.coins=snap.val().amount;localStorage.setItem('burmalda_v5',JSON.stringify(G));updateUI()}}catch(e){}
-},1500);
 function fmt(n){n=Math.round(n);if(n>=1e9)return(n/1e9).toFixed(2)+'B';if(n>=1e6)return(n/1e6).toFixed(2)+'M';if(n>=1000)return(n/1000).toFixed(1)+'K';return n.toString()}
 function wrand(syms,wts){const t=wts.reduce((a,b)=>a+b,0);let r=Math.random()*t;for(let i=0;i<syms.length;i++){r-=wts[i];if(r<=0)return syms[i]}return syms[syms.length-1]}
 function popup(msg){const p=document.getElementById('win-popup');p.textContent=msg;p.classList.add('show');setTimeout(()=>p.classList.remove('show'),2200)}
