@@ -877,7 +877,7 @@ if(!accountId){accountId=genId();localStorage.setItem('burmalda_account_id',acco
    SHARED STATE
 ══════════════════════════════════ */
 function defState(){return{coins:500,totalEarned:0,level:1,xp:0,spins:0,mult:1,lucky:false,prestigeCount:0,prestigeMult:1,bought:[],reelCount:3,shopOwned:[]}}
-function loadG(){try{const s=JSON.parse(localStorage.getItem('burmalda_v5'));if(s&&typeof s.coins==='number'){if(!s.shopOwned)s.shopOwned=[];return s}}catch(e){}return defState()}
+function loadG(){try{const s=JSON.parse(localStorage.getItem('burmalda_v5'));if(s&&typeof s.coins==='number'){if(!s.shopOwned)s.shopOwned=[];if(!s.bought)s.bought=[];return s}}catch(e){}return defState()}
 let _cloudTimer=null;
 function gameState(){const{coins,...s}=G;return s}  // монеты не пишем от пользователя
 function saveG(){
