@@ -353,7 +353,7 @@ footer a:hover{color:var(--gold)}
 /* PROFILE TAB */
 .profile-section{background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r2);padding:20px;margin-bottom:14px}
 .profile-section-title{font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:14px;font-weight:600}
-.profile-avatar{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold2));display:flex;align-items:center;justify-content:center;font-size:36px;margin:0 auto 16px;box-shadow:0 0 24px rgba(245,197,24,.3)}
+.profile-avatar{width:80px;height:80px;border-radius:50%;background:var(--bg4);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;box-shadow:0 0 24px rgba(245,197,24,.4);overflow:hidden;border:2px solid var(--gold)}
 .profile-name{font-size:22px;font-weight:900;text-align:center;color:var(--gold);margin-bottom:4px}
 .profile-sub{font-size:12px;color:var(--muted);text-align:center;letter-spacing:1px;margin-bottom:16px}
 .profile-id-wrap{background:#000;border:1px solid var(--border2);border-radius:var(--r);padding:10px 14px;display:flex;align-items:center;gap:10px;margin-bottom:8px}
@@ -912,9 +912,9 @@ if(!accountId){accountId=genId();localStorage.setItem('burmalda_account_id',acco
 /* ══════════════════════════════════
    SHARED STATE
 ══════════════════════════════════ */
-const AVATARS=['🎰','🃏','🎲','🎯','💎','🔥','⚡','👑','🐻','🦁','🐺','🦊','🤑','😈','🥷','👾','🚀','🌟','💀','🍀'];
-function defState(){return{coins:500,totalEarned:0,level:1,xp:0,spins:0,mult:1,lucky:false,prestigeCount:0,prestigeMult:1,bought:[],reelCount:3,shopOwned:[],nickname:'',avatar:'🎰'}}
-function loadG(){try{const s=JSON.parse(localStorage.getItem('burmalda_v5'));if(s&&typeof s.coins==='number'){if(!s.shopOwned)s.shopOwned=[];if(!s.bought)s.bought=[];if(!s.nickname)s.nickname='';if(!s.avatar)s.avatar='🎰';return s}}catch(e){}return defState()}
+const AVATARS=['av1.svg','av2.svg','av3.svg','av4.svg','av5.svg'];
+function defState(){return{coins:500,totalEarned:0,level:1,xp:0,spins:0,mult:1,lucky:false,prestigeCount:0,prestigeMult:1,bought:[],reelCount:3,shopOwned:[],nickname:'',avatar:'av1.svg'}}
+function loadG(){try{const s=JSON.parse(localStorage.getItem('burmalda_v5'));if(s&&typeof s.coins==='number'){if(!s.shopOwned)s.shopOwned=[];if(!s.bought)s.bought=[];if(!s.nickname)s.nickname='';if(!s.avatar||!s.avatar.endsWith('.svg'))s.avatar='av1.svg';return s}}catch(e){}return defState()}
 let _cloudTimer=null;
 function saveG(){
   localStorage.setItem('burmalda_v5',JSON.stringify(G));
@@ -1464,11 +1464,11 @@ function updateProfileTab(){
   if(!fbDB)setCloudStatus('off','Firebase не настроен — прогресс только локально');
   // ник и аватарка
   const nick=G.nickname||'';
-  const av=G.avatar||'🎰';
+  const av=G.avatar||'av1.svg';
   document.getElementById('nick-input').value=nick;
-  document.getElementById('profile-avatar-big').textContent=av;
+  document.getElementById('profile-avatar-big').innerHTML=`<img src="${av}" width="80" height="80" style="border-radius:50%;object-fit:cover">`;
   document.getElementById('profile-name-display').textContent=nick||'BURMALDA PLAYER';
-  document.getElementById('hdr-avatar-icon').textContent=av;
+  document.getElementById('hdr-avatar-icon').innerHTML=`<img src="${av}" width="26" height="26" style="border-radius:50%;object-fit:cover">`;
   document.getElementById('hdr-nickname-text').textContent=nick||'Профиль';
   renderAvatarGrid();
 }
@@ -1477,7 +1477,7 @@ function renderAvatarGrid(){
   AVATARS.forEach(a=>{
     const b=document.createElement('button');
     b.className='avatar-opt'+(G.avatar===a?' selected':'');
-    b.textContent=a;
+    b.innerHTML=`<img src="${a}" width="100%" height="100%" style="border-radius:50%;object-fit:cover">`;
     b.onclick=()=>{G.avatar=a;saveG();updateProfileTab()};
     g.appendChild(b);
   });
@@ -1579,7 +1579,7 @@ document.getElementById('privacy-check').addEventListener('change',function(){
 rebuildReels();for(let i=3;i<G.reelCount;i++)addReel();
 buildNumGrid();renderPayouts();updateUI();bjSetActions('bet');
 // обновляем хедер аватарку/ник сразу
-(function(){const av=G.avatar||'🎰';const nick=G.nickname||'';const ai=document.getElementById('hdr-avatar-icon');const nt=document.getElementById('hdr-nickname-text');if(ai)ai.textContent=av;if(nt)nt.textContent=nick||'Профиль'})();
+(function(){const av=G.avatar||'av1.svg';const nick=G.nickname||'';const ai=document.getElementById('hdr-avatar-icon');const nt=document.getElementById('hdr-nickname-text');if(ai)ai.innerHTML=`<img src="${av}" width="26" height="26" style="border-radius:50%;object-fit:cover">`;if(nt)nt.textContent=nick||'Профиль'})();
 initFirebase();
 if(localStorage.getItem('burmalda_privacy_accepted')==='1'){
   startSplash();

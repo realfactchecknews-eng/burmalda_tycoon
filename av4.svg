@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <defs>
+    <radialGradient id="bg4" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#1a0a00"/>
+      <stop offset="100%" stop-color="#000"/>
+    </radialGradient>
+    <filter id="glow4"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="200" height="200" rx="20" fill="url(#bg4)"/>
+  <rect width="200" height="200" rx="20" fill="none" stroke="#f5c518" stroke-width="3"/>
+  <rect x="6" y="6" width="188" height="188" rx="16" fill="none" stroke="#b8860b" stroke-width="1"/>
+  <!-- diamond gem -->
+  <g filter="url(#glow4)">
+    <polygon points="100,28 140,70 100,150 60,70" fill="#0d0d0d" stroke="#f5c518" stroke-width="2"/>
+    <polygon points="100,28 140,70 100,70" fill="#2a2200" stroke="#f5c518" stroke-width="1"/>
+    <polygon points="100,28 60,70 100,70" fill="#1a1500" stroke="#f5c518" stroke-width="1"/>
+    <polygon points="60,70 100,70 100,150" fill="#0d0d00" stroke="#f5c518" stroke-width="1"/>
+    <polygon points="140,70 100,70 100,150" fill="#1a1400" stroke="#f5c518" stroke-width="1"/>
+    <!-- shine -->
+    <line x1="100" y1="28" x2="120" y2="55" stroke="#f5c518" stroke-width="1.5" opacity=".6"/>
+    <line x1="100" y1="28" x2="85" y2="52" stroke="#fff" stroke-width="1" opacity=".4"/>
+  </g>
+  <!-- corner suits -->
+  <text x="28" y="48" font-size="20" font-family="serif" fill="#f5c518" opacity=".6">♦</text>
+  <text x="160" y="48" font-size="20" font-family="serif" fill="#f5c518" opacity=".6">♦</text>
+  <text x="28" y="170" font-size="20" font-family="serif" fill="#f5c518" opacity=".6">♦</text>
+  <text x="160" y="170" font-size="20" font-family="serif" fill="#f5c518" opacity=".6">♦</text>
+  <!-- chips stack -->
+  <ellipse cx="100" cy="158" rx="28" ry="7" fill="#1a1200" stroke="#f5c518" stroke-width="1.5"/>
+  <rect x="72" y="148" width="56" height="10" rx="2" fill="#1a1200" stroke="#f5c518" stroke-width="1"/>
+  <ellipse cx="100" cy="148" rx="28" ry="7" fill="#222" stroke="#f5c518" stroke-width="1.5"/>
+  <!-- label -->
+  <rect x="45" y="166" width="110" height="26" rx="6" fill="#0a0800" stroke="#f5c518" stroke-width="1.5"/>
+  <text x="100" y="184" text-anchor="middle" font-size="11" font-family="Arial" font-weight="900" fill="#f5c518" letter-spacing="2">DIAMOND</text>
+</svg>
