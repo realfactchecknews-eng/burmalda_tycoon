@@ -1735,7 +1735,9 @@ async function melSend(){
   // track recent phrases
   MEL_CATCHPHRASES.forEach(p=>{if(reply.includes(p.trim())){melRecentPhrases.push(p);if(melRecentPhrases.length>5)melRecentPhrases.shift()}});
 
-  btn.disabled=false;
+  let cd=5;
+  btn.textContent=`ПОДОЖДИТЕ ${cd}с`;
+  const iv=setInterval(()=>{cd--;if(cd<=0){clearInterval(iv);btn.disabled=false;btn.textContent='ОТПРАВИТЬ';}else{btn.textContent=`ПОДОЖДИТЕ ${cd}с`;}},1000);
   inp.focus();
 }
 
