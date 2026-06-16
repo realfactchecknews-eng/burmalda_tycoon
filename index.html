@@ -1443,7 +1443,7 @@ async function forceLoadCloud(){
   try{
     const snap=await fbDB.ref('accounts/'+accountId).get();
     if(!snap.exists()){st.style.color='var(--muted)';st.textContent='Нет данных в облаке';return}
-    const data=snap.val();delete data._ts;G=data;if(!G.shopOwned)G.shopOwned=[];
+    const data=snap.val();delete data._ts;G=data;if(!G.shopOwned)G.shopOwned=[];if(!G.bought)G.bought=[];
     localStorage.setItem('burmalda_v5',JSON.stringify(G));
     updateUI();updateProfileTab();st.style.color='var(--green)';st.textContent='✓ Загружено из облака!';
   }catch(e){st.style.color='var(--red)';st.textContent='Ошибка: '+e.message}
