@@ -73,6 +73,18 @@ button{font-family:inherit}
 .hdr-balance{display:flex;align-items:center;gap:6px;background:var(--bg3);border:1px solid var(--border);border-radius:99px;padding:5px 14px;font-size:13px;font-weight:700;color:var(--gold)}
 .hdr-back{background:transparent;border:1px solid var(--border2);border-radius:var(--r);padding:5px 12px;font-size:12px;color:var(--muted);cursor:pointer;transition:border-color .15s,color .15s;letter-spacing:1px}
 .hdr-back:hover{border-color:var(--gold);color:var(--gold)}
+.hdr-profile-btn{background:var(--bg3);border:1px solid var(--border2);border-radius:99px;padding:4px 12px 4px 6px;font-size:12px;color:var(--text);cursor:pointer;display:flex;align-items:center;gap:6px;transition:border-color .15s;font-weight:600;max-width:120px}
+.hdr-profile-btn:hover{border-color:var(--gold)}
+.hdr-avatar{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold2));display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.hdr-nickname{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nick-input{width:100%;background:#000;border:1px solid var(--border2);border-radius:var(--r);color:var(--text);font-size:15px;padding:10px 14px;margin-bottom:10px;outline:none;transition:border-color .15s}
+.nick-input:focus{border-color:var(--gold)}
+.nick-save-btn{width:100%;padding:11px;background:var(--gold);border:none;border-radius:var(--r);font-size:14px;font-weight:800;color:#000;cursor:pointer;letter-spacing:1px;transition:opacity .15s}
+.nick-save-btn:hover{opacity:.85}
+.avatar-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:10px}
+.avatar-opt{width:100%;aspect-ratio:1;border-radius:50%;background:var(--bg4);border:2px solid var(--border);font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:border-color .15s,background .15s}
+.avatar-opt:hover{border-color:var(--gold);background:rgba(245,197,24,.1)}
+.avatar-opt.selected{border-color:var(--gold);background:rgba(245,197,24,.15);box-shadow:0 0 12px rgba(245,197,24,.3)}
 .tab-nav{display:flex;background:var(--bg2);border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none}
 .tab-nav::-webkit-scrollbar{display:none}
 .tab-btn{flex:1;min-width:90px;padding:14px 6px;background:transparent;border:none;border-bottom:2px solid transparent;color:var(--muted);font-size:11px;font-weight:700;letter-spacing:1.5px;cursor:pointer;transition:color .2s,border-color .2s;white-space:nowrap}
@@ -603,7 +615,11 @@ footer a:hover{color:var(--gold)}
     </div>
     <div class="hdr-right">
       <div class="hdr-balance">💰 <span id="hd-coins">500</span></div>
-      <button class="hdr-back" onclick="goMenu()">LOBBY</button>
+      <button class="hdr-profile-btn" onclick="showTab('profile',document.querySelectorAll('.tab-btn')[5])">
+        <div class="hdr-avatar" id="hdr-avatar-icon">🎰</div>
+        <span class="hdr-nickname" id="hdr-nickname-text">Профиль</span>
+      </button>
+      <button class="hdr-back" onclick="goMenu()">◀ LOBBY</button>
     </div>
   </div>
   <nav class="tab-nav">
@@ -774,13 +790,24 @@ footer a:hover{color:var(--gold)}
     <div id="tab-profile" class="tab-panel">
       <div class="inner">
         <div class="profile-section">
-          <div class="profile-avatar">🎰</div>
-          <div class="profile-name">BURMALDA PLAYER</div>
+          <div class="profile-avatar" id="profile-avatar-big">🎰</div>
+          <div class="profile-name" id="profile-name-display">BURMALDA PLAYER</div>
           <div class="profile-sub">ЛИЧНЫЙ КАБИНЕТ</div>
           <div class="cloud-status">
             <div class="cloud-dot" id="cloud-dot"></div>
             <span id="cloud-status-text">Инициализация...</span>
           </div>
+        </div>
+
+        <div class="profile-section">
+          <div class="profile-section-title">✏️ Твой ник</div>
+          <input class="nick-input" id="nick-input" type="text" maxlength="20" placeholder="Введи никнейм...">
+          <button class="nick-save-btn" onclick="saveNick()">СОХРАНИТЬ НИК</button>
+        </div>
+
+        <div class="profile-section">
+          <div class="profile-section-title">🎭 Аватарка</div>
+          <div class="avatar-grid" id="avatar-grid"></div>
         </div>
         <div class="profile-section">
           <div class="profile-section-title">🔑 Ваш ID аккаунта</div>
@@ -876,20 +903,22 @@ if(!accountId){accountId=genId();localStorage.setItem('burmalda_account_id',acco
 /* ══════════════════════════════════
    SHARED STATE
 ══════════════════════════════════ */
-function defState(){return{coins:500,totalEarned:0,level:1,xp:0,spins:0,mult:1,lucky:false,prestigeCount:0,prestigeMult:1,bought:[],reelCount:3,shopOwned:[]}}
-function loadG(){try{const s=JSON.parse(localStorage.getItem('burmalda_v5'));if(s&&typeof s.coins==='number'){if(!s.shopOwned)s.shopOwned=[];if(!s.bought)s.bought=[];return s}}catch(e){}return defState()}
+const AVATARS=['🎰','🃏','🎲','🎯','💎','🔥','⚡','👑','🐻','🦁','🐺','🦊','🤑','😈','🥷','👾','🚀','🌟','💀','🍀'];
+function defState(){return{coins:500,totalEarned:0,level:1,xp:0,spins:0,mult:1,lucky:false,prestigeCount:0,prestigeMult:1,bought:[],reelCount:3,shopOwned:[],nickname:'',avatar:'🎰'}}
+function loadG(){try{const s=JSON.parse(localStorage.getItem('burmalda_v5'));if(s&&typeof s.coins==='number'){if(!s.shopOwned)s.shopOwned=[];if(!s.bought)s.bought=[];if(!s.nickname)s.nickname='';if(!s.avatar)s.avatar='🎰';return s}}catch(e){}return defState()}
 let _cloudTimer=null;
-function gameState(){const{coins,...s}=G;return s}  // монеты не пишем от пользователя
+function gameState(){const{coins,...s}=G;return s}
 function saveG(){
   localStorage.setItem('burmalda_v5',JSON.stringify(G));
   if(!fbDB)return;
   clearTimeout(_cloudTimer);
-  setCloudStatus('syncing','Сохранение...');
+  // Мгновенное сохранение — нельзя откатить проигрыш рефрешем
   _cloudTimer=setTimeout(()=>{
+    setCloudStatus('syncing','Сохранение...');
     fbDB.ref('game/'+accountId).set({...gameState(),_ts:Date.now()})
       .then(()=>setCloudStatus('online','Сохранено ✓'))
       .catch(()=>setCloudStatus('online','Ошибка сохранения'));
-  },2000);
+  },300);
 }
 async function loadCloudAccount(id){
   const[gSnap,cSnap]=await Promise.all([fbDB.ref('game/'+id).get(),fbDB.ref('coins/'+id).get()]);
@@ -1425,6 +1454,31 @@ function updateProfileTab(){
   document.getElementById('pr-spins').textContent=G.spins;
   document.getElementById('pr-earned').textContent=fmt(G.totalEarned);
   if(!fbDB)setCloudStatus('off','Firebase не настроен — прогресс только локально');
+  // ник и аватарка
+  const nick=G.nickname||'';
+  const av=G.avatar||'🎰';
+  document.getElementById('nick-input').value=nick;
+  document.getElementById('profile-avatar-big').textContent=av;
+  document.getElementById('profile-name-display').textContent=nick||'BURMALDA PLAYER';
+  document.getElementById('hdr-avatar-icon').textContent=av;
+  document.getElementById('hdr-nickname-text').textContent=nick||'Профиль';
+  renderAvatarGrid();
+}
+function renderAvatarGrid(){
+  const g=document.getElementById('avatar-grid');g.innerHTML='';
+  AVATARS.forEach(a=>{
+    const b=document.createElement('button');
+    b.className='avatar-opt'+(G.avatar===a?' selected':'');
+    b.textContent=a;
+    b.onclick=()=>{G.avatar=a;saveG();updateProfileTab()};
+    g.appendChild(b);
+  });
+}
+function saveNick(){
+  const v=document.getElementById('nick-input').value.trim().slice(0,20);
+  G.nickname=v;saveG();updateProfileTab();
+  const btn=document.querySelector('.nick-save-btn');
+  btn.textContent='✓ Сохранено!';setTimeout(()=>btn.textContent='СОХРАНИТЬ НИК',1500);
 }
 function copyUID(){
   navigator.clipboard.writeText(accountId).then(()=>{
@@ -1516,6 +1570,8 @@ document.getElementById('privacy-check').addEventListener('change',function(){
 /* INIT */
 rebuildReels();for(let i=3;i<G.reelCount;i++)addReel();
 buildNumGrid();renderPayouts();updateUI();bjSetActions('bet');
+// обновляем хедер аватарку/ник сразу
+(function(){const av=G.avatar||'🎰';const nick=G.nickname||'';const ai=document.getElementById('hdr-avatar-icon');const nt=document.getElementById('hdr-nickname-text');if(ai)ai.textContent=av;if(nt)nt.textContent=nick||'Профиль'})();
 initFirebase();
 if(localStorage.getItem('burmalda_privacy_accepted')==='1'){
   startSplash();
