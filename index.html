@@ -863,18 +863,32 @@ if(!accountId){accountId=genId();localStorage.setItem('burmalda_account_id',acco
 function defState(){return{coins:500,totalEarned:0,level:1,xp:0,spins:0,mult:1,lucky:false,prestigeCount:0,prestigeMult:1,bought:[],reelCount:3,shopOwned:[]}}
 function loadG(){try{const s=JSON.parse(localStorage.getItem('burmalda_v5'));if(s&&typeof s.coins==='number'){if(!s.shopOwned)s.shopOwned=[];return s}}catch(e){}return defState()}
 let _cloudTimer=null;
+function gameState(){const{coins,...s}=G;return s}  // монеты не пишем от пользователя
 function saveG(){
   localStorage.setItem('burmalda_v5',JSON.stringify(G));
   if(!fbDB)return;
   clearTimeout(_cloudTimer);
   setCloudStatus('syncing','Сохранение...');
   _cloudTimer=setTimeout(()=>{
-    fbDB.ref('accounts/'+accountId).set({...G,_ts:Date.now()})
+    fbDB.ref('game/'+accountId).set({...gameState(),_ts:Date.now()})
       .then(()=>setCloudStatus('online','Сохранено ✓'))
       .catch(()=>setCloudStatus('online','Ошибка сохранения'));
   },2000);
 }
+async function loadCloudAccount(id){
+  const[gSnap,cSnap]=await Promise.all([fbDB.ref('game/'+id).get(),fbDB.ref('coins/'+id).get()]);
+  if(!gSnap.exists())return null;
+  const d=gSnap.val();delete d._ts;
+  if(!d.shopOwned)d.shopOwned=[];if(!d.bought)d.bought=[];
+  d.coins=cSnap.exists()?cSnap.val().amount:(d.coins||500);
+  return d;
+}
 let G=loadG();
+// Подгружаем монеты из облака при старте (асинхронно)
+setTimeout(async()=>{
+  if(!fbDB)return;
+  try{const snap=await fbDB.ref('coins/'+accountId).get();if(snap.exists()){G.coins=snap.val().amount;localStorage.setItem('burmalda_v5',JSON.stringify(G));updateUI()}}catch(e){}
+},1500);
 function fmt(n){n=Math.round(n);if(n>=1e9)return(n/1e9).toFixed(2)+'B';if(n>=1e6)return(n/1e6).toFixed(2)+'M';if(n>=1000)return(n/1000).toFixed(1)+'K';return n.toString()}
 function wrand(syms,wts){const t=wts.reduce((a,b)=>a+b,0);let r=Math.random()*t;for(let i=0;i<syms.length;i++){r-=wts[i];if(r<=0)return syms[i]}return syms[syms.length-1]}
 function popup(msg){const p=document.getElementById('win-popup');p.textContent=msg;p.classList.add('show');setTimeout(()=>p.classList.remove('show'),2200)}
@@ -1417,13 +1431,10 @@ async function switchAccount(){
   if(!fbDB){st.style.color='var(--red)';st.textContent='Firebase не настроен';return}
   st.style.color='var(--gold)';st.textContent='Загружаю...';
   try{
-    const snap=await fbDB.ref('accounts/'+newId).get();
-    if(!snap.exists()){st.style.color='var(--red)';st.textContent='Аккаунт не найден';return}
-    const data=snap.val();
-    if(typeof data.coins!=='number'){st.style.color='var(--red)';st.textContent='Данные повреждены';return}
+    const data=await loadCloudAccount(newId);
+    if(!data){st.style.color='var(--red)';st.textContent='Аккаунт не найден';return}
     accountId=newId;localStorage.setItem('burmalda_account_id',accountId);
-    delete data._ts;G=data;if(!G.shopOwned)G.shopOwned=[];
-    localStorage.setItem('burmalda_v5',JSON.stringify(G));
+    G=data;localStorage.setItem('burmalda_v5',JSON.stringify(G));
     updateUI();updateProfileTab();inp.value='';
     st.style.color='var(--green)';st.textContent='✓ Аккаунт загружен!';
     popup('✅ Вошёл в аккаунт!');
@@ -1433,7 +1444,7 @@ async function forceSyncCloud(){
   const st=document.getElementById('profile-sync-status2');
   if(!fbDB){st.style.color='var(--red)';st.textContent='Firebase не настроен';return}
   st.style.color='var(--gold)';st.textContent='Сохранение...';
-  try{await fbDB.ref('accounts/'+accountId).set({...G,_ts:Date.now()});st.style.color='var(--green)';st.textContent='✓ Сохранено в облако!'}
+  try{await fbDB.ref('game/'+accountId).set({...gameState(),_ts:Date.now()});st.style.color='var(--green)';st.textContent='✓ Сохранено в облако!'}
   catch(e){st.style.color='var(--red)';st.textContent='Ошибка: '+e.message}
 }
 async function forceLoadCloud(){
@@ -1441,10 +1452,9 @@ async function forceLoadCloud(){
   if(!fbDB){st.style.color='var(--red)';st.textContent='Firebase не настроен';return}
   st.style.color='var(--gold)';st.textContent='Загрузка...';
   try{
-    const snap=await fbDB.ref('accounts/'+accountId).get();
-    if(!snap.exists()){st.style.color='var(--muted)';st.textContent='Нет данных в облаке';return}
-    const data=snap.val();delete data._ts;G=data;if(!G.shopOwned)G.shopOwned=[];if(!G.bought)G.bought=[];
-    localStorage.setItem('burmalda_v5',JSON.stringify(G));
+    const data=await loadCloudAccount(accountId);
+    if(!data){st.style.color='var(--muted)';st.textContent='Нет данных в облаке';return}
+    G=data;localStorage.setItem('burmalda_v5',JSON.stringify(G));
     updateUI();updateProfileTab();st.style.color='var(--green)';st.textContent='✓ Загружено из облака!';
   }catch(e){st.style.color='var(--red)';st.textContent='Ошибка: '+e.message}
 }
