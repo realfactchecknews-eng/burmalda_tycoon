@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>BURMALDA — Админ</title>
+<style>
+:root{--bg:#0d0b14;--card:#171324;--card2:#1f1933;--line:#2c2540;--txt:#ece8f5;--muted:#8b82a8;--gold:#ffd24a;--green:#3ddc84;--red:#ff5a6e;--accent:#7b5cff}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:radial-gradient(1200px 600px at 50% -10%,#221b3a,#0d0b14);color:var(--txt);min-height:100vh}
+.wrap{max-width:920px;margin:0 auto;padding:24px 16px 60px}
+h1{font-size:26px;margin:0 0 4px;letter-spacing:.5px}
+h1 span{color:var(--gold)}
+.sub{color:var(--muted);font-size:13px;margin-bottom:22px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:18px}
+.card h2{margin:0 0 14px;font-size:16px;color:var(--gold)}
+label{display:block;font-size:12px;color:var(--muted);margin:0 0 6px}
+input{width:100%;background:var(--card2);border:1px solid var(--line);border-radius:10px;color:var(--txt);padding:11px 12px;font-size:14px;outline:none}
+input:focus{border-color:var(--accent)}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.row>div{flex:1;min-width:160px}
+button{background:linear-gradient(135deg,var(--accent),#a855f7);color:#fff;border:0;border-radius:10px;padding:11px 18px;font-size:14px;font-weight:600;cursor:pointer;transition:.15s}
+button:hover{filter:brightness(1.12)}
+button.alt{background:var(--card2);border:1px solid var(--line)}
+button.danger{background:linear-gradient(135deg,#ff5a6e,#c0392b)}
+.mt{margin-top:14px}
+.msg{font-size:13px;margin-top:12px;min-height:18px}
+.ok{color:var(--green)}.err{color:var(--red)}
+.quick{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.quick button{padding:7px 12px;font-size:12px;background:var(--card2);border:1px solid var(--line)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}
+.stat{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:14px}
+.stat .v{font-size:22px;font-weight:700;color:var(--gold)}
+.stat .l{font-size:11px;color:var(--muted);margin-top:2px}
+table{width:100%;border-collapse:collapse;font-size:13px;margin-top:6px}
+th,td{text-align:left;padding:9px 8px;border-bottom:1px solid var(--line)}
+th{color:var(--muted);font-weight:500;font-size:11px;text-transform:uppercase;letter-spacing:.5px;cursor:pointer}
+td .id{font-family:ui-monospace,monospace;font-size:11px;color:var(--muted)}
+.tbtn{padding:5px 9px;font-size:11px;background:var(--card2);border:1px solid var(--line)}
+.search{margin-bottom:10px}
+.gate{max-width:360px;margin:14vh auto 0}
+.hidden{display:none}
+.tag{display:inline-block;font-size:10px;padding:2px 7px;border-radius:6px;background:var(--card2);border:1px solid var(--line);color:var(--muted)}
+.scroll{overflow-x:auto}
+</style>
+</head>
+<body>
+
+<!-- ВХОД -->
+<div id="gate" class="wrap gate">
+  <h1><span>BURMALDA</span> Админ</h1>
+  <div class="sub">Доступ только для владельца</div>
+  <div class="card">
+    <label>Пароль</label>
+    <input id="pw" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')login()">
+    <button class="mt" onclick="login()">Войти</button>
+    <div id="gateMsg" class="msg"></div>
+  </div>
+</div>
+
+<!-- ПАНЕЛЬ -->
+<div id="panel" class="wrap hidden">
+  <h1><span>BURMALDA</span> Админ-кабинет</h1>
+  <div class="sub">Статус облака: <span id="cloud" class="tag">подключение…</span></div>
+
+  <!-- Статистика -->
+  <div class="card">
+    <h2>📊 Статистика сайта</h2>
+    <div id="stats" class="stats"></div>
+  </div>
+
+  <!-- Выдать деньги -->
+  <div class="card">
+    <h2>💰 Выдать монеты по ID</h2>
+    <div class="row">
+      <div>
+        <label>ID аккаунта</label>
+        <input id="giveId" placeholder="напр. a4f5f885fc6e6bbd3661838a4a62">
+      </div>
+      <div>
+        <label>Сумма монет</label>
+        <input id="giveAmt" type="number" placeholder="500000000">
+      </div>
+    </div>
+    <div class="quick">
+      <button onclick="qa(1e6)">+1 млн</button>
+      <button onclick="qa(1e7)">+10 млн</button>
+      <button onclick="qa(1e8)">+100 млн</button>
+      <button onclick="qa(5e8)">+500 млн</button>
+      <button onclick="qa(1e9)">+1 млрд</button>
+    </div>
+    <div class="row mt">
+      <button onclick="give('add')">➕ Добавить к балансу</button>
+      <button class="alt" onclick="give('set')">✏️ Установить ровно</button>
+    </div>
+    <div id="giveMsg" class="msg"></div>
+  </div>
+
+  <!-- Игроки -->
+  <div class="card">
+    <h2>👥 Игроки</h2>
+    <input id="search" class="search" placeholder="Поиск по нику или ID…" oninput="render()">
+    <div class="scroll">
+      <table>
+        <thead><tr>
+          <th onclick="sortBy('nickname')">Ник</th>
+          <th onclick="sortBy('coins')">Монеты</th>
+          <th onclick="sortBy('totalEarned')">Всего заработано</th>
+          <th onclick="sortBy('level')">Lvl</th>
+          <th onclick="sortBy('spins')">Спины</th>
+          <th>Действия</th>
+        </tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+    <button class="alt mt" onclick="loadAll()">🔄 Обновить</button>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+<script>
+const FB_CFG={apiKey:"AIzaSyBne3DnqaVlOmOBG5yBPynp3XC-7aKThH4",authDomain:"burmalda-c2a06.firebaseapp.com",databaseURL:"https://burmalda-c2a06-default-rtdb.europe-west1.firebasedatabase.app",projectId:"burmalda-c2a06",storageBucket:"burmalda-c2a06.firebasestorage.app",messagingSenderId:"465392160674",appId:"1:465392160674:web:810ab78cff3229053becfb"};
+
+// Пароль админки. Поменяй при желании.
+const ADMIN_PW="burmalda2026";
+
+let db=null, players=[], sortKey='coins', sortDir=-1;
+
+function login(){
+  const v=document.getElementById('pw').value;
+  const m=document.getElementById('gateMsg');
+  if(v!==ADMIN_PW){m.className='msg err';m.textContent='Неверный пароль';return}
+  sessionStorage.setItem('burmalda_admin','1');
+  start();
+}
+function start(){
+  document.getElementById('gate').classList.add('hidden');
+  document.getElementById('panel').classList.remove('hidden');
+  const app=firebase.initializeApp(FB_CFG);
+  db=firebase.database(app);
+  document.getElementById('cloud').textContent='подключено ✓';
+  loadAll();
+}
+if(sessionStorage.getItem('burmalda_admin')==='1') window.addEventListener('load',start);
+
+async function loadAll(){
+  const snap=await db.ref('game').get();
+  const val=snap.val()||{};
+  players=Object.entries(val).map(([id,d])=>({id,...d}));
+  renderStats();
+  render();
+}
+
+function renderStats(){
+  const n=players.length;
+  const totalCoins=players.reduce((s,p)=>s+(+p.coins||0),0);
+  const totalEarned=players.reduce((s,p)=>s+(+p.totalEarned||0),0);
+  const totalSpins=players.reduce((s,p)=>s+(+p.spins||0),0);
+  const active=players.filter(p=>p._ts&&Date.now()-p._ts<86400000*7).length;
+  const s=[['👥 '+n,'Всего игроков'],['🟢 '+active,'Активны за 7 дней'],['💰 '+fmt(totalCoins),'Монет в обороте'],['📈 '+fmt(totalEarned),'Всего заработано'],['🎰 '+fmt(totalSpins),'Спинов сделано']];
+  document.getElementById('stats').innerHTML=s.map(([v,l])=>`<div class="stat"><div class="v">${v}</div><div class="l">${l}</div></div>`).join('');
+}
+
+function sortBy(k){if(sortKey===k)sortDir*=-1;else{sortKey=k;sortDir=typeof players[0]?.[k]==='string'?1:-1}render()}
+
+function render(){
+  const q=document.getElementById('search').value.toLowerCase();
+  let list=players.filter(p=>(p.nickname||'').toLowerCase().includes(q)||p.id.includes(q));
+  list.sort((a,b)=>{const x=a[sortKey],y=b[sortKey];if(typeof x==='string'||typeof y==='string')return (''+x).localeCompare(''+y)*sortDir;return ((+x||0)-(+y||0))*sortDir});
+  document.getElementById('rows').innerHTML=list.map(p=>`<tr>
+    <td>${esc(p.nickname)||'<i style="color:var(--muted)">—</i>'}<br><span class="id">${p.id}</span></td>
+    <td style="color:var(--gold)">${fmt(p.coins)}</td>
+    <td>${fmt(p.totalEarned)}</td>
+    <td>${p.level||1}</td>
+    <td>${fmt(p.spins)}</td>
+    <td><button class="tbtn" onclick="pick('${p.id}')">Выдать</button></td>
+  </tr>`).join('') || '<tr><td colspan="6" style="color:var(--muted);text-align:center;padding:20px">Ничего не найдено</td></tr>';
+}
+
+function pick(id){document.getElementById('giveId').value=id;window.scrollTo({top:0,behavior:'smooth'});document.getElementById('giveAmt').focus()}
+function qa(n){const f=document.getElementById('giveAmt');f.value=(+f.value||0)+n}
+
+async function give(mode){
+  const id=document.getElementById('giveId').value.trim();
+  const amt=+document.getElementById('giveAmt').value;
+  const m=document.getElementById('giveMsg');
+  if(!id){m.className='msg err';m.textContent='Укажи ID';return}
+  if(!amt&&mode==='add'){m.className='msg err';m.textContent='Укажи сумму';return}
+  const ref=db.ref('game/'+id);
+  const snap=await ref.get();
+  if(!snap.exists()){m.className='msg err';m.textContent='Аккаунт с таким ID не найден';return}
+  const cur=+snap.val().coins||0;
+  const next=mode==='add'?cur+amt:amt;
+  await ref.update({coins:next});
+  m.className='msg ok';m.textContent=`✓ ${snap.val().nickname||id}: ${fmt(cur)} → ${fmt(next)} монет`;
+  loadAll();
+}
+
+function fmt(n){n=+n||0;return n.toLocaleString('ru-RU')}
+function esc(s){return (s||'').replace(/[<>&]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]))}
+</script>
+</body>
+</html>
