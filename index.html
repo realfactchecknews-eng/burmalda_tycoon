@@ -164,6 +164,9 @@ button{font-family:inherit}
 .lever-ball{width:36px;height:36px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ff7777,#880000);border:2px solid #cc0000;box-shadow:0 4px 12px rgba(0,0,0,.6);margin-bottom:-1px}
 .lever-rod{width:12px;height:108px;background:linear-gradient(90deg,#555,#ddd,#888,#ddd,#555);border-radius:6px}
 .lever-mount-bot{width:34px;height:20px;background:linear-gradient(180deg,#444,#1a1a1a);border-radius:0 0 7px 7px;border:1px solid #333}
+.slot-bet-bar{background:#0a0a0a;border-top:1px solid #1e1e1e;padding:12px 20px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.slot-bet-lbl{font-size:10px;font-weight:700;letter-spacing:2px;color:var(--muted);margin-right:2px}
+.chip.active,#slot-free-chip.active{background:rgba(245,197,24,.15);border-color:var(--gold);color:var(--gold)}
 .machine-bottom{background:#080808;border-top:1px solid #1e1e1e;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .m-displays{display:flex;gap:10px}
 .m-disp{background:#000;border:1px solid #1a1300;border-radius:6px;padding:8px 14px;min-width:88px}
@@ -223,8 +226,9 @@ button{font-family:inherit}
 .nc-r{background:#7f1d1d;color:#fca5a5}
 .nc-b{background:#1a1a1a;color:#d1d5db;border-color:#333}
 .sel-display{display:flex;gap:6px;flex-wrap:wrap;min-height:36px;align-items:center;background:var(--bg3);border-radius:var(--r);padding:6px 10px;border:1px solid var(--border)}
-.sel-chip{width:30px;height:30px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;cursor:pointer}
-.sel-chip:hover{opacity:.7}
+.sel-chip{min-width:30px;height:28px;padding:0 9px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap}
+.sel-chip.qb-chip{background:var(--bg4);border:1px solid var(--gold);color:var(--gold)}
+.sel-chip:hover{opacity:.7;text-decoration:line-through}
 .qb-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
 .qb{padding:8px 4px;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);font-size:11px;font-weight:700;color:var(--muted);cursor:pointer;text-align:center;letter-spacing:.3px;transition:background .15s,color .15s,border-color .15s;user-select:none}
 .qb:hover,.qb.active{background:rgba(245,197,24,.08);border-color:var(--gold);color:var(--gold)}
@@ -295,6 +299,54 @@ button{font-family:inherit}
 .cashout-btn.st-live{background:#166534;color:#fff;border-color:#22c55e;animation:livePulse .7s ease-in-out infinite}
 @keyframes livePulse{0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,.5)}50%{box-shadow:0 0 0 10px rgba(34,197,94,0)}}
 .crash-last-msg{font-size:13px;color:var(--muted);margin-top:6px;min-height:20px;text-align:center}
+
+/* PENALTY */
+.pen-wrap{width:100%;max-width:560px}
+.pen-field{position:relative;height:340px;border-radius:var(--r2);overflow:hidden;background:linear-gradient(#4a9d4a 0%,#3f8f3f 55%,#2f7a2f 100%);border:1px solid #1e4a1e}
+.pen-field::after{content:'';position:absolute;left:0;right:0;bottom:0;height:60%;background:repeating-linear-gradient(90deg,rgba(255,255,255,.04) 0 28px,transparent 28px 56px)}
+.pen-goal{position:absolute;top:14px;left:50%;transform:translateX(-50%);width:72%;height:120px}
+.pen-net{position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(255,255,255,.18) 0 1px,transparent 1px 11px),repeating-linear-gradient(90deg,rgba(255,255,255,.18) 0 1px,transparent 1px 11px);border:0}
+.pen-post{position:absolute;background:#fff;box-shadow:0 0 6px rgba(0,0,0,.3)}
+.pen-post-l{left:0;top:0;width:6px;height:100%}
+.pen-post-r{right:0;top:0;width:6px;height:100%}
+.pen-post-top{left:0;top:0;width:100%;height:6px}
+.pen-keeper{position:absolute;top:78px;left:50%;font-size:46px;transform:translateX(-50%);transition:transform .45s cubic-bezier(.3,1.4,.5,1);z-index:3;filter:drop-shadow(0 3px 4px rgba(0,0,0,.4))}
+.pen-ball{position:absolute;bottom:18px;left:50%;font-size:38px;transform:translateX(-50%);transition:transform .55s cubic-bezier(.4,.1,.5,1);z-index:2;filter:drop-shadow(0 3px 5px rgba(0,0,0,.5))}
+.pen-msg{position:absolute;bottom:8px;left:0;right:0;text-align:center;font-size:15px;font-weight:900;color:#fff;text-shadow:0 2px 6px rgba(0,0,0,.7);z-index:4}
+.pen-aim{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.pen-zone{padding:14px 6px;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);color:var(--text);font-size:13px;font-weight:700;cursor:pointer;transition:background .15s,border-color .15s,color .15s}
+.pen-zone:hover{border-color:var(--gold);color:var(--gold)}
+.pen-zone.active{background:rgba(245,197,24,.15);border-color:var(--gold);color:var(--gold)}
+.pen-shoot-btn{width:100%;margin-top:14px;padding:15px;background:var(--gold);color:#000;border:none;border-radius:var(--r);font-size:15px;font-weight:900;letter-spacing:1px;cursor:pointer;box-shadow:0 4px 0 #7a6000;transition:transform .1s,opacity .15s}
+.pen-shoot-btn:hover:not(:disabled){transform:translateY(-1px)}
+.pen-shoot-btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* MINES */
+.mines-wrap{width:100%;max-width:480px}
+.mines-top{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.mines-stat{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:12px 8px;text-align:center}
+.mines-stat-v{font-size:20px;font-weight:900;color:var(--gold)}
+.mines-stat-l{font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:2px}
+.mines-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.mine-cell{aspect-ratio:1;border-radius:var(--r);background:linear-gradient(145deg,#1c1c1c,#141414);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:26px;cursor:pointer;user-select:none;transition:transform .1s,background .2s,border-color .2s}
+.mine-cell:hover:not(.revealed){border-color:var(--gold);transform:translateY(-2px)}
+.mine-cell.disabled{cursor:default}
+.mine-cell.revealed{cursor:default;animation:cellPop .3s cubic-bezier(.34,1.56,.64,1)}
+.mine-cell.gem{background:radial-gradient(circle at 50% 35%,#10402a,#07271a);border-color:#1f8a5a}
+.mine-cell.bomb{background:radial-gradient(circle at 50% 35%,#4a1212,#270707);border-color:#a33}
+.mine-cell.dim{opacity:.4}
+@keyframes cellPop{0%{transform:scale(.6);opacity:.3}100%{transform:scale(1);opacity:1}}
+.mines-msg{text-align:center;font-size:14px;font-weight:700;color:var(--muted);min-height:22px;margin:12px 0 0}
+.mines-count{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.mn-cbtn{padding:11px 4px;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);color:var(--text);font-size:13px;font-weight:700;cursor:pointer;transition:background .15s,border-color .15s,color .15s}
+.mn-cbtn:hover{border-color:var(--gold);color:var(--gold)}
+.mn-cbtn.active{background:rgba(245,197,24,.15);border-color:var(--gold);color:var(--gold)}
+.mines-btn-row{display:flex;gap:10px;margin-top:14px}
+.mines-btn{flex:1;padding:15px;border:none;border-radius:var(--r);font-size:14px;font-weight:900;letter-spacing:1px;cursor:pointer;transition:transform .1s,opacity .15s}
+.mines-start{background:var(--gold);color:#000;box-shadow:0 4px 0 #7a6000}
+.mines-cash{background:var(--green);color:#022;box-shadow:0 4px 0 #15803d}
+.mines-btn:hover:not(:disabled){transform:translateY(-1px)}
+.mines-btn:disabled{opacity:.35;cursor:not-allowed;box-shadow:none}
 
 /* SHOP */
 .shop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;width:100%;max-width:780px}
@@ -641,10 +693,12 @@ footer a:hover{color:var(--gold)}
       <button class="menu-play" onclick="startGame()">▶ ENTER CASINO</button>
       <a class="menu-tg-btn" href="https://t.me/drunAI67_bot" target="_blank" rel="noopener">CHAT WITH MELLSTROY</a>
       <div class="menu-features">
-        <div class="mf"><div class="mf-icon">🎰</div><div><span class="mf-title">Slots</span>8 symbols · jackpots · auto</div></div>
-        <div class="mf"><div class="mf-icon">🎡</div><div><span class="mf-title">Roulette</span>Full wheel · 3 numbers</div></div>
+        <div class="mf"><div class="mf-icon">🎰</div><div><span class="mf-title">Slots</span>Free spin or raise your bet</div></div>
+        <div class="mf"><div class="mf-icon">🎡</div><div><span class="mf-title">Roulette</span>Full wheel · multi-bet</div></div>
         <div class="mf"><div class="mf-icon">🃏</div><div><span class="mf-title">Blackjack</span>Classic 21 · double down</div></div>
         <div class="mf"><div class="mf-icon">🚀</div><div><span class="mf-title">Crash</span>Real odds · cash out live</div></div>
+        <div class="mf"><div class="mf-icon">⚽</div><div><span class="mf-title">Penalty</span>Beat the keeper · ×1.4</div></div>
+        <div class="mf"><div class="mf-icon">💣</div><div><span class="mf-title">Mines</span>Dodge bombs · cash out</div></div>
       </div>
     </div>
   </div>
@@ -681,7 +735,7 @@ footer a:hover{color:var(--gold)}
     </div>
     <div class="hdr-right">
       <div class="hdr-balance">💰 <span id="hd-coins">500</span></div>
-      <button class="hdr-profile-btn" onclick="showTab('profile',document.querySelectorAll('.tab-btn')[5])">
+      <button class="hdr-profile-btn" onclick="showTab('profile')">
         <div class="hdr-avatar" id="hdr-avatar-icon">🎰</div>
         <span class="hdr-nickname" id="hdr-nickname-text">Профиль</span>
       </button>
@@ -689,12 +743,14 @@ footer a:hover{color:var(--gold)}
     </div>
   </div>
   <nav class="tab-nav">
-    <button class="tab-btn active" onclick="showTab('slots',this)">🎰 SLOTS</button>
-    <button class="tab-btn" onclick="showTab('roulette',this)">🎡 ROULETTE</button>
-    <button class="tab-btn" onclick="showTab('blackjack',this)">🃏 BLACKJACK</button>
-    <button class="tab-btn" onclick="showTab('crash',this)">🚀 CRASH</button>
-    <button class="tab-btn" onclick="showTab('shop',this)">🛍️ SHOP</button>
-    <button class="tab-btn" onclick="showTab('profile',this)">👤 ПРОФИЛЬ</button>
+    <button class="tab-btn active" data-tab="slots" onclick="showTab('slots',this)">🎰 SLOTS</button>
+    <button class="tab-btn" data-tab="roulette" onclick="showTab('roulette',this)">🎡 ROULETTE</button>
+    <button class="tab-btn" data-tab="blackjack" onclick="showTab('blackjack',this)">🃏 BLACKJACK</button>
+    <button class="tab-btn" data-tab="crash" onclick="showTab('crash',this)">🚀 CRASH</button>
+    <button class="tab-btn" data-tab="penalty" onclick="showTab('penalty',this)">⚽ ПЕНАЛЬТИ</button>
+    <button class="tab-btn" data-tab="mines" onclick="showTab('mines',this)">💣 МИНЫ</button>
+    <button class="tab-btn" data-tab="shop" onclick="showTab('shop',this)">🛍️ SHOP</button>
+    <button class="tab-btn" data-tab="profile" onclick="showTab('profile',this)">👤 ПРОФИЛЬ</button>
   </nav>
   <div class="tab-content">
 
@@ -728,10 +784,20 @@ footer a:hover{color:var(--gold)}
               <div class="lever-mount-bot"></div>
             </div>
           </div>
+          <div class="slot-bet-bar">
+            <span class="slot-bet-lbl">СТАВКА</span>
+            <button class="chip" id="slot-free-chip" onclick="slotSetBet(0)">🎁 FREE</button>
+            <input class="bet-input" type="number" id="slot-bet" value="0" min="0" style="width:104px" oninput="slotSyncBet()">
+            <div class="chip" onclick="slotAddBet(10)">+10</div>
+            <div class="chip" onclick="slotAddBet(100)">+100</div>
+            <div class="chip" onclick="slotAddBet(1000)">+1K</div>
+            <div class="chip" onclick="document.getElementById('slot-bet').value=Math.floor(G.coins);slotSyncBet()">ВСЁ</div>
+          </div>
           <div class="machine-bottom">
             <div class="m-displays">
               <div class="m-disp"><div class="m-disp-l">COINS</div><div class="m-disp-v" id="mdb-coins">500</div></div>
               <div class="m-disp"><div class="m-disp-l">MULT</div><div class="m-disp-v" id="mdb-mult">×1</div></div>
+              <div class="m-disp"><div class="m-disp-l">BET</div><div class="m-disp-v" id="mdb-bet">FREE</div></div>
             </div>
             <button class="m-spin-btn" id="slot-btn" onclick="slotTrigger()">SPIN</button>
           </div>
@@ -757,11 +823,18 @@ footer a:hover{color:var(--gold)}
             <div class="roul-banner" id="roul-banner">Сделайте ставки и крутите</div>
           </div>
           <div class="roul-right">
-            <div class="card-title">Selected numbers</div>
-            <div class="sel-display" id="r-sel-display"><span style="font-size:12px;color:var(--muted2)">None selected</span></div>
-            <div class="card-title" style="margin-top:4px">Numbers (0–36)</div>
+            <div class="card-title">Сумма на следующую фишку</div>
+            <div class="bet-row">
+              <input class="bet-input" type="number" id="r-bet" value="10" min="1">
+              <div class="chip" onclick="rAddBet(10)">+10</div>
+              <div class="chip" onclick="rAddBet(100)">+100</div>
+              <div class="chip" onclick="rAddBet(1000)">+1K</div>
+            </div>
+            <div class="card-title" style="margin-top:8px">Ваши ставки <span id="r-total" style="color:var(--gold);float:right;font-size:11px"></span></div>
+            <div class="sel-display" id="r-sel-display"><span style="font-size:12px;color:var(--muted2)">Кликайте числа и сектора — можно несколько</span></div>
+            <div class="card-title" style="margin-top:4px">Числа (0–36)</div>
             <div class="num-grid" id="num-grid"></div>
-            <div class="card-title" style="margin-top:4px">Quick bets</div>
+            <div class="card-title" style="margin-top:4px">Сектора (можно несколько)</div>
             <div class="qb-grid">
               <div class="qb" data-mode="red" onclick="rQuick(this)">🔴 Red</div>
               <div class="qb" data-mode="black" onclick="rQuick(this)">⚫ Black</div>
@@ -770,14 +843,7 @@ footer a:hover{color:var(--gold)}
               <div class="qb" data-mode="odd" onclick="rQuick(this)">Odd</div>
               <div class="qb" data-mode="low" onclick="rQuick(this)">1–18</div>
               <div class="qb" data-mode="high" onclick="rQuick(this)">19–36</div>
-              <div class="qb" onclick="rClear()">✕ Clear</div>
-            </div>
-            <div class="card-title" style="margin-top:4px">Bet amount</div>
-            <div class="bet-row">
-              <input class="bet-input" type="number" id="r-bet" value="10" min="1">
-              <div class="chip" onclick="rAddBet(10)">+10</div>
-              <div class="chip" onclick="rAddBet(100)">+100</div>
-              <div class="chip" onclick="document.getElementById('r-bet').value=G.coins">ALL IN</div>
+              <div class="qb" onclick="rClear()">✕ Очистить</div>
             </div>
             <button class="roul-spin-btn" id="roul-spin-btn" onclick="rSpin()">КРУТИТЬ КОЛЕСО</button>
           </div>
@@ -838,6 +904,73 @@ footer a:hover{color:var(--gold)}
           <button class="cashout-btn st-idle" id="crash-btn" onclick="crashAction()">СДЕЛАТЬ СТАВКУ</button>
         </div>
         <div class="crash-last-msg" id="crash-last"></div>
+      </div>
+    </div>
+
+    <!-- PENALTY -->
+    <div id="tab-penalty" class="tab-panel">
+      <div class="pen-wrap">
+        <div class="pen-field" id="pen-field">
+          <div class="pen-goal">
+            <div class="pen-net"></div>
+            <div class="pen-post pen-post-l"></div>
+            <div class="pen-post pen-post-r"></div>
+            <div class="pen-post pen-post-top"></div>
+          </div>
+          <div class="pen-keeper" id="pen-keeper">🧤</div>
+          <div class="pen-ball" id="pen-ball">⚽</div>
+          <div class="pen-msg" id="pen-msg">Выбери угол и бей!</div>
+        </div>
+        <div class="card" style="margin-top:10px">
+          <div class="card-title">Куда бьём</div>
+          <div class="pen-aim">
+            <button class="pen-zone" data-zone="0" onclick="penPick(this)">↖ Влево</button>
+            <button class="pen-zone" data-zone="1" onclick="penPick(this)">⬆ По центру</button>
+            <button class="pen-zone" data-zone="2" onclick="penPick(this)">↗ Вправо</button>
+          </div>
+          <div class="card-title" style="margin-top:14px">Ставка</div>
+          <div class="bet-row">
+            <input class="bet-input" type="number" id="pen-bet" value="10" min="1">
+            <div class="chip" onclick="penAddBet(10)">+10</div>
+            <div class="chip" onclick="penAddBet(100)">+100</div>
+            <div class="chip" onclick="document.getElementById('pen-bet').value=Math.floor(G.coins)">ВСЁ</div>
+          </div>
+          <button class="pen-shoot-btn" id="pen-shoot" onclick="penShoot()">⚽ БИТЬ — выигрыш ×1.4</button>
+          <div style="font-size:11px;color:var(--muted);margin-top:8px;line-height:1.6">Гол — забираешь ставку ×1.4. Вратарь угадал угол — ставка сгорает.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MINES -->
+    <div id="tab-mines" class="tab-panel">
+      <div class="mines-wrap">
+        <div class="mines-top">
+          <div class="mines-stat"><div class="mines-stat-v" id="mn-mult">×1.00</div><div class="mines-stat-l">Множитель</div></div>
+          <div class="mines-stat"><div class="mines-stat-v" id="mn-next">×1.00</div><div class="mines-stat-l">След. клетка</div></div>
+          <div class="mines-stat"><div class="mines-stat-v" id="mn-win">0</div><div class="mines-stat-l">Забрать</div></div>
+        </div>
+        <div class="mines-grid" id="mines-grid"></div>
+        <div class="mines-msg" id="mines-msg">Поставь ставку, выбери число мин и открывай клетки</div>
+        <div class="card" style="margin-top:8px">
+          <div class="card-title">Мин на поле</div>
+          <div class="mines-count" id="mines-count">
+            <button class="mn-cbtn active" data-m="3" onclick="minesSetCount(this,3)">3 💣</button>
+            <button class="mn-cbtn" data-m="5" onclick="minesSetCount(this,5)">5 💣</button>
+            <button class="mn-cbtn" data-m="10" onclick="minesSetCount(this,10)">10 💣</button>
+            <button class="mn-cbtn" data-m="24" onclick="minesSetCount(this,24)">24 💣</button>
+          </div>
+          <div class="card-title" style="margin-top:14px">Ставка</div>
+          <div class="bet-row">
+            <input class="bet-input" type="number" id="mines-bet" value="10" min="1">
+            <div class="chip" onclick="minesAddBet(10)">+10</div>
+            <div class="chip" onclick="minesAddBet(100)">+100</div>
+            <div class="chip" onclick="document.getElementById('mines-bet').value=Math.floor(G.coins)">ВСЁ</div>
+          </div>
+          <div class="mines-btn-row">
+            <button class="mines-btn mines-start" id="mines-start-btn" onclick="minesStart()">НАЧАТЬ ИГРУ</button>
+            <button class="mines-btn mines-cash" id="mines-cash-btn" onclick="minesCashout()" disabled>ЗАБРАТЬ</button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -1098,9 +1231,13 @@ function rebuildReels(){const row=document.getElementById('reels-row');row.inner
 function addReel(){const row=document.getElementById('reels-row');row.appendChild(makeReelEl(G.reelCount));G.reelCount++}
 function leverAnim(){const sw=document.getElementById('lever-sw');sw.classList.remove('pull','rel');void sw.offsetWidth;sw.classList.add('pull');setTimeout(()=>{sw.classList.remove('pull');sw.classList.add('rel')},280);setTimeout(()=>sw.classList.remove('rel'),560)}
 function spinReel(i,final,dur){return new Promise(res=>{const strip=document.getElementById('rs'+i);if(!strip){res();return}const win=document.getElementById('rw'+i);const cellH=(win&&win.clientHeight)||SH;const cnt=22+i*4;let h='';for(let j=0;j<cnt;j++)h+=`<div class="reel-sym">${SSYM[Math.floor(Math.random()*SSYM.length)]}</div>`;h+=`<div class="reel-sym">${final}</div>`;strip.style.transition='none';strip.style.transform='translateY(0)';strip.innerHTML=h;void strip.offsetWidth;strip.style.transition=`transform ${dur}ms cubic-bezier(.22,.8,.35,1)`;strip.style.transform=`translateY(-${cnt*cellH}px)`;setTimeout(res,dur)})}
-function slotTrigger(){if(slotBusy)return;leverAnim();doSlot()}
-async function doSlot(){if(slotBusy)return;slotBusy=true;document.getElementById('slot-btn').disabled=true;const b=document.getElementById('slot-banner');b.className='';b.textContent='⏳';G.spins++;const n=G.reelCount,res=[];for(let i=0;i<n;i++){let s=wrand(SSYM,SWT);if(G.lucky&&i>0&&i<2&&Math.random()<.3)s=res[0];res.push(s)}for(let i=0;i<n;i++){const w=document.getElementById('rw'+i);if(w)w.classList.remove('glow')}await Promise.all(res.map((sym,i)=>spinReel(i,sym,900+i*250)));slotBusy=false;document.getElementById('slot-btn').disabled=false;evalSlot(res);addXP(8+Math.floor(G.level/5));updateUI();saveG()}
-function evalSlot(res){const n=res.length;let win=0,msg='',big=false;if(n>=5&&res.every(s=>s===res[0])){win=(SJACK[res.slice(0,3).join('')]||10)*20;msg='🎰 MEGA JACKPOT ×5! +'+fmt(win*G.mult*G.prestigeMult);big=true;glowAll(n)}else if(n>=4&&res.slice(0,4).every(s=>s===res[0])){win=(SJACK[res.slice(0,3).join('')]||10)*5;msg='🔥 SUPER JACKPOT ×4! +'+fmt(win*G.mult*G.prestigeMult);big=true;glowAll(4)}else{const key=res.slice(0,3).join('');if(SJACK[key]){win=SJACK[key];msg='🎉 JACKPOT! +'+fmt(win*G.mult*G.prestigeMult);big=true;glowAll(3)}else{const c={};res.forEach(s=>c[s]=(c[s]||0)+1);const p=Object.entries(c).find(([,v])=>v>=2);if(p){win=SPAIR[p[0]]||3;msg='✅ Pair! +'+fmt(win*G.mult*G.prestigeMult)}}}const b=document.getElementById('slot-banner');if(win>0){const e=Math.round(win*G.mult*G.prestigeMult);G.coins+=e;G.totalEarned+=e;b.textContent=msg;b.className=big?'big':'win';addLog(msg+' '+res.join(' '));if(big){popup(msg);flashLights()}}else{b.textContent='No win';b.className='miss';addLog('No win  '+res.join(' '))}}
+function slotSyncBet(){const inp=document.getElementById('slot-bet');let v=Math.max(0,Math.floor(+inp.value||0));inp.value=v;const free=document.getElementById('slot-free-chip');if(free)free.classList.toggle('active',v===0);const disp=document.getElementById('mdb-bet');if(disp)disp.textContent=v===0?'FREE':fmt(v);}
+function slotSetBet(v){document.getElementById('slot-bet').value=v;slotSyncBet()}
+function slotAddBet(n){document.getElementById('slot-bet').value=Math.max(0,(parseInt(document.getElementById('slot-bet').value)||0)+n);slotSyncBet()}
+function slotStake(){return Math.max(0,Math.floor(+document.getElementById('slot-bet').value||0))}
+function slotTrigger(){if(slotBusy)return;const stake=slotStake();if(stake>0&&stake>G.coins){const b=document.getElementById('slot-banner');b.className='miss';b.textContent='Недостаточно монет для ставки';return}leverAnim();doSlot()}
+async function doSlot(){if(slotBusy)return;const stake=slotStake();if(stake>0&&stake>G.coins){const b=document.getElementById('slot-banner');b.className='miss';b.textContent='Недостаточно монет для ставки';return}slotBusy=true;document.getElementById('slot-btn').disabled=true;if(stake>0){G.coins-=stake;updateUI()}const b=document.getElementById('slot-banner');b.className='';b.textContent='⏳';G.spins++;const n=G.reelCount,res=[];for(let i=0;i<n;i++){let s=wrand(SSYM,SWT);if(G.lucky&&i>0&&i<2&&Math.random()<.3)s=res[0];res.push(s)}for(let i=0;i<n;i++){const w=document.getElementById('rw'+i);if(w)w.classList.remove('glow')}await Promise.all(res.map((sym,i)=>spinReel(i,sym,900+i*250)));slotBusy=false;document.getElementById('slot-btn').disabled=false;evalSlot(res,stake);addXP(8+Math.floor(G.level/5));updateUI();saveG()}
+function evalSlot(res,stake){const n=res.length;const stakeMult=stake>0?stake/10:1;const payMul=G.mult*G.prestigeMult*stakeMult;let win=0,msg='',big=false;if(n>=5&&res.every(s=>s===res[0])){win=(SJACK[res.slice(0,3).join('')]||10)*20;msg='🎰 MEGA JACKPOT ×5! +'+fmt(win*payMul);big=true;glowAll(n)}else if(n>=4&&res.slice(0,4).every(s=>s===res[0])){win=(SJACK[res.slice(0,3).join('')]||10)*5;msg='🔥 SUPER JACKPOT ×4! +'+fmt(win*payMul);big=true;glowAll(4)}else{const key=res.slice(0,3).join('');if(SJACK[key]){win=SJACK[key];msg='🎉 JACKPOT! +'+fmt(win*payMul);big=true;glowAll(3)}else{const c={};res.forEach(s=>c[s]=(c[s]||0)+1);const p=Object.entries(c).find(([,v])=>v>=2);if(p){win=SPAIR[p[0]]||3;msg='✅ Pair! +'+fmt(win*payMul)}}}const b=document.getElementById('slot-banner');if(win>0){const e=Math.round(win*payMul);G.coins+=e;if(e>stake)G.totalEarned+=e-stake;b.textContent=msg;b.className=big?'big':'win';addLog(msg+' '+res.join(' '));if(big){popup(msg);flashLights()}}else{b.textContent=stake>0?'Проигрыш −'+fmt(stake):'No win';b.className='miss';addLog((stake>0?'Проигрыш −'+fmt(stake):'No win')+'  '+res.join(' '))}}
 function glowAll(c){for(let i=0;i<c;i++){const w=document.getElementById('rw'+i);if(w)w.classList.add('glow')}}
 function flashLights(){const rows=document.querySelectorAll('.m-lights');rows.forEach(r=>r.classList.add('flash'));setTimeout(()=>rows.forEach(r=>r.classList.remove('flash')),1500)}
 function addXP(n){G.xp+=n;const need=G.level*100;if(G.xp>=need){G.xp-=need;G.level++;addLog('🆙 Level '+G.level+'!')}}
@@ -1115,7 +1252,7 @@ const R_ORDER=[0,32,15,19,4,21,2,25,17,34,6,27,13,36,11,30,8,23,10,5,24,16,33,1,
 const R_RED=[1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36];
 const R_SEG=2*Math.PI/37;
 let roulAngle=0,roulBallAngle=0,roulBallR=0,roulSpinning=false,roulRaf=null;
-let roulSelected=[],roulQuick=null;
+let roulBets=[];const ROUL_MAX_BETS=15;
 let roulCv,roulCtx,roulSize;
 
 function initRoulCanvas(){
@@ -1179,26 +1316,52 @@ function buildNumGrid(){
   const z=document.createElement('div');z.className='nc nc-g';z.textContent='0';z.onclick=()=>rToggle(0);g.appendChild(z);
   for(let row=3;row>=1;row--){for(let col=1;col<=12;col++){const n=(col-1)*3+row;const cl=R_RED.includes(n)?'nc-r':'nc-b';const d=document.createElement('div');d.className='nc '+cl;d.textContent=n;d.id='nc'+n;d.onclick=()=>rToggle(n);g.appendChild(d)}}
 }
-function rToggle(n){roulQuick=null;document.querySelectorAll('.qb').forEach(b=>b.classList.remove('active'));if(roulSelected.includes(n))roulSelected=roulSelected.filter(x=>x!==n);else if(roulSelected.length<3)roulSelected.push(n);updateRSel()}
-function rQuick(el){roulSelected=[];roulQuick=el.dataset.mode;document.querySelectorAll('.qb').forEach(b=>b.classList.remove('active'));el.classList.add('active');updateRSel()}
-function rClear(){roulSelected=[];roulQuick=null;document.querySelectorAll('.qb').forEach(b=>b.classList.remove('active'));updateRSel()}
+const RQ_LBL={'red':'🔴 Red','black':'⚫ Black','green':'🟢 Zero','even':'Even','odd':'Odd','low':'1–18','high':'19–36'};
+function rBetAmt(){return Math.max(1,parseInt(document.getElementById('r-bet').value)||1)}
+function rToggle(n){
+  const i=roulBets.findIndex(b=>b.kind==='num'&&b.val===n);
+  if(i>=0)roulBets.splice(i,1);
+  else if(roulBets.length<ROUL_MAX_BETS)roulBets.push({kind:'num',val:n,amt:rBetAmt()});
+  updateRSel();
+}
+function rQuick(el){
+  const mode=el.dataset.mode;
+  const i=roulBets.findIndex(b=>b.kind==='quick'&&b.val===mode);
+  if(i>=0)roulBets.splice(i,1);
+  else if(roulBets.length<ROUL_MAX_BETS)roulBets.push({kind:'quick',val:mode,amt:rBetAmt()});
+  updateRSel();
+}
+function rClear(){roulBets=[];updateRSel()}
+function rRemove(idx){roulBets.splice(idx,1);updateRSel()}
 function rAddBet(n){const inp=document.getElementById('r-bet');inp.value=Math.max(1,(parseInt(inp.value)||0)+n)}
+function roulTotal(){return roulBets.reduce((s,b)=>s+b.amt,0)}
 function updateRSel(){
   document.querySelectorAll('.nc').forEach(c=>c.classList.remove('sel'));
-  roulSelected.forEach(n=>{const c=document.getElementById('nc'+n);if(c)c.classList.add('sel')});
+  document.querySelectorAll('.qb').forEach(b=>b.classList.remove('active'));
+  roulBets.forEach(b=>{
+    if(b.kind==='num'){const c=document.getElementById('nc'+b.val);if(c)c.classList.add('sel')}
+    else{const q=document.querySelector('.qb[data-mode="'+b.val+'"]');if(q)q.classList.add('active')}
+  });
   const d=document.getElementById('r-sel-display');d.innerHTML='';
-  if(!roulSelected.length&&!roulQuick){d.innerHTML='<span style="font-size:12px;color:var(--muted2)">None selected</span>';return}
-  roulSelected.forEach(n=>{const cl=n===0?'nc-g':R_RED.includes(n)?'nc-r':'nc-b';const el=document.createElement('div');el.className='sel-chip '+cl;el.textContent=n;el.onclick=()=>rToggle(n);d.appendChild(el)});
-  if(roulQuick){const lbl={'red':'🔴 Red','black':'⚫ Black','green':'🟢 Zero','even':'Even','odd':'Odd','low':'1–18','high':'19–36'};const s=document.createElement('span');s.style.cssText='font-size:13px;color:var(--gold);font-weight:700';s.textContent=lbl[roulQuick];d.appendChild(s)}
+  const tot=document.getElementById('r-total');
+  if(!roulBets.length){d.innerHTML='<span style="font-size:12px;color:var(--muted2)">Кликайте числа и сектора — можно несколько</span>';if(tot)tot.textContent='';return}
+  roulBets.forEach((b,idx)=>{
+    const el=document.createElement('div');
+    if(b.kind==='num'){const n=b.val;el.className='sel-chip '+(n===0?'nc-g':R_RED.includes(n)?'nc-r':'nc-b');el.textContent=n+' · '+fmt(b.amt);}
+    else{el.className='sel-chip qb-chip';el.textContent=RQ_LBL[b.val]+' · '+fmt(b.amt);}
+    el.title='Убрать ставку';el.onclick=()=>rRemove(idx);
+    d.appendChild(el);
+  });
+  if(tot)tot.textContent='Σ '+fmt(roulTotal());
 }
 
 async function rSpin(){
   if(roulSpinning)return;
-  if(!roulSelected.length&&!roulQuick){document.getElementById('roul-banner').textContent='Выберите хотя бы одну ставку!';return}
-  const bet=parseInt(document.getElementById('r-bet').value)||0;
-  if(bet<1||bet>G.coins){document.getElementById('roul-banner').textContent='Неверная сумма ставки';return}
+  if(!roulBets.length){document.getElementById('roul-banner').textContent='Сделайте хотя бы одну ставку!';return}
+  const total=roulTotal();
+  if(total<1||total>G.coins){document.getElementById('roul-banner').textContent='Не хватает монет на ставки (нужно '+fmt(total)+')';return}
   roulSpinning=true;document.getElementById('roul-spin-btn').disabled=true;
-  G.coins-=bet;updateUI();
+  G.coins-=total;updateUI();
 
   const result=Math.floor(Math.random()*37);
   const idx=R_ORDER.indexOf(result);
@@ -1227,30 +1390,39 @@ async function rSpin(){
     else{
       roulAngle=targetWheel;roulBallAngle=-Math.PI/2;
       drawRoulette(-Math.PI/2);
-      showRoulResult(result,bet);
+      showRoulResult(result,total);
       roulSpinning=false;document.getElementById('roul-spin-btn').disabled=false;
     }
   }
   roulRaf=requestAnimationFrame(frame);
 }
 
-function showRoulResult(result,bet){
-  const isRed=R_RED.includes(result),isBlack=result!==0&&!isRed;
+function quickMult(mode,result){
+  const isRed=R_RED.includes(result);
+  switch(mode){
+    case'red':return isRed?2:0;
+    case'black':return(result!==0&&!isRed)?2:0;
+    case'green':return result===0?36:0;
+    case'even':return(result!==0&&result%2===0)?2:0;
+    case'odd':return(result%2!==0)?2:0;
+    case'low':return(result>=1&&result<=18)?2:0;
+    case'high':return(result>=19&&result<=36)?2:0;
+  }
+  return 0;
+}
+function showRoulResult(result,total){
+  const isRed=R_RED.includes(result);
   const el=document.getElementById('roul-result');
   el.textContent=result+(result===0?' 🟢':isRed?' 🔴':' ⚫');
   el.className='roul-result-big '+(result===0?'rr-green':isRed?'rr-red':'rr-black');
   let won=0;
-  if(roulSelected.includes(result))won=bet*35+bet;
-  else if(roulQuick==='red'&&isRed)won=bet*2;
-  else if(roulQuick==='black'&&isBlack)won=bet*2;
-  else if(roulQuick==='green'&&result===0)won=bet*35+bet;
-  else if(roulQuick==='even'&&result!==0&&result%2===0)won=bet*2;
-  else if(roulQuick==='odd'&&result%2!==0)won=bet*2;
-  else if(roulQuick==='low'&&result>=1&&result<=18)won=bet*2;
-  else if(roulQuick==='high'&&result>=19&&result<=36)won=bet*2;
+  roulBets.forEach(b=>{
+    if(b.kind==='num'){if(b.val===result)won+=b.amt*36;}
+    else{won+=b.amt*quickMult(b.val,result);}
+  });
   const banner=document.getElementById('roul-banner');
-  if(won>0){G.coins+=won;G.totalEarned+=won-bet;banner.textContent='✅ ВЫИГРЫШ +'+fmt(won)+'!';popup('🎡 Рулетка +'+fmt(won)+'!');addLog('🎡 Рулетка: '+result+' → +'+fmt(won))}
-  else{banner.textContent='😔 Не повезло — '+result;addLog('🎡 Рулетка: '+result+' — проигрыш')}
+  if(won>0){G.coins+=won;G.totalEarned+=Math.max(0,won-total);banner.textContent='✅ Выпало '+result+' — выигрыш +'+fmt(won)+'!';popup('🎡 Рулетка +'+fmt(won)+'!');addLog('🎡 Рулетка: '+result+' → ставка '+fmt(total)+', выигрыш +'+fmt(won))}
+  else{banner.textContent='😔 Выпало '+result+' — мимо (−'+fmt(total)+')';addLog('🎡 Рулетка: '+result+' — проигрыш −'+fmt(total))}
   updateUI();saveG();
 }
 
@@ -1264,25 +1436,33 @@ function newDeck(){bjDeck=[];for(const s of SUITS)for(const r of RANKS)bjDeck.pu
 function cVal(c){if(c.r==='A')return 11;if(['J','Q','K'].includes(c.r))return 10;return parseInt(c.r)}
 function hVal(h){let v=0,a=0;for(const c of h){if(c.hidden)continue;v+=cVal(c);if(c.r==='A')a++}while(v>21&&a){v-=10;a--}return v}
 function bjAddBet(n){const i=document.getElementById('bj-bet');i.value=Math.max(1,(parseInt(i.value)||0)+n)}
-async function renderBJ(revealDelay){
-  const dc=document.getElementById('bj-dealer'),pc=document.getElementById('bj-player');
-  dc.innerHTML='';pc.innerHTML='';
-  for(let i=0;i<bjDealer.length;i++){
-    const c=bjDealer[i];const isR=['♥','♦'].includes(c.s);
-    const d=document.createElement('div');
-    d.style.animationDelay=(i*.12)+'s';
-    d.className='card-el deal '+(c.hidden?'back':(isR?'red':'black'));
-    if(!c.hidden)d.innerHTML=`<div class="card-top">${c.r}${c.s}</div><div class="card-mid">${c.s}</div><div class="card-bot">${c.r}${c.s}</div>`;
-    dc.appendChild(d);
+function cardFace(c){return `<div class="card-top">${c.r}${c.s}</div><div class="card-mid">${c.s}</div><div class="card-bot">${c.r}${c.s}</div>`}
+function cardKey(c){return c.hidden?'back':(c.r+c.s)}
+// Incremental render: only NEW cards play the deal animation; a hidden card that
+// gets revealed flips in place. Existing cards are never re-animated (no shake).
+function renderHand(container,hand){
+  while(container.children.length>hand.length)container.removeChild(container.lastChild);
+  for(let i=0;i<hand.length;i++){
+    const c=hand[i];const key=cardKey(c);const isR=['♥','♦'].includes(c.s);
+    let el=container.children[i];
+    if(!el){
+      el=document.createElement('div');
+      el.className='card-el deal '+(c.hidden?'back':(isR?'red':'black'));
+      el.style.animationDelay=(Math.min(i,1)*.1)+'s';
+      el.innerHTML=c.hidden?'':cardFace(c);
+      el.dataset.key=key;
+      container.appendChild(el);
+    }else if(el.dataset.key!==key){
+      // card changed (e.g. dealer's hole card revealed) — flip, don't re-deal
+      el.className='card-el flip '+(c.hidden?'back':(isR?'red':'black'));
+      el.innerHTML=c.hidden?'':cardFace(c);
+      el.dataset.key=key;
+    }
   }
-  for(let i=0;i<bjPlayer.length;i++){
-    const c=bjPlayer[i];const isR=['♥','♦'].includes(c.s);
-    const d=document.createElement('div');
-    d.style.animationDelay=(i*.12)+'s';
-    d.className='card-el deal '+(isR?'red':'black');
-    d.innerHTML=`<div class="card-top">${c.r}${c.s}</div><div class="card-mid">${c.s}</div><div class="card-bot">${c.r}${c.s}</div>`;
-    pc.appendChild(d);
-  }
+}
+async function renderBJ(){
+  renderHand(document.getElementById('bj-dealer'),bjDealer);
+  renderHand(document.getElementById('bj-player'),bjPlayer);
   const pv=hVal(bjPlayer),dv=hVal(bjDealer.filter(c=>!c.hidden));
   document.getElementById('bj-pscore').textContent=bjActive?pv:'';
   document.getElementById('bj-dscore').textContent=bjActive?(dv+(bjDealer.some(c=>c.hidden)?'+':'')):'';
@@ -1295,14 +1475,19 @@ function bjSetActions(phase){
     a.innerHTML=`<div class="bj-btn-row"><button class="abtn btn-green" onclick="bjHit()">ЕЩЁ</button><button class="abtn btn-red" onclick="bjStand()">ХВАТИТ</button><button class="abtn btn-blue" onclick="bjDouble()" ${G.coins<bjBetAmt?'disabled':''}>×2 УДВОИТЬ</button></div>`;
   }
 }
+const bjSleep=ms=>new Promise(r=>setTimeout(r,ms));
 async function bjDeal(){
   bjBetAmt=parseInt(document.getElementById('bj-bet').value)||20;
   if(bjBetAmt<1||bjBetAmt>G.coins){document.getElementById('bj-status').textContent='Неверная ставка';return}
   G.coins-=bjBetAmt;newDeck();
-  bjPlayer=[bjDeck.pop(),bjDeck.pop()];
-  bjDealer=[bjDeck.pop(),{...bjDeck.pop(),hidden:true}];
-  bjActive=true;document.getElementById('bj-status').textContent='';
-  await renderBJ();bjSetActions('play');updateUI();
+  bjPlayer=[];bjDealer=[];bjActive=true;
+  document.getElementById('bj-status').textContent='';
+  document.getElementById('bj-dealer').innerHTML='';document.getElementById('bj-player').innerHTML='';
+  document.getElementById('bj-actions').innerHTML='';updateUI();
+  // deal one card at a time: you, dealer, you, dealer(hole)
+  const deal=[['p',bjDeck.pop()],['d',bjDeck.pop()],['p',bjDeck.pop()],['d',{...bjDeck.pop(),hidden:true}]];
+  for(const [who,card] of deal){(who==='p'?bjPlayer:bjDealer).push(card);await renderBJ();await bjSleep(190)}
+  bjSetActions('play');
   if(hVal(bjPlayer)===21)setTimeout(bjStand,600);
 }
 async function bjHit(){bjPlayer.push(bjDeck.pop());await renderBJ();if(hVal(bjPlayer)>21)bjEnd('bust')}
@@ -1468,6 +1653,131 @@ function doCrash(){
   },2800);
 }
 function addCrashHist(v){crashHistory.unshift(v);if(crashHistory.length>12)crashHistory.pop();const h=document.getElementById('crash-history');h.innerHTML='';crashHistory.forEach(x=>{const d=document.createElement('div');d.className='c-hist '+(x<1.5?'low':x<4?'mid':'high');d.textContent=x.toFixed(2)+'×';h.appendChild(d)})}
+
+/* ══════════════════════════════════
+   PENALTY
+══════════════════════════════════ */
+const PEN_X=['-32%','0%','32%'];   // ball/keeper offset per zone (left, center, right)
+let penZone=1,penBusy=false;
+function penPick(btn){if(penBusy)return;penZone=+btn.dataset.zone;document.querySelectorAll('.pen-zone').forEach(b=>b.classList.remove('active'));btn.classList.add('active')}
+function penAddBet(n){const i=document.getElementById('pen-bet');i.value=Math.max(1,(parseInt(i.value)||0)+n)}
+async function penShoot(){
+  if(penBusy)return;
+  const bet=parseInt(document.getElementById('pen-bet').value)||0;
+  const msg=document.getElementById('pen-msg');
+  if(bet<1||bet>G.coins){msg.textContent='Неверная ставка';return}
+  penBusy=true;document.getElementById('pen-shoot').disabled=true;
+  G.coins-=bet;updateUI();
+  const keeper=document.getElementById('pen-keeper'),ball=document.getElementById('pen-ball');
+  const keeperZone=Math.floor(Math.random()*3);   // keeper dives uniformly → ~66% goal
+  msg.textContent='⚽ Удар!';
+  // fly ball to chosen corner, keeper dives
+  ball.style.transform=`translateX(calc(-50% + ${PEN_X[penZone]})) translateY(-150px) scale(.8)`;
+  keeper.style.transform=`translateX(calc(-50% + ${PEN_X[keeperZone]})) rotate(${keeperZone===0?-35:keeperZone===2?35:0}deg)`;
+  await new Promise(r=>setTimeout(r,650));
+  const goal=keeperZone!==penZone;
+  if(goal){
+    const win=Math.floor(bet*1.4);
+    G.coins+=win;G.totalEarned+=Math.max(0,win-bet);
+    msg.textContent='⚽ ГОЛ! +'+fmt(win);popup('⚽ ГОЛ! +'+fmt(win));addLog('⚽ Пенальти: гол +'+fmt(win));
+  }else{
+    msg.textContent='🧤 Вратарь взял! −'+fmt(bet);addLog('⚽ Пенальти: сейв −'+fmt(bet));
+  }
+  updateUI();saveG();
+  setTimeout(()=>{
+    ball.style.transition='none';keeper.style.transition='none';
+    ball.style.transform='translateX(-50%)';keeper.style.transform='translateX(-50%)';
+    void ball.offsetWidth;
+    ball.style.transition='';keeper.style.transition='';
+    msg.textContent='Выбери угол и бей!';
+    penBusy=false;document.getElementById('pen-shoot').disabled=false;
+  },1500);
+}
+
+/* ══════════════════════════════════
+   MINES
+══════════════════════════════════ */
+const MINES_N=25;
+let minesCount=3,minesBet=0,minesField=[],minesRevealed=0,minesActive=false,minesMult=1;
+function buildMinesGrid(){
+  const g=document.getElementById('mines-grid');if(!g)return;g.innerHTML='';
+  for(let i=0;i<MINES_N;i++){
+    const c=document.createElement('div');c.className='mine-cell disabled';c.id='mc'+i;
+    c.onclick=()=>minesReveal(i);g.appendChild(c);
+  }
+}
+function minesSetCount(btn,m){if(minesActive)return;minesCount=m;document.querySelectorAll('.mn-cbtn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');minesUpdateStats()}
+function minesAddBet(n){const i=document.getElementById('mines-bet');i.value=Math.max(1,(parseInt(i.value)||0)+n)}
+// fair multiplier after k safe picks with m mines on N cells, with 3% house edge
+function minesMultAt(k){let p=1;for(let i=0;i<k;i++)p*=(MINES_N-i)/(MINES_N-minesCount-i);return p*0.97}
+function minesUpdateStats(){
+  const cur=minesActive?minesMult:1;
+  const next=minesActive?minesMultAt(minesRevealed+1):minesMultAt(1);
+  document.getElementById('mn-mult').textContent='×'+cur.toFixed(2);
+  document.getElementById('mn-next').textContent='×'+next.toFixed(2);
+  document.getElementById('mn-win').textContent=minesActive?fmt(Math.floor(minesBet*cur)):'0';
+}
+function minesStart(){
+  const bet=parseInt(document.getElementById('mines-bet').value)||0;
+  const msg=document.getElementById('mines-msg');
+  if(bet<1||bet>G.coins){msg.textContent='Неверная ставка';return}
+  minesBet=bet;G.coins-=bet;updateUI();
+  minesActive=true;minesRevealed=0;minesMult=1;
+  // place mines
+  minesField=Array(MINES_N).fill(false);
+  let placed=0;while(placed<minesCount){const idx=Math.floor(Math.random()*MINES_N);if(!minesField[idx]){minesField[idx]=true;placed++}}
+  for(let i=0;i<MINES_N;i++){const c=document.getElementById('mc'+i);c.className='mine-cell';c.textContent=''}
+  document.getElementById('mines-start-btn').disabled=true;
+  document.getElementById('mines-cash-btn').disabled=false;
+  document.querySelectorAll('.mn-cbtn').forEach(b=>b.style.pointerEvents='none');
+  msg.textContent='Открывай клетки. Найдёшь 💣 — сгорает ставка';
+  minesUpdateStats();
+}
+function minesReveal(i){
+  if(!minesActive)return;
+  const c=document.getElementById('mc'+i);
+  if(c.classList.contains('revealed'))return;
+  if(minesField[i]){
+    // boom
+    c.classList.add('revealed','bomb');c.textContent='💣';
+    minesActive=false;
+    minesRevealAll(i);
+    document.getElementById('mines-msg').textContent='💥 БУМ! Ставка −'+fmt(minesBet);
+    addLog('💣 Мины: взрыв −'+fmt(minesBet));
+    minesEndUI();saveG();
+    return;
+  }
+  c.classList.add('revealed','gem');c.textContent='💎';
+  minesRevealed++;minesMult=minesMultAt(minesRevealed);
+  minesUpdateStats();
+  // all safe cells opened → auto win
+  if(minesRevealed===MINES_N-minesCount)minesCashout();
+}
+function minesRevealAll(hit){
+  for(let i=0;i<MINES_N;i++){
+    const c=document.getElementById('mc'+i);
+    if(c.classList.contains('revealed'))continue;
+    if(minesField[i]){c.classList.add('bomb');c.textContent='💣';if(i!==hit)c.classList.add('dim')}
+    else{c.classList.add('dim');c.textContent='💎'}
+    c.classList.add('disabled');
+  }
+}
+function minesCashout(){
+  if(!minesActive)return;
+  const win=Math.floor(minesBet*minesMult);
+  G.coins+=win;G.totalEarned+=Math.max(0,win-minesBet);
+  minesActive=false;
+  for(let i=0;i<MINES_N;i++){const c=document.getElementById('mc'+i);if(!c.classList.contains('revealed')){c.classList.add('disabled','dim');if(minesField[i])c.textContent='💣'}}
+  document.getElementById('mines-msg').textContent='💰 Забрано +'+fmt(win)+' (×'+minesMult.toFixed(2)+')';
+  popup('💎 Мины +'+fmt(win));addLog('💣 Мины: забрал +'+fmt(win)+' ×'+minesMult.toFixed(2));
+  minesEndUI();updateUI();saveG();
+}
+function minesEndUI(){
+  document.getElementById('mines-start-btn').disabled=false;
+  document.getElementById('mines-cash-btn').disabled=true;
+  document.querySelectorAll('.mn-cbtn').forEach(b=>b.style.pointerEvents='');
+  updateUI();
+}
 
 /* ══════════════════════════════════
    SHOP
@@ -1637,6 +1947,7 @@ function showTab(name,btn){
   document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('tab-'+name).classList.add('active');
+  if(!btn)btn=document.querySelector('.tab-btn[data-tab="'+name+'"]');
   if(btn)btn.classList.add('active');
   if(name==='roulette'){setTimeout(initRoulCanvas,50)}
   if(name==='crash'){setTimeout(initCrashCanvas,50)}
@@ -1985,7 +2296,7 @@ async function melPopupSend(){
 
 /* INIT */
 rebuildReels();for(let i=3;i<G.reelCount;i++)addReel();
-buildNumGrid();renderPayouts();updateUI();bjSetActions('bet');
+buildNumGrid();buildMinesGrid();renderPayouts();updateUI();bjSetActions('bet');slotSyncBet();minesUpdateStats();
 // обновляем хедер аватарку/ник сразу
 (function(){const av=G.avatar||'av1.svg';const nick=G.nickname||'';const ai=document.getElementById('hdr-avatar-icon');const nt=document.getElementById('hdr-nickname-text');if(ai)ai.innerHTML=`<img src="${av}" width="26" height="26" style="border-radius:50%;object-fit:cover">`;if(nt)nt.textContent=nick||'Профиль'})();
 initFirebase();
