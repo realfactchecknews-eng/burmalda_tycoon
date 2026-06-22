@@ -348,6 +348,26 @@ button{font-family:inherit}
 .mines-btn:hover:not(:disabled){transform:translateY(-1px)}
 .mines-btn:disabled{opacity:.35;cursor:not-allowed;box-shadow:none}
 
+/* PLINKO */
+.plinko-wrap{width:100%;max-width:460px}
+.plinko-board{width:100%;background:radial-gradient(ellipse at 50% 0%,#1a1430,#0a0712);border:1px solid var(--border);border-radius:var(--r2) var(--r2) 0 0;line-height:0;overflow:hidden}
+#plinko-canvas{width:100%;display:block}
+.plinko-slots{display:grid;gap:2px;background:#0a0712;border:1px solid var(--border);border-top:none;border-radius:0 0 var(--r2) var(--r2);padding:0 0 4px}
+.pk-slot{text-align:center;font-size:10px;font-weight:900;padding:6px 0;border-radius:5px;color:#000;transition:transform .15s,box-shadow .15s}
+.pk-slot.lo{background:#7a3030;color:#ffd9d9}
+.pk-slot.mid{background:#7a6a20;color:#fff6d0}
+.pk-slot.hi{background:var(--gold);color:#000}
+.pk-slot.win{transform:translateY(-4px) scale(1.08);box-shadow:0 0 16px currentColor;outline:2px solid #fff}
+@media(max-width:480px){.pk-slot{font-size:8px;padding:5px 0}}
+.plinko-msg{text-align:center;font-size:14px;font-weight:800;color:var(--muted);min-height:22px;margin:10px 0 0}
+.plinko-risk{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.pk-rbtn{padding:11px 4px;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);color:var(--text);font-size:12px;font-weight:700;cursor:pointer;transition:background .15s,border-color .15s,color .15s}
+.pk-rbtn:hover{border-color:var(--gold);color:var(--gold)}
+.pk-rbtn.active{background:rgba(245,197,24,.15);border-color:var(--gold);color:var(--gold)}
+.plinko-drop-btn{width:100%;margin-top:14px;padding:15px;background:var(--gold);color:#000;border:none;border-radius:var(--r);font-size:15px;font-weight:900;letter-spacing:1px;cursor:pointer;box-shadow:0 4px 0 #7a6000;transition:transform .1s,opacity .15s}
+.plinko-drop-btn:hover:not(:disabled){transform:translateY(-1px)}
+.plinko-drop-btn:disabled{opacity:.4;cursor:not-allowed}
+
 /* SHOP */
 .shop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;width:100%;max-width:780px}
 .shop-item{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:20px;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;transition:border-color .2s,transform .15s}
@@ -699,6 +719,7 @@ footer a:hover{color:var(--gold)}
         <div class="mf"><div class="mf-icon">🚀</div><div><span class="mf-title">Crash</span>Real odds · cash out live</div></div>
         <div class="mf"><div class="mf-icon">⚽</div><div><span class="mf-title">Penalty</span>Beat the keeper · ×1.4</div></div>
         <div class="mf"><div class="mf-icon">💣</div><div><span class="mf-title">Mines</span>Dodge bombs · cash out</div></div>
+        <div class="mf"><div class="mf-icon">🎯</div><div><span class="mf-title">Plinko</span>Drop the ball · up to ×50</div></div>
       </div>
     </div>
   </div>
@@ -749,6 +770,7 @@ footer a:hover{color:var(--gold)}
     <button class="tab-btn" data-tab="crash" onclick="showTab('crash',this)">🚀 CRASH</button>
     <button class="tab-btn" data-tab="penalty" onclick="showTab('penalty',this)">⚽ ПЕНАЛЬТИ</button>
     <button class="tab-btn" data-tab="mines" onclick="showTab('mines',this)">💣 МИНЫ</button>
+    <button class="tab-btn" data-tab="plinko" onclick="showTab('plinko',this)">🎯 PLINKO</button>
     <button class="tab-btn" data-tab="shop" onclick="showTab('shop',this)">🛍️ SHOP</button>
     <button class="tab-btn" data-tab="profile" onclick="showTab('profile',this)">👤 ПРОФИЛЬ</button>
   </nav>
@@ -970,6 +992,33 @@ footer a:hover{color:var(--gold)}
             <button class="mines-btn mines-start" id="mines-start-btn" onclick="minesStart()">НАЧАТЬ ИГРУ</button>
             <button class="mines-btn mines-cash" id="mines-cash-btn" onclick="minesCashout()" disabled>ЗАБРАТЬ</button>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PLINKO -->
+    <div id="tab-plinko" class="tab-panel">
+      <div class="plinko-wrap">
+        <div class="plinko-board" id="plinko-board">
+          <canvas id="plinko-canvas"></canvas>
+        </div>
+        <div class="plinko-slots" id="plinko-slots"></div>
+        <div class="plinko-msg" id="plinko-msg">Выбери риск и брось шар</div>
+        <div class="card" style="margin-top:8px">
+          <div class="card-title">Риск</div>
+          <div class="plinko-risk" id="plinko-risk">
+            <button class="pk-rbtn active" data-risk="low" onclick="plinkoSetRisk(this,'low')">🟢 Низкий</button>
+            <button class="pk-rbtn" data-risk="med" onclick="plinkoSetRisk(this,'med')">🟡 Средний</button>
+            <button class="pk-rbtn" data-risk="high" onclick="plinkoSetRisk(this,'high')">🔴 Высокий</button>
+          </div>
+          <div class="card-title" style="margin-top:14px">Ставка</div>
+          <div class="bet-row">
+            <input class="bet-input" type="number" id="plinko-bet" value="10" min="1">
+            <div class="chip" onclick="plinkoAddBet(10)">+10</div>
+            <div class="chip" onclick="plinkoAddBet(100)">+100</div>
+            <div class="chip" onclick="document.getElementById('plinko-bet').value=Math.floor(G.coins)">ВСЁ</div>
+          </div>
+          <button class="plinko-drop-btn" id="plinko-drop" onclick="plinkoDrop()">🎯 БРОСИТЬ ШАР</button>
         </div>
       </div>
     </div>
@@ -1780,6 +1829,98 @@ function minesEndUI(){
 }
 
 /* ══════════════════════════════════
+   PLINKO
+══════════════════════════════════ */
+const PLINKO_ROWS=12;                 // → 13 slots (bins 0..12)
+const PLINKO_MULTS={
+  low: [3, 1.5, 1.3, 1.2, 1.1, 1, 0.7, 1, 1.1, 1.2, 1.3, 1.5, 3],
+  med: [18, 5, 2, 1.4, 1.1, 0.9, 0.5, 0.9, 1.1, 1.4, 2, 5, 18],
+  high:[50, 12, 4, 2, 1.1, 0.5, 0.3, 0.5, 1.1, 2, 4, 12, 50]
+};
+let plinkoRisk='low',plinkoBusy=false,plinkoRaf=null;
+let pkCv=null,pkCtx=null,pkW=420,pkH=380,pkSX=30,pkSY=26,pkTop=24,pkPegR=3,pkBallR=8;
+function initPlinkoCanvas(){
+  pkCv=document.getElementById('plinko-canvas');if(!pkCv)return;
+  const board=document.getElementById('plinko-board');
+  pkW=board.clientWidth||420;
+  pkSX=pkW/(PLINKO_ROWS+1);
+  pkSY=pkSX*0.82;
+  pkTop=pkSY*1.1;
+  pkH=Math.round(pkTop+PLINKO_ROWS*pkSY+pkSY*0.9);
+  pkPegR=Math.max(2,pkSX*0.11);
+  pkBallR=Math.max(5,pkSX*0.26);
+  const dpr=window.devicePixelRatio||1;
+  pkCv.width=Math.round(pkW*dpr);pkCv.height=Math.round(pkH*dpr);
+  pkCv.style.height=pkH+'px';
+  pkCtx=pkCv.getContext('2d');pkCtx.setTransform(dpr,0,0,dpr,0,0);
+  drawPlinkoBoard();
+}
+function pegX(r,p){return pkW/2+(p-r/2)*pkSX}
+function pegY(r){return pkTop+r*pkSY}
+function drawPlinkoBoard(bx,by){
+  if(!pkCtx)return;const ctx=pkCtx;
+  ctx.clearRect(0,0,pkW,pkH);
+  for(let r=0;r<PLINKO_ROWS;r++)for(let p=0;p<=r;p++){
+    ctx.beginPath();ctx.arc(pegX(r,p),pegY(r),pkPegR,0,2*Math.PI);
+    ctx.fillStyle='#cdbff0';ctx.shadowBlur=4;ctx.shadowColor='rgba(123,92,255,.6)';ctx.fill();ctx.shadowBlur=0;
+  }
+  if(bx!==undefined){
+    const g=ctx.createRadialGradient(bx-pkBallR*.4,by-pkBallR*.4,pkBallR*.1,bx,by,pkBallR);
+    g.addColorStop(0,'#fff7c2');g.addColorStop(.5,'#f5c518');g.addColorStop(1,'#b8860b');
+    ctx.beginPath();ctx.arc(bx,by,pkBallR,0,2*Math.PI);ctx.fillStyle=g;ctx.shadowBlur=12;ctx.shadowColor='rgba(245,197,24,.8)';ctx.fill();ctx.shadowBlur=0;
+  }
+}
+function renderPlinkoSlots(){
+  const m=PLINKO_MULTS[plinkoRisk];const c=document.getElementById('plinko-slots');if(!c)return;
+  c.style.gridTemplateColumns='repeat('+m.length+',1fr)';c.innerHTML='';
+  m.forEach((x,i)=>{const d=document.createElement('div');d.className='pk-slot '+(x>=2?'hi':x>=1?'mid':'lo');d.id='pk-slot'+i;d.textContent=x+'×';c.appendChild(d)});
+}
+function plinkoSetRisk(btn,r){if(plinkoBusy)return;plinkoRisk=r;document.querySelectorAll('.pk-rbtn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderPlinkoSlots()}
+function plinkoAddBet(n){const i=document.getElementById('plinko-bet');i.value=Math.max(1,(parseInt(i.value)||0)+n)}
+function plinkoDrop(){
+  if(plinkoBusy)return;
+  const bet=parseInt(document.getElementById('plinko-bet').value)||0;
+  const msg=document.getElementById('plinko-msg');
+  if(bet<1||bet>G.coins){msg.textContent='Неверная ставка';return}
+  plinkoBusy=true;document.getElementById('plinko-drop').disabled=true;
+  G.coins-=bet;updateUI();msg.textContent='🎯 Шар летит...';
+  document.querySelectorAll('.pk-slot').forEach(s=>s.classList.remove('win'));
+  // random path: PLINKO_ROWS left/right decisions → bin k = number of rights
+  const dec=[];let k=0;for(let r=0;r<PLINKO_ROWS;r++){const d=Math.random()<0.5?0:1;dec.push(d);k+=d}
+  // waypoints: entry, each peg hit, final slot
+  const wp=[{x:pkW/2,y:pkTop-pkSY*0.8}];
+  let rights=0;
+  for(let r=0;r<PLINKO_ROWS;r++){wp.push({x:pegX(r,rights),y:pegY(r)});rights+=dec[r]}
+  wp.push({x:pkW/2+(k-PLINKO_ROWS/2)*pkSX,y:pegY(PLINKO_ROWS)+pkSY*0.2});
+  const mult=PLINKO_MULTS[plinkoRisk][k];
+  const win=Math.floor(bet*mult);
+  let seg=0,t0=performance.now();const segDur=80;
+  function frame(now){
+    if(seg>=wp.length-1){plinkoLand(k,mult,bet,win);return}
+    const p=Math.min(1,(now-t0)/segDur);
+    const a=wp[seg],b=wp[seg+1];
+    const x=a.x+(b.x-a.x)*p;
+    const y=a.y+(b.y-a.y)*(p*p*0.55+p*0.45);   // accelerate downward
+    drawPlinkoBoard(x,y);
+    if(p>=1){seg++;t0=now}
+    plinkoRaf=requestAnimationFrame(frame);
+  }
+  plinkoRaf=requestAnimationFrame(frame);
+}
+function plinkoLand(k,mult,bet,win){
+  drawPlinkoBoard();
+  const slot=document.getElementById('pk-slot'+k);if(slot)slot.classList.add('win');
+  G.coins+=win;G.totalEarned+=Math.max(0,win-bet);
+  const msg=document.getElementById('plinko-msg');
+  if(win>bet){msg.textContent='🎉 '+mult+'× → +'+fmt(win);popup('🎯 Plinko '+mult+'× +'+fmt(win))}
+  else if(win===bet){msg.textContent='↔ '+mult+'× → возврат '+fmt(win)}
+  else{msg.textContent='😔 '+mult+'× → +'+fmt(win)+' (−'+fmt(bet-win)+')'}
+  addLog('🎯 Plinko '+plinkoRisk+' '+mult+'×: ставка '+fmt(bet)+' → +'+fmt(win));
+  updateUI();saveG();
+  plinkoBusy=false;document.getElementById('plinko-drop').disabled=false;
+}
+
+/* ══════════════════════════════════
    SHOP
 ══════════════════════════════════ */
 const SHOP_ITEMS=[
@@ -1951,6 +2092,7 @@ function showTab(name,btn){
   if(btn)btn.classList.add('active');
   if(name==='roulette'){setTimeout(initRoulCanvas,50)}
   if(name==='crash'){setTimeout(initCrashCanvas,50)}
+  if(name==='plinko'){setTimeout(()=>{initPlinkoCanvas();renderPlinkoSlots()},50)}
   if(name==='profile'){updateProfileTab()}
 }
 function startGame(){
@@ -2056,7 +2198,7 @@ function playHammamTransition(onDone){
   raf=requestAnimationFrame(draw);
 }
 function goMenu(){document.getElementById('game').classList.remove('visible');document.getElementById('menu').classList.add('visible');updateUI()}
-let _rsz;window.addEventListener('resize',()=>{clearTimeout(_rsz);_rsz=setTimeout(()=>{if(document.getElementById('tab-roulette').classList.contains('active'))initRoulCanvas();if(document.getElementById('tab-crash').classList.contains('active')&&crashState==='idle')initCrashCanvas()},200)});
+let _rsz;window.addEventListener('resize',()=>{clearTimeout(_rsz);_rsz=setTimeout(()=>{if(document.getElementById('tab-roulette').classList.contains('active'))initRoulCanvas();if(document.getElementById('tab-crash').classList.contains('active')&&crashState==='idle')initCrashCanvas();if(document.getElementById('tab-plinko').classList.contains('active')&&!plinkoBusy){initPlinkoCanvas();renderPlinkoSlots()}},200)});
 
 /* PRIVACY */
 function acceptPrivacy(){
@@ -2296,7 +2438,7 @@ async function melPopupSend(){
 
 /* INIT */
 rebuildReels();for(let i=3;i<G.reelCount;i++)addReel();
-buildNumGrid();buildMinesGrid();renderPayouts();updateUI();bjSetActions('bet');slotSyncBet();minesUpdateStats();
+buildNumGrid();buildMinesGrid();renderPayouts();updateUI();bjSetActions('bet');slotSyncBet();minesUpdateStats();renderPlinkoSlots();
 // обновляем хедер аватарку/ник сразу
 (function(){const av=G.avatar||'av1.svg';const nick=G.nickname||'';const ai=document.getElementById('hdr-avatar-icon');const nt=document.getElementById('hdr-nickname-text');if(ai)ai.innerHTML=`<img src="${av}" width="26" height="26" style="border-radius:50%;object-fit:cover">`;if(nt)nt.textContent=nick||'Профиль'})();
 initFirebase();
